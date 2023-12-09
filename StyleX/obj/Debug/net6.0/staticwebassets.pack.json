@@ -189,16 +189,8 @@
       "PackagePath": "staticwebassets\\images\\products\\2.webp"
     },
     {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\js\\demo.js",
-      "PackagePath": "staticwebassets\\js\\demo.js"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\js\\main.js",
-      "PackagePath": "staticwebassets\\js\\main.js"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\js\\range.js",
-      "PackagePath": "staticwebassets\\js\\range.js"
+      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\js\\animation_view.js",
+      "PackagePath": "staticwebassets\\js\\animation_view.js"
     },
     {
       "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\js\\search-image.js",

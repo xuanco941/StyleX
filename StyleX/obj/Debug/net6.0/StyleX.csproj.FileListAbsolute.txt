@@ -388,3 +388,4 @@ C:\Users\xuanc\Desktop\StyleX\StyleX\bin\Debug\net6.0\tr\Microsoft.CodeAnalysis.
 C:\Users\xuanc\Desktop\StyleX\StyleX\bin\Debug\net6.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll
 C:\Users\xuanc\Desktop\StyleX\StyleX\bin\Debug\net6.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll
 C:\Users\xuanc\Desktop\StyleX\StyleX\obj\Debug\net6.0\StyleX.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\xuanc\Desktop\StyleX\StyleX\obj\Debug\net6.0\StyleX.sourcelink.json
