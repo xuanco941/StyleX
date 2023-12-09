@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "tiBpCc1A4YMvjNTWwF9BeKViQgkUX6agfCHc2oyOxQE=",
+  "Hash": "rzjNHE/mrT/xiO2022FnGJNwQa+VmR4Q0aKMgZPT4xM=",
   "Source": "StyleX",
   "BasePath": "_content/StyleX",
   "Mode": "Default",
@@ -1461,12 +1461,12 @@
       "OriginalItemSpec": "wwwroot\\library\\js\\scrollax.min.js"
     },
     {
-      "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model-glb\\cresent_witch_clothes.glb",
+      "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model\\cresent_witch_clothes.glb",
       "SourceId": "StyleX",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\",
       "BasePath": "_content/StyleX",
-      "RelativePath": "model-glb/cresent_witch_clothes.glb",
+      "RelativePath": "model/cresent_witch_clothes.glb",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -1477,15 +1477,15 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\model-glb\\cresent_witch_clothes.glb"
+      "OriginalItemSpec": "wwwroot\\model\\cresent_witch_clothes.glb"
     },
     {
-      "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model-glb\\cresent_witch_clothes_merge.glb",
+      "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model\\cresent_witch_clothes_merge.glb",
       "SourceId": "StyleX",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\",
       "BasePath": "_content/StyleX",
-      "RelativePath": "model-glb/cresent_witch_clothes_merge.glb",
+      "RelativePath": "model/cresent_witch_clothes_merge.glb",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -1496,15 +1496,15 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\model-glb\\cresent_witch_clothes_merge.glb"
+      "OriginalItemSpec": "wwwroot\\model\\cresent_witch_clothes_merge.glb"
     },
     {
-      "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model-glb\\decal-diffuse.png",
+      "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model\\decal-diffuse.png",
       "SourceId": "StyleX",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\",
       "BasePath": "_content/StyleX",
-      "RelativePath": "model-glb/decal-diffuse.png",
+      "RelativePath": "model/decal-diffuse.png",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -1515,15 +1515,15 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\model-glb\\decal-diffuse.png"
+      "OriginalItemSpec": "wwwroot\\model\\decal-diffuse.png"
     },
     {
-      "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model-glb\\decal-normal.jpg",
+      "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model\\decal-normal.jpg",
       "SourceId": "StyleX",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\",
       "BasePath": "_content/StyleX",
-      "RelativePath": "model-glb/decal-normal.jpg",
+      "RelativePath": "model/decal-normal.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -1534,15 +1534,15 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\model-glb\\decal-normal.jpg"
+      "OriginalItemSpec": "wwwroot\\model\\decal-normal.jpg"
     },
     {
-      "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model-glb\\first_clothing_item.glb",
+      "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model\\first_clothing_item.glb",
       "SourceId": "StyleX",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\",
       "BasePath": "_content/StyleX",
-      "RelativePath": "model-glb/first_clothing_item.glb",
+      "RelativePath": "model/first_clothing_item.glb",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -1553,15 +1553,15 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\model-glb\\first_clothing_item.glb"
+      "OriginalItemSpec": "wwwroot\\model\\first_clothing_item.glb"
     },
     {
-      "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model-glb\\LeePerrySmith.glb",
+      "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model\\LeePerrySmith.glb",
       "SourceId": "StyleX",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\",
       "BasePath": "_content/StyleX",
-      "RelativePath": "model-glb/LeePerrySmith.glb",
+      "RelativePath": "model/LeePerrySmith.glb",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -1572,15 +1572,15 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\model-glb\\LeePerrySmith.glb"
+      "OriginalItemSpec": "wwwroot\\model\\LeePerrySmith.glb"
     },
     {
-      "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model-glb\\maid_costume.glb",
+      "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model\\maid_costume.glb",
       "SourceId": "StyleX",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\",
       "BasePath": "_content/StyleX",
-      "RelativePath": "model-glb/maid_costume.glb",
+      "RelativePath": "model/maid_costume.glb",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -1591,7 +1591,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\model-glb\\maid_costume.glb"
+      "OriginalItemSpec": "wwwroot\\model\\maid_costume.glb"
     },
     {
       "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\textures\\coarse-old-fabric_albedo.png",
