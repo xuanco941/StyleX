@@ -301,32 +301,28 @@
       "PackagePath": "staticwebassets\\library\\js\\scrollax.min.js"
     },
     {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model\\LeePerrySmith.glb",
-      "PackagePath": "staticwebassets\\model\\LeePerrySmith.glb"
+      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model\\1.glb",
+      "PackagePath": "staticwebassets\\model\\1.glb"
     },
     {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model\\cresent_witch_clothes.glb",
-      "PackagePath": "staticwebassets\\model\\cresent_witch_clothes.glb"
+      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model\\1.webp",
+      "PackagePath": "staticwebassets\\model\\1.webp"
     },
     {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model\\cresent_witch_clothes_merge.glb",
-      "PackagePath": "staticwebassets\\model\\cresent_witch_clothes_merge.glb"
+      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model\\2.glb",
+      "PackagePath": "staticwebassets\\model\\2.glb"
     },
     {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model\\decal-diffuse.png",
-      "PackagePath": "staticwebassets\\model\\decal-diffuse.png"
+      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model\\2.webp",
+      "PackagePath": "staticwebassets\\model\\2.webp"
     },
     {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model\\decal-normal.jpg",
-      "PackagePath": "staticwebassets\\model\\decal-normal.jpg"
+      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model\\3.glb",
+      "PackagePath": "staticwebassets\\model\\3.glb"
     },
     {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model\\first_clothing_item.glb",
-      "PackagePath": "staticwebassets\\model\\first_clothing_item.glb"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model\\maid_costume.glb",
-      "PackagePath": "staticwebassets\\model\\maid_costume.glb"
+      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\model\\3.webp",
+      "PackagePath": "staticwebassets\\model\\3.webp"
     },
     {
       "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\textures\\coarse-old-fabric_albedo.png",

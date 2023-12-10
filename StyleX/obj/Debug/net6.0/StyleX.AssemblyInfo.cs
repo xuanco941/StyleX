@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("StyleX")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6a0c6c4136f109f64a2dc51846fde99d781b23b4")]
 [assembly: System.Reflection.AssemblyProductAttribute("StyleX")]
 [assembly: System.Reflection.AssemblyTitleAttribute("StyleX")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

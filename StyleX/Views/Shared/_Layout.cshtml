@@ -81,6 +81,9 @@
                             Không giới hạn màu sắc.
                         </p>
                         <p>
+                            Đa dạng chất liệu.
+                        </p>
+                        <p>
                             Thiết kế trên mô hình 3D.
                         </p>
                         <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-3">
@@ -134,13 +137,6 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <p style="font-size: 17px;">
-                        <a href="/" target="_parent">StyleX</a> - Phong cách bạn tạo ra
-                    </p>
-                </div>
-            </div>
         </div>
     </footer>
 
@@ -172,6 +168,22 @@
     <script src="/library/js/scrollax.min.js"></script>
     <script src="/js/animation_view.js"></script>
 
+    <script>
+
+        //set tất cả material về OPAQUE, double side = true
+        window.addEventListener('load', (e) => {
+            var allModels = Array.from(document.querySelectorAll('model-viewer'));
+
+            allModels.forEach((md) => {
+                md.addEventListener('load', (elm) => {
+                    for (var m of elm.target.model.materials) {
+                        m.setAlphaMode("OPAQUE");
+                    }
+                })
+            })
+
+        })
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
     
