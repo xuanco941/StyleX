@@ -78,9 +78,6 @@
                             In ấn và thiết kế quần áo chất lượng cao.
                         </p>
                         <p>
-                            Không giới hạn màu sắc.
-                        </p>
-                        <p>
                             Đa dạng chất liệu.
                         </p>
                         <p>
@@ -100,7 +97,7 @@
                     </div>
                 </div>
                 <div class="col-md">
-                    <div class="ftco-footer-widget mb-4 ml-md-5">
+                    <div class="ftco-footer-widget mb-4">
                         <h2 class="ftco-heading-2">Menu</h2>
                         <ul class="list-unstyled">
                             <li class="color-hover"><a href="#" class="py-2 d-block color-hover">Sản phẩm</a></li>
@@ -111,7 +108,7 @@
                     </div>
                 </div>
                 <div class="col-md">
-                    <div class="ftco-footer-widget mb-4">
+                    <div class="ftco-footer-widget mb-4 ">
                         <h2 class="ftco-heading-2">Liên hệ với chúng tôi?</h2>
                         <div class="block-23 mb-3">
                             <ul>
@@ -148,7 +145,7 @@
         <svg class="circular" width="48px" height="48px">
             <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
             <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
-                    stroke="#F96D00" />
+                    stroke="#86c9ef" />
         </svg>
     </div>
 
@@ -168,6 +165,8 @@
     <script src="/library/js/scrollax.min.js"></script>
     <script src="/js/animation_view.js"></script>
 
+    @await RenderSectionAsync("Scripts", required: false)
+
     <script>
 
         //set tất cả material về OPAQUE, double side = true
@@ -179,13 +178,15 @@
                     for (var m of elm.target.model.materials) {
                         m.setAlphaMode("OPAQUE");
                     }
-                })
-            })
+                });
 
+            });
         })
+
+
+
     </script>
 
-    @await RenderSectionAsync("Scripts", required: false)
     
 </body>
 </html>

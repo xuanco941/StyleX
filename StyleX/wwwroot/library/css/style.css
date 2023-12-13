@@ -686,17 +686,17 @@ h1, h2, h3, h4, h5,
 }
 
 
-.text h1 {
-    font-size: 40px;
-    color: #000000;
-    line-height: 1.3;
-    font-weight: 300;
-    text-transform: uppercase;
-}
-
-    .owl-carousel.home-slider .slider-item .slider-text h1 span {
-        font-weight: 900;
+    .text h1 {
+        font-size: 40px;
+        color: #000000;
+        line-height: 1.3;
+        font-weight: 300;
+        text-transform: uppercase;
     }
+
+.owl-carousel.home-slider .slider-item .slider-text h1 span {
+    font-weight: 900;
+}
 
 
 .text p {
@@ -709,6 +709,7 @@ h1, h2, h3, h4, h5,
     background: #149CEA;
     font-size: 19px;
 }
+
     .text .btn-custom:hover {
         background: #1273ab;
     }
@@ -718,10 +719,12 @@ h1, h2, h3, h4, h5,
     .text .btn-custom {
         font-size: 16px;
     }
+
     .text p {
         font-size: 15px;
     }
-    .text h1{
+
+    .text h1 {
         font-size: 24px;
     }
 }
@@ -1161,7 +1164,7 @@ h1, h2, h3, h4, h5,
 
     .product .text .bottom-area {
         position: absolute;
-        top: -65px;
+        top: -50px;
         left: 0;
         right: 0;
         opacity: 0;
@@ -2564,49 +2567,6 @@ textarea.form-control {
         margin-top: 0;
     }
 
-        .services-2 .icon:after {
-            position: absolute;
-            top: -10px;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            content: '';
-            border: 2px dotted #b3b3b3;
-            border-bottom: none;
-            -webkit-border-radius: 50%;
-            -moz-border-radius: 50%;
-            -ms-border-radius: 50%;
-            border-radius: 50%;
-            z-index: -1;
-            width: 74px;
-            height: 74px;
-        }
-
-        .services-2 .icon:before {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            bottom: 0;
-            right: 0;
-            content: '';
-            background: #e1d5a2;
-            -webkit-transform: translateY(-50%);
-            -ms-transform: translateY(-50%);
-            transform: translateY(-50%);
-            margin-left: -20px;
-            -webkit-border-radius: 50%;
-            -moz-border-radius: 50%;
-            -ms-border-radius: 50%;
-            border-radius: 50%;
-            z-index: -1;
-            width: 40px;
-            height: 40px;
-        }
-
-        .services-2 .icon span {
-            font-size: 70px;
-            color: #000000;
-        }
 
     .services-2 .text {
         margin-left: 2em;
@@ -2641,7 +2601,7 @@ textarea.form-control {
         }
 
     .services-2:nth-child(4) {
-        background: #000000;
+        background: #1e7baf;
     }
 
         .services-2:nth-child(4) .icon:after {
@@ -3552,6 +3512,7 @@ textarea.form-control {
 .color-hover:hover {
     color: #86c9ef !important;
 }
+
 .color-hover-nav:hover {
     color: #137db9 !important;
 }
