@@ -17,6 +17,10 @@
       "PackagePath": "staticwebassets\\images\\about.jpg"
     },
     {
+      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\ar.jpg",
+      "PackagePath": "staticwebassets\\images\\ar.jpg"
+    },
+    {
       "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\bg_1.jpg",
       "PackagePath": "staticwebassets\\images\\bg_1.jpg"
     },
@@ -31,6 +35,10 @@
     {
       "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\bg_6.jpg",
       "PackagePath": "staticwebassets\\images\\bg_6.jpg"
+    },
+    {
+      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\chat-lieu.jpg",
+      "PackagePath": "staticwebassets\\images\\chat-lieu.jpg"
     },
     {
       "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\choose-1.jpg",
@@ -95,6 +103,14 @@
     {
       "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\logo\\logo-no-background-blue.png",
       "PackagePath": "staticwebassets\\images\\logo\\logo-no-background-blue.png"
+    },
+    {
+      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\may-in.jpg",
+      "PackagePath": "staticwebassets\\images\\may-in.jpg"
+    },
+    {
+      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\may.jpg",
+      "PackagePath": "staticwebassets\\images\\may.jpg"
     },
     {
       "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\none.png",
