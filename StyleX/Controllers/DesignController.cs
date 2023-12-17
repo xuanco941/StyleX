@@ -2,16 +2,12 @@
 
 namespace StyleX.Controllers
 {
-	public class ProductController : Controller
+	public class DesignController : Controller
 	{
 		public IActionResult Index()
 		{
 			return View();
 		}
-        public IActionResult Detail()
-        {
-            return View();
-        }
 
     }
 }

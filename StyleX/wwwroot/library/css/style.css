@@ -322,7 +322,6 @@ h1, h2, h3, h4, h5,
 .ftco-navbar-light.scrolled .nav-link {
     padding-top: 0.9rem !important;
     padding-bottom: 0.9rem !important;
-    color: #000000 !important;
 }
 
     .ftco-navbar-light.scrolled .nav-link.active {
@@ -1656,9 +1655,6 @@ h1, h2, h3, h4, h5,
                     color: #fff;
                 }
 
-        .table tbody tr td.quantity {
-            width: 20%;
-        }
 
         .table tbody tr td.image-prod .img {
             display: block;
@@ -1667,9 +1663,6 @@ h1, h2, h3, h4, h5,
             margin: 0 auto;
         }
 
-        .table tbody tr td.product-name {
-            width: 30%;
-        }
 
             .table tbody tr td.product-name h3 {
                 font-size: 14px;
