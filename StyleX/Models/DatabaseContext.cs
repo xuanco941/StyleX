@@ -18,7 +18,10 @@ namespace StyleX.Models
         public DbSet<OrderItem> OrderItems { get; set; } = null!;
         public DbSet<Product> Products { get; set; } = null!;
         public DbSet<Promotion> Promotions { get; set; } = null!;
-        public DbSet<Size> Sizes { get; set; } = null!;
+        public DbSet<Warehouse> Warehouses { get; set; } = null!;
+        public DbSet<ProductMaterial> ProductMaterials { get; set; } = null!;
+
+
 
 
 
@@ -48,6 +51,13 @@ namespace StyleX.Models
             {
                 entity.HasIndex(e => e.Username).IsUnique();
             });
+            //Admin
+            modelBuilder.Entity<Product>(entity =>
+            {
+                entity.HasIndex(e => e.Name).IsUnique();
+            });
+
+
         }
     }
 }

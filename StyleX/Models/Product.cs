@@ -8,17 +8,15 @@ namespace StyleX.Models
     {
         [Key]
         public int ProductID { get; set; }
-        public string? Name { get; set; }
+        public string ModelUrl { get; set; } = null!; // url model
+        public string PosterUrl { get; set; } = null!; // ảnh hiển thị của product;  
+        public string Name { get; set; } = null!;
         public string? Description { get; set; }
-        public int Quantity { get; set; } //số dư trong kho
         public double Price { get; set; }
         public double Sale { get; set; } // % giảm giá
+
         public int CategoryID { get; set; }
         public Category Category { get; set; } = null!;
-        public int SizeID { get; set; }
-        public Size Size { get; set; } = null!;
-        public int MaterialID { get; set; }
-        public Material Material { get; set; } = null!;
 
 
     }

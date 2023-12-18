@@ -11,7 +11,7 @@ namespace StyleX.Models
         [Key]
         public int PromotionID { get; set; }
         public string? Name { get; set; }
-        public double Number { get; set; }
+        public double Number { get; set; } //% phần trăm giảm giá
         
     }
 }
