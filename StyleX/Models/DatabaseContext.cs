@@ -10,6 +10,17 @@ namespace StyleX.Models
         private readonly IConfiguration _configuration;
 
         public DbSet<User> Users { get; set; } = null!;
+        public DbSet<Admin> Admins { get; set; } = null!;
+        public DbSet<Cart> Carts { get; set; } = null!;
+        public DbSet<Category> Categories { get; set; } = null!;
+        public DbSet<Material> Materials { get; set; } = null!;
+        public DbSet<Order> Orders { get; set; } = null!;
+        public DbSet<OrderItem> OrderItems { get; set; } = null!;
+        public DbSet<Product> Products { get; set; } = null!;
+        public DbSet<Promotion> Promotions { get; set; } = null!;
+        public DbSet<Size> Sizes { get; set; } = null!;
+
+
 
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options, IConfiguration configuration)
@@ -27,8 +38,13 @@ namespace StyleX.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //Admin
+            //User
             modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasIndex(e => e.Username).IsUnique();
+            });
+            //Admin
+            modelBuilder.Entity<Admin>(entity =>
             {
                 entity.HasIndex(e => e.Username).IsUnique();
             });
