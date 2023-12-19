@@ -12,17 +12,19 @@ namespace StyleX.DataAccess
             _dbContext = dbContext;
         }
 
-        public async Task<bool> Add(User user)
+        public bool SignUp(User user)
         {
             try
             {
-                await _dbContext.AddAsync(user);
-                return await _dbContext.SaveChangesAsync() > 0;
+                _dbContext.Add(user);
+                return _dbContext.SaveChanges() > 0;
             }
             catch
             {
                 throw;
             }
         }
+
+
     }
 }

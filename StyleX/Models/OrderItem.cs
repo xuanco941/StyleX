@@ -15,11 +15,12 @@ namespace StyleX.Models
         public string? Description { get; set; }
         public double Price { get; set; }
         public double Sale { get; set; } // % giảm giá
-        public string Color { get; set; } = string.Empty;
-        public string ColorTexture { get; set; } = string.Empty;
-        public string TextureRotation { get; set; } = string.Empty;
-        public string TextureScale { get; set; } = string.Empty;
-        public string Size { get; set; } = null!;
+        public string? Color { get; set; } = string.Empty;
+        public string? ColorTexture { get; set; } = string.Empty;
+        public string? TextureRotation { get; set; } = string.Empty;
+        public string? TextureScale { get; set; } = string.Empty;
+        public string? Size { get; set; } = string.Empty;
+        public string? MaterialUrl = string.Empty; //img 
 
 
 

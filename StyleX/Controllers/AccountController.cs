@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace StyleX.Controllers
 {
 	public class AccountController : Controller
 	{
+		[Authorize]
 		public IActionResult Index()
 		{
 			return View();

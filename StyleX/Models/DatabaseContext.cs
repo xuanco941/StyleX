@@ -44,7 +44,7 @@ namespace StyleX.Models
             //User
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasIndex(e => e.Username).IsUnique();
+                entity.HasIndex(e => e.Email).IsUnique();
             });
             //Admin
             modelBuilder.Entity<Admin>(entity =>
