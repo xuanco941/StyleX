@@ -92,7 +92,7 @@ h1, h2, h3, h4, h5,
         color: #fff;
     }
 
-    .ftco-navbar-light .navbar-brand:hover, .ftco-navbar-light .navbar-brand:focus {
+    .ftco-navbar-light .navbar-brand:hover {
         color: #000000;
     }
 
@@ -105,6 +105,9 @@ h1, h2, h3, h4, h5,
 @media (max-width: 991.98px) {
     .ftco-navbar-light .navbar-nav {
         padding-bottom: 10px;
+    }
+    .ftco-navbar-light .navbar-brand:hover {
+        color: #fff;
     }
 }
 

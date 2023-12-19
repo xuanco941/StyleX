@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using StyleX.Models;
+using StyleX.Utils;
+using StyleX.DTOs;
 
 namespace StyleX.Controllers
 {
@@ -20,59 +22,96 @@ namespace StyleX.Controllers
             ClaimsPrincipal claimsPrincipal = HttpContext.User;
             if (claimsPrincipal.Identity.IsAuthenticated)
                 return RedirectToAction("Index", "Home");
+
             return View();
 
         }
         [HttpPost]
-        public async Task<IActionResult> Login(IFormCollection form)
+        public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
         {
-            User? user = _dbContext.Users.SingleOrDefault(u => u.Email == form["email"] && u.Password == form["password"]);
-            if(user != null)
+            if (string.IsNullOrEmpty(loginDTO.email) || string.IsNullOrEmpty(loginDTO.password))
             {
-                if(user.isAuthen == true)
+                return new OkObjectResult(new { status = -4, message = "Tài khoản hoặc mật khẩu không được để trống." });
+            }
+            try
+            {
+                User? user = _dbContext.Users.SingleOrDefault(u => u.Email == loginDTO.email && u.Password == loginDTO.password);
+
+                if (user != null)
                 {
-                    List<Claim> claims = new List<Claim>() { new Claim(ClaimTypes.NameIdentifier, user.Email) };
-                    ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    AuthenticationProperties properties = new AuthenticationProperties() { AllowRefresh = true, IsPersistent = true };
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), properties);
+                    ViewBag.Status = 200;
+                    if (user.isActive == true)
+                    {
+                        List<Claim> claims = new List<Claim>() { new Claim(ClaimTypes.Email, user.Email), new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()) };
+                        ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        AuthenticationProperties properties = new AuthenticationProperties() { AllowRefresh = true, IsPersistent = true };
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), properties);
+                    }
+                    else
+                    {
+                        return new OkObjectResult(new { status = -1, message = "Tài khoản của bạn chưa được kích hoạt." });
+                    }
                 }
                 else
                 {
-                    ViewBag.Message = "Tài khoản của bạn chưa được kích hoạt.";
+                    return new OkObjectResult(new { status = -2, message = "Tài khoản hoặc mật khẩu không chính xác." });
                 }
             }
-            else
+            catch (Exception e)
             {
-                ViewBag.Message = "Tài khoản hoặc mật khẩu không chính xác.";
+                return new OkObjectResult(new { status = -3, message = e.Message });
+
             }
 
             return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
-        public async Task<IActionResult> SignUp(IFormCollection form)
+        public IActionResult SignUp([FromBody] LoginDTO sigupDto)
         {
-            User? user = _dbContext.Users.SingleOrDefault(u => u.Email == form["email"] && u.Password == form["password"]);
-            if (user != null)
+            try
             {
-                if (user.isAuthen == true)
+                sigupDto.email = sigupDto.email.Trim();
+                sigupDto.password = sigupDto.password.Trim();
+                if (string.IsNullOrEmpty(sigupDto.email) || string.IsNullOrEmpty(sigupDto.password))
                 {
-                    List<Claim> claims = new List<Claim>() { new Claim(ClaimTypes.NameIdentifier, user.Email) };
-                    ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    AuthenticationProperties properties = new AuthenticationProperties() { AllowRefresh = true, IsPersistent = true };
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), properties);
+                    return new OkObjectResult(new { status = -1, message = "Tài khoản hoặc mật khẩu không được để trống." });
+                }
+
+                User? user = _dbContext.Users.FirstOrDefault(u => u.Email == sigupDto.email);
+                if (user != null)
+                {
+                    if (user.isActive == false)
+                    {
+                        return new OkObjectResult(new { status = -2, message = "Tài khoản đã đăng ký nhưng chưa được kích hoạt." });
+
+                    }
+                    return new OkObjectResult(new { status = -3, message = "Tài khoản này đã tồn tại." });
+
                 }
                 else
                 {
-                    ViewBag.Message = "Tài khoản của bạn chưa được kích hoạt.";
+                    string keyActive = Guid.NewGuid().ToString();
+                    string linkActive = $"<a href=\"http://{HttpContext.Request.Host.Value}/Access/Active/keyActive={keyActive}\">Nhấn vào đây để kích hoạt tài khoản của bạn.</a>";
+
+                    _dbContext.Users.Add(new Models.User() { Email = sigupDto.email, Password = sigupDto.password, isActive = false, keyActive = keyActive });
+                    if (_dbContext.SaveChanges() > 0)
+                    {
+                        new SendMail().SendEmailByGmail(sigupDto.email, "Kích hoạt tài khoản", "<html><body>" + linkActive + "</body></html>");
+                        return new OkObjectResult(new { status = 1, message = "Đã gửi link kích hoạt về email của bạn."});
+
+                    }
+                    else
+                    {
+                        return new OkObjectResult(new { status = -4, message = "Lỗi hệ thống vui lòng thử lại sau." });
+                    }
                 }
             }
-            else
+            catch (Exception e)
             {
-                ViewBag.Message = "Tài khoản hoặc mật khẩu không chính xác.";
+                return new BadRequestObjectResult(new { status = -99, message = e.Message });
             }
 
-            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
@@ -80,7 +119,7 @@ namespace StyleX.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            return RedirectToAction("Login", "Access");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

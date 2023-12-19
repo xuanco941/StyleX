@@ -38,6 +38,7 @@
 
   <ItemGroup>
     <Folder Include="Views\Design\" />
+    <Folder Include="wwwroot\mini-game\" />
   </ItemGroup>
 
 </Project>

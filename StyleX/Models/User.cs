@@ -12,17 +12,18 @@ namespace StyleX.Models
         public string? FullName { get; set; } = string.Empty;
         [Required]
         [StringLength(50)]
+        [MinLength(5)]
         public string Email { get; set; } = string.Empty;
+        [Required]
         [StringLength(50)]
-        [Required]
+        [MinLength(4)]
         public string Password { get; set; } = string.Empty;
-        [Required]
         [StringLength(20)]
         public string? PhoneNumber { get; set; } = string.Empty;
         [StringLength(300)]
         public string? Address { get; set; } = string.Empty;
-        public bool isAuthen = false;
-        public string keyActive = new Guid().ToString();
+        public bool isActive { get; set; } = false;
+        public string keyActive { get; set; } = string.Empty;
 
     }
 }

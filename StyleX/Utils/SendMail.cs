@@ -5,7 +5,7 @@ namespace StyleX.Utils
 {
     public class SendMail
     {
-        public bool SendEmailFromGmail(string toEmail, string subject, string body)
+        public bool SendEmailByGmail(string toEmail, string subject, string body)
         {
             string fromEmail = "kaioco09@gmail.com";
             string password = "mffh clnl chgu fcgg"; //app password , 2auth
