@@ -38,6 +38,8 @@
 
   <ItemGroup>
     <Folder Include="Views\Design\" />
+    <Folder Include="wwwroot\images\avatar\" />
+    <Folder Include="wwwroot\images\products\" />
     <Folder Include="wwwroot\mini-game\" />
   </ItemGroup>
 

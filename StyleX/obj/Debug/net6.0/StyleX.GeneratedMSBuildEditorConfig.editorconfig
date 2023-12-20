@@ -34,12 +34,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/xuanc/Desktop/StyleX/StyleX/Views/MiniGame/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWluaUdhbWVcSW5kZXguY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/xuanc/Desktop/StyleX/StyleX/Views/Product/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/xuanc/Desktop/StyleX/StyleX/Views/Promotion/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvbW90aW9uXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/xuanc/Desktop/StyleX/StyleX/Views/Shared/_ValidationScriptsPartial.cshtml]

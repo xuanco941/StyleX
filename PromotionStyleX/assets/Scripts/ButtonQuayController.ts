@@ -18,9 +18,13 @@ export default class ButtonQuayController extends cc.Component {
     board1: cc.Node;
     soLuotQuay: cc.Node;
     isQuay: boolean = false;
+    trungThuong: cc.Node;
+    labelTrungThuong: cc.Node;
     protected onLoad(): void {
         this.board1 = cc.find('Canvas/Main Board/Mask 1/Board');
         this.soLuotQuay = cc.find('Canvas/Main Board/board_number/soLuotQuay');
+        this.trungThuong = cc.find('Canvas/TrungThuong');
+        this.labelTrungThuong = cc.find('Canvas/TrungThuong/LabelTrungThuong');
     }
 
     start() {
@@ -34,6 +38,7 @@ export default class ButtonQuayController extends cc.Component {
 
         const button = this.node.getComponent(cc.Button);
         button.clickEvents.push(clickEventHandler);
+        
 
     }
 
@@ -52,6 +57,49 @@ export default class ButtonQuayController extends cc.Component {
             this.isQuay = false;
         }
     }
+
+
+    async getResult() {
+        await fetch('/Promotion/GetResult', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status == 1) {
+                }
+                else {
+                }
+            })
+            .catch(error => {
+            });
+    }
+
+    async getNumberPlay() {
+        await fetch('/Promotion/GetNumberPlay', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                this.soLuotQuay.getComponent(cc.Label).string = `Còn ${data.number} lượt`;
+                this.node.active = true;
+            })
+            .catch(error => {
+                this.soLuotQuay.getComponent(cc.Label).string = `Hệ thống bận`;
+                this.node.active = false;
+            });
+    }
+
+
     //tạo kết quả ngẫu nhiên
     generateRandomArray() {
         let result: number[] = [];

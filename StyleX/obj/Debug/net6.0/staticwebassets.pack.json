@@ -97,28 +97,12 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\about.jpg",
-      "PackagePath": "staticwebassets\\images\\about.jpg"
-    },
-    {
       "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\ar.jpg",
       "PackagePath": "staticwebassets\\images\\ar.jpg"
     },
     {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\bg_1.jpg",
-      "PackagePath": "staticwebassets\\images\\bg_1.jpg"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\bg_1.png",
-      "PackagePath": "staticwebassets\\images\\bg_1.png"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\bg_2.png",
-      "PackagePath": "staticwebassets\\images\\bg_2.png"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\bg_6.jpg",
-      "PackagePath": "staticwebassets\\images\\bg_6.jpg"
+      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\avatar\\2.jpg",
+      "PackagePath": "staticwebassets\\images\\avatar\\2.jpg"
     },
     {
       "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\chat-lieu.jpg",
@@ -135,50 +119,6 @@
     {
       "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\choose-3.jpg",
       "PackagePath": "staticwebassets\\images\\choose-3.jpg"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\gallery-1.jpg",
-      "PackagePath": "staticwebassets\\images\\gallery-1.jpg"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\gallery-2.jpg",
-      "PackagePath": "staticwebassets\\images\\gallery-2.jpg"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\gallery-3.jpg",
-      "PackagePath": "staticwebassets\\images\\gallery-3.jpg"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\gallery-4.jpg",
-      "PackagePath": "staticwebassets\\images\\gallery-4.jpg"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\gallery-5.jpg",
-      "PackagePath": "staticwebassets\\images\\gallery-5.jpg"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\gallery-6.jpg",
-      "PackagePath": "staticwebassets\\images\\gallery-6.jpg"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\image_1.jpg",
-      "PackagePath": "staticwebassets\\images\\image_1.jpg"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\image_2.jpg",
-      "PackagePath": "staticwebassets\\images\\image_2.jpg"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\image_3.jpg",
-      "PackagePath": "staticwebassets\\images\\image_3.jpg"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\image_5.jpg",
-      "PackagePath": "staticwebassets\\images\\image_5.jpg"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\image_6.jpg",
-      "PackagePath": "staticwebassets\\images\\image_6.jpg"
     },
     {
       "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\logo\\logo-no-background-black.png",
@@ -203,90 +143,6 @@
     {
       "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\none.svg",
       "PackagePath": "staticwebassets\\images\\none.svg"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\person_1.jpg",
-      "PackagePath": "staticwebassets\\images\\person_1.jpg"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\person_2.jpg",
-      "PackagePath": "staticwebassets\\images\\person_2.jpg"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\person_3.jpg",
-      "PackagePath": "staticwebassets\\images\\person_3.jpg"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\person_4.jpg",
-      "PackagePath": "staticwebassets\\images\\person_4.jpg"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\prod-1.png",
-      "PackagePath": "staticwebassets\\images\\prod-1.png"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\prod-2.png",
-      "PackagePath": "staticwebassets\\images\\prod-2.png"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\product-1.jpg",
-      "PackagePath": "staticwebassets\\images\\product-1.jpg"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\product-1.png",
-      "PackagePath": "staticwebassets\\images\\product-1.png"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\product-2.jpg",
-      "PackagePath": "staticwebassets\\images\\product-2.jpg"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\product-2.png",
-      "PackagePath": "staticwebassets\\images\\product-2.png"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\product-3.jpg",
-      "PackagePath": "staticwebassets\\images\\product-3.jpg"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\product-3.png",
-      "PackagePath": "staticwebassets\\images\\product-3.png"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\product-4.jpg",
-      "PackagePath": "staticwebassets\\images\\product-4.jpg"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\product-4.png",
-      "PackagePath": "staticwebassets\\images\\product-4.png"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\product-5.png",
-      "PackagePath": "staticwebassets\\images\\product-5.png"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\product-6.png",
-      "PackagePath": "staticwebassets\\images\\product-6.png"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\product-7.png",
-      "PackagePath": "staticwebassets\\images\\product-7.png"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\product-8.png",
-      "PackagePath": "staticwebassets\\images\\product-8.png"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\products\\1.webp",
-      "PackagePath": "staticwebassets\\images\\products\\1.webp"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\products\\10_23_2023, 2_07_37 PM.png",
-      "PackagePath": "staticwebassets\\images\\products\\10_23_2023, 2_07_37 PM.png"
-    },
-    {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\products\\2.webp",
-      "PackagePath": "staticwebassets\\images\\products\\2.webp"
     },
     {
       "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\js\\animation_view.js",

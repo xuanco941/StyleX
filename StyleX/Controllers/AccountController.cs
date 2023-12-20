@@ -20,9 +20,32 @@ namespace StyleX.Controllers
         }
         public IActionResult Index()
 		{
-            string userEmail = User.FindFirstValue(ClaimTypes.Email);
-            User? user = _dbContext.Users.FirstOrDefault(u => u.Email == userEmail);
-            ViewBag.user = user;
+            try
+            {
+                string userEmail = User.FindFirstValue(ClaimTypes.Email);
+                User? user = _dbContext.Users.FirstOrDefault(u => u.Email == userEmail);
+                if (user != null)
+                {
+                    int promotion5Percent = _dbContext.Promotions.Where(p => p.UserID == user.UserID && p.Status == true && p.Number == 5).Count();
+                    int promotion10Percent = _dbContext.Promotions.Where(p => p.UserID == user.UserID && p.Status == true && p.Number == 10).Count();
+                    int promotion15Percent = _dbContext.Promotions.Where(p => p.UserID == user.UserID && p.Status == true && p.Number == 15).Count();
+                    int promotion20Percent = _dbContext.Promotions.Where(p => p.UserID == user.UserID && p.Status == true && p.Number == 20).Count();
+
+                    List<Order> orders = _dbContext.Orders.Where(o => o.UserID == user.UserID).ToList();
+
+                    ViewBag.user = user;
+                    ViewBag.promotion5Percent = promotion5Percent;
+                    ViewBag.promotion10Percent = promotion10Percent;
+                    ViewBag.promotion15Percent = promotion15Percent;
+                    ViewBag.promotion20Percent = promotion20Percent;
+                    ViewBag.orders = orders;
+
+                }
+            }
+            catch
+            {
+                return RedirectToAction("Index","Home");
+            }
             return View();
 		}
         [HttpPost]

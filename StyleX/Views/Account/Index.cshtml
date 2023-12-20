@@ -1,19 +1,19 @@
 ﻿@{
-    @model StyleX.DTOs.UserModel;
     ViewBag.Title = "StyleX - Tài khoản";
     ViewBag.pageName = "Tài khoản";
     Layout = "_Layout";
 
     User user = ViewBag.user as User ?? new User();
+    List<Order> orders = ViewBag.orders as List<Order> ?? new List<Order>();
+    int index = 1;
 }
-
 
 
 
 <section class="ftco-section mt-3" id="appAccount">
     <div class="container mt-5 mb-5">
         <div class="row no-gutters">
-            <div class="col-md-4 col-lg-4"><img class="h-100 w-100" src="https://i.imgur.com/aCwpF7V.jpg"></div>
+            <div class="col-md-4 col-lg-4"><img class="h-100 w-100" src="/images/avatar/@Html.Raw(user.Avatar)"></div>
             <div class="col-md-8 col-lg-8">
                 <div class="d-flex flex-column">
                     <div class="d-flex flex-row justify-content-between align-items-center p-5 bg-dark text-white">
@@ -39,40 +39,74 @@
                             </div>
                         </div>
                         <div class="row d-flex align-items-center mt-2">
-                            <div class="col-5" style="font-size: 20px;">Mật khẩu :</div>
+                            <div class="col-5" style="font-size: 20px;">Email :</div>
                             <div class="col-7">
-                                <input type="password" class="form-control form-control-sm" v-model="password" v-on:change="Update()">
-                                 <div class="text-danger" style="font-size:14px;">{{messagePassword}}</div>
+                                <input type="text" class="form-control form-control-sm" readonly value="@Html.Raw(user.Email)">
                             </div>
                         </div>
                         <div class="row d-flex align-items-center mt-2">
-                            <div class="col-5" style="font-size: 20px;">Email :</div>
+                            <div class="col-5" style="font-size: 20px;">Mật khẩu :</div>
                             <div class="col-7">
-                                <input type="text" class="form-control form-control-sm" readonly value="@user.Email">
+                                <input type="password" class="form-control form-control-sm" v-model="password" v-on:change="Update()">
+                                <div class="text-danger" style="font-size:14px;">{{messagePassword}}</div>
                             </div>
                         </div>
                     </div>
                     <div class="d-flex flex-row text-white">
                         <div class="p-2 bg-primary text-center skill-block" style="width: 30%">
-                            <h3>1</h3>
-                            <h6>Phiếu giảm giá 5%</h6>
+                            <h3>@ViewBag.promotion5Percent</h3>
+                            <h6>Phiếu giảm giá 5% tổng hóa đơn</h6>
                         </div>
                         <div class="p-2 bg-success text-center skill-block" style="width: 30%">
-                            <h3>5</h3>
-                            <h6>Phiếu giảm giá 10%</h6>
+                            <h3>@ViewBag.promotion10Percent</h3>
+                            <h6>Phiếu giảm giá 10% tổng hóa đơn</h6>
                         </div>
                         <div class="p-2 bg-warning text-center skill-block" style="width: 30%">
-                            <h3>8</h3>
-                            <h6>Phiếu giảm giá 15%</h6>
+                            <h3>@ViewBag.promotion15Percent</h3>
+                            <h6>Phiếu giảm giá 15% tổng hóa đơn</h6>
                         </div>
                         <div class="p-2 bg-danger text-center skill-block" style="width: 30%">
-                            <h3>1</h3>
-                            <h6>Phiếu giảm giá 20%</h6>
+                            <h3>@ViewBag.promotion20Percent</h3>
+                            <h6>Phiếu giảm giá 20% tổng hóa đơn</h6>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <table class="table mt-3 table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Mã đơn hàng</th>
+                    <th scope="col">Địa chỉ</th>
+                    <th scope="col">Số điện thoại</th>
+                    <th scope="col">Ghi chú</th>
+                    <th scope="col">Khuyến mại</th>
+                    <th scope="col">Giá gốc</th>
+                    <th scope="col">Thành tiền</th>
+                    <th scope="col">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(Order order in orders)
+                {
+                    <tr>
+                        <td>@index</td>
+                        <td>@order.OrderID</td>
+                        <td>@order.Address</td>
+                        <td>@order.PhoneNumber</td>
+                        <td>@order.Message</td>
+                        <td>@order.PercentSale.ToString("#,##0") %</td>
+                        <td>@order.BasePrice.ToString("#,##0") &#8363;</td>
+                        <td>@order.NetPrice.ToString("#,##0") &#8363;</td>
+                        <td><button class="btn btn-primary">Chi tiết</button></td>
+
+                    </tr>
+                    index++;
+                }
+            </tbody>
+        </table>
     </div>
 </section>
 
