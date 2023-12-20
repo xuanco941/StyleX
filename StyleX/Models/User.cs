@@ -12,11 +12,9 @@ namespace StyleX.Models
         public string? FullName { get; set; } = string.Empty;
         [Required]
         [StringLength(50)]
-        [MinLength(5)]
         public string Email { get; set; } = string.Empty;
         [Required]
         [StringLength(50)]
-        [MinLength(4)]
         public string Password { get; set; } = string.Empty;
         [StringLength(20)]
         public string? PhoneNumber { get; set; } = string.Empty;

@@ -12,6 +12,12 @@ namespace StyleX.Models
         public int PromotionID { get; set; }
         public string? Name { get; set; }
         public double Number { get; set; } //% phần trăm giảm giá
-        
+        public bool Status { get; set; }
+        public int? OrderID { get; set; }
+
+        public int UserID { get; set; }
+        public User User { get; set; } = null!;
+
+
     }
 }

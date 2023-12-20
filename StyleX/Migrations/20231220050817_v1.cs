@@ -51,20 +51,6 @@ namespace StyleX.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Promotion",
-                columns: table => new
-                {
-                    PromotionID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Number = table.Column<double>(type: "float", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Promotion", x => x.PromotionID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
@@ -76,7 +62,7 @@ namespace StyleX.Migrations
                     PhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Address = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
                     isActive = table.Column<bool>(type: "bit", nullable: false),
-                    keyActive = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    keyActive = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -120,19 +106,36 @@ namespace StyleX.Migrations
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserID = table.Column<int>(type: "int", nullable: false),
-                    PromotionID = table.Column<int>(type: "int", nullable: true)
+                    UserID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Order", x => x.OrderID);
                     table.ForeignKey(
-                        name: "FK_Order_Promotion_PromotionID",
-                        column: x => x.PromotionID,
-                        principalTable: "Promotion",
-                        principalColumn: "PromotionID");
-                    table.ForeignKey(
                         name: "FK_Order_User_UserID",
+                        column: x => x.UserID,
+                        principalTable: "User",
+                        principalColumn: "UserID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Promotion",
+                columns: table => new
+                {
+                    PromotionID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Number = table.Column<double>(type: "float", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false),
+                    OrderID = table.Column<int>(type: "int", nullable: true),
+                    UserID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Promotion", x => x.PromotionID);
+                    table.ForeignKey(
+                        name: "FK_Promotion_User_UserID",
                         column: x => x.UserID,
                         principalTable: "User",
                         principalColumn: "UserID",
@@ -267,11 +270,6 @@ namespace StyleX.Migrations
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Order_PromotionID",
-                table: "Order",
-                column: "PromotionID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Order_UserID",
                 table: "Order",
                 column: "UserID");
@@ -303,9 +301,20 @@ namespace StyleX.Migrations
                 column: "ProductID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Promotion_UserID",
+                table: "Promotion",
+                column: "UserID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_User_Email",
                 table: "User",
                 column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_keyActive",
+                table: "User",
+                column: "keyActive",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -329,6 +338,9 @@ namespace StyleX.Migrations
                 name: "ProductMaterial");
 
             migrationBuilder.DropTable(
+                name: "Promotion");
+
+            migrationBuilder.DropTable(
                 name: "Warehouse");
 
             migrationBuilder.DropTable(
@@ -339,9 +351,6 @@ namespace StyleX.Migrations
 
             migrationBuilder.DropTable(
                 name: "Product");
-
-            migrationBuilder.DropTable(
-                name: "Promotion");
 
             migrationBuilder.DropTable(
                 name: "User");

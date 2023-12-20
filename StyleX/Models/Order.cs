@@ -16,7 +16,5 @@ namespace StyleX.Models
         public DateTime CreateAt { get; set; } = DateTime.Now;
         public int UserID { get; set; }
         public User User { get; set; } = null!;
-        public int? PromotionID { get; set; }
-        public Promotion? Promotion { get; set; }
     }
 }

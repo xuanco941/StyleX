@@ -1,50 +1,54 @@
 ﻿@{
+    @model StyleX.DTOs.UserModel;
     ViewBag.Title = "StyleX - Tài khoản";
     ViewBag.pageName = "Tài khoản";
     Layout = "_Layout";
+
+    User user = ViewBag.user as User ?? new User();
 }
 
 
 
 
-<section class="ftco-section mt-3">
+<section class="ftco-section mt-3" id="appAccount">
     <div class="container mt-5 mb-5">
         <div class="row no-gutters">
             <div class="col-md-4 col-lg-4"><img class="h-100 w-100" src="https://i.imgur.com/aCwpF7V.jpg"></div>
             <div class="col-md-8 col-lg-8">
                 <div class="d-flex flex-column">
                     <div class="d-flex flex-row justify-content-between align-items-center p-5 bg-dark text-white">
-                        <h3 class="display-5 text-white">Username</h3>
+                        <h3 class="display-5 text-white">{{fullname}}</h3>
                     </div>
                     <div class="p-3 bg-black text-white" style="background-color: #000">
                         <div class="row d-flex align-items-center">
                             <div class="col-5" style="font-size: 20px;">Tên đầy đủ :</div>
                             <div class="col-7">
-                                <input type="text" class="form-control form-control-sm">
+                                <input type="text" class="form-control form-control-sm" v-model="fullname" v-on:change="Update()">
                             </div>
                         </div>
                         <div class="row d-flex align-items-center mt-2">
                             <div class="col-5" style="font-size: 20px;">Địa chỉ :</div>
                             <div class="col-7">
-                                <input type="text" class="form-control form-control-sm">
+                                <input type="text" class="form-control form-control-sm" v-model="address" v-on:change="Update()">
                             </div>
                         </div>
                         <div class="row d-flex align-items-center mt-2">
                             <div class="col-5" style="font-size: 20px;">Số điện thoại :</div>
                             <div class="col-7">
-                                <input type="text" class="form-control form-control-sm">
+                                <input type="text" class="form-control form-control-sm" v-model="phoneNumber" v-on:change="Update()">
                             </div>
                         </div>
                         <div class="row d-flex align-items-center mt-2">
                             <div class="col-5" style="font-size: 20px;">Mật khẩu :</div>
                             <div class="col-7">
-                                <input type="text" class="form-control form-control-sm">
+                                <input type="password" class="form-control form-control-sm" v-model="password" v-on:change="Update()">
+                                 <div class="text-danger" style="font-size:14px;">{{messagePassword}}</div>
                             </div>
                         </div>
                         <div class="row d-flex align-items-center mt-2">
                             <div class="col-5" style="font-size: 20px;">Email :</div>
                             <div class="col-7">
-                                <input type="text" class="form-control form-control-sm">
+                                <input type="text" class="form-control form-control-sm" readonly value="@user.Email">
                             </div>
                         </div>
                     </div>
@@ -72,6 +76,71 @@
     </div>
 </section>
 
+
+
+@section Scripts{
+
+    <script>
+        var appAccount = new Vue({
+            el: "#appAccount",
+            data: {
+                fullname: '@Html.Raw(user.FullName)',
+                address: '@Html.Raw(user.Address)',
+                phoneNumber: '@Html.Raw(user.PhoneNumber)',
+                password: '@Html.Raw(user.Password)',
+                messagePassword: ''
+            },
+            methods: {
+                init: async function () {
+                    this.$forceUpdate();
+
+                },
+                Update: async function () {
+                    var self = this;
+
+                    if (self.password.length < 5) {
+                        self.messagePassword = "Mật khẩu tối thiểu là 5 ký tự.";
+                        return;
+                    }
+                    else {
+                        self.messagePassword = "";
+                    }
+
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "/Account/Update",
+                        data: JSON.stringify({
+                            fullname: self.fullname,
+                            address: self.address,
+                            phoneNumber: self.phoneNumber,
+                            password: self.password
+
+                        }),
+                        success: function (data) {
+                            if (data.status == 1) {
+                                ShowAlert(data.message, "success");
+                            }
+                            else {
+                                ShowAlert(data.message, "danger");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            ShowAlert(error, "danger");
+                        }
+                    });
+
+                },
+               
+
+            },
+            mounted() {
+                this.init();
+            },
+        });
+
+    </script>
+}
 
 
 

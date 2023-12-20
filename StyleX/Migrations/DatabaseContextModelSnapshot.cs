@@ -157,9 +157,6 @@ namespace StyleX.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PromotionID")
-                        .HasColumnType("int");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -170,8 +167,6 @@ namespace StyleX.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("OrderID");
-
-                    b.HasIndex("PromotionID");
 
                     b.HasIndex("UserID");
 
@@ -314,7 +309,18 @@ namespace StyleX.Migrations
                     b.Property<double>("Number")
                         .HasColumnType("float");
 
+                    b.Property<int?>("OrderID")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
                     b.HasKey("PromotionID");
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("Promotion");
                 });
@@ -354,11 +360,14 @@ namespace StyleX.Migrations
 
                     b.Property<string>("keyActive")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("UserID");
 
                     b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("keyActive")
                         .IsUnique();
 
                     b.ToTable("User");
@@ -410,17 +419,11 @@ namespace StyleX.Migrations
 
             modelBuilder.Entity("StyleX.Models.Order", b =>
                 {
-                    b.HasOne("StyleX.Models.Promotion", "Promotion")
-                        .WithMany()
-                        .HasForeignKey("PromotionID");
-
                     b.HasOne("StyleX.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Promotion");
 
                     b.Navigation("User");
                 });
@@ -464,6 +467,17 @@ namespace StyleX.Migrations
                     b.Navigation("Material");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("StyleX.Models.Promotion", b =>
+                {
+                    b.HasOne("StyleX.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("StyleX.Models.Warehouse", b =>

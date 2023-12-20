@@ -5,6 +5,7 @@ using System.Security.Claims;
 using StyleX.Models;
 using StyleX.Utils;
 using StyleX.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace StyleX.Controllers
 {
@@ -16,9 +17,23 @@ namespace StyleX.Controllers
         {
             _dbContext = dbContext;
         }
+        [AllowAnonymous]
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login(string keyActive)
         {
+            if (!string.IsNullOrEmpty(keyActive))
+            {
+                User? user = _dbContext.Users.FirstOrDefault(u => u.keyActive == keyActive && u.isActive == false);
+                if (user != null)
+                {
+                    user.isActive = true;
+                    _dbContext.SaveChanges();
+                    ViewBag.IsActive = 1;
+                    ViewBag.email = user.Email;
+                    ViewBag.password = user.Password;
+                }
+            }
+
             ClaimsPrincipal claimsPrincipal = HttpContext.User;
             if (claimsPrincipal.Identity.IsAuthenticated)
                 return RedirectToAction("Index", "Home");
@@ -26,8 +41,9 @@ namespace StyleX.Controllers
             return View();
 
         }
+        [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
+        public async Task<IActionResult> SignIn([FromBody] LoginModel loginDTO)
         {
             if (string.IsNullOrEmpty(loginDTO.email) || string.IsNullOrEmpty(loginDTO.password))
             {
@@ -46,6 +62,8 @@ namespace StyleX.Controllers
                         ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                         AuthenticationProperties properties = new AuthenticationProperties() { AllowRefresh = true, IsPersistent = true };
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), properties);
+                        return new OkObjectResult(new { status = 1, message = "/" });
+
                     }
                     else
                     {
@@ -62,12 +80,10 @@ namespace StyleX.Controllers
                 return new OkObjectResult(new { status = -3, message = e.Message });
 
             }
-
-            return RedirectToAction("Index", "Home");
         }
-
+        [AllowAnonymous]
         [HttpPost]
-        public IActionResult SignUp([FromBody] LoginDTO sigupDto)
+        public IActionResult SignUp([FromBody] LoginModel sigupDto)
         {
             try
             {
@@ -92,7 +108,7 @@ namespace StyleX.Controllers
                 else
                 {
                     string keyActive = Guid.NewGuid().ToString();
-                    string linkActive = $"<a href=\"http://{HttpContext.Request.Host.Value}/Access/Active/keyActive={keyActive}\">Nhấn vào đây để kích hoạt tài khoản của bạn.</a>";
+                    string linkActive = $"<a href=\"https://{HttpContext.Request.Host.Value}/Access/Login/?keyActive={keyActive}\">StyleX - Nhấn vào đây để kích hoạt tài khoản của bạn.</a>";
 
                     _dbContext.Users.Add(new Models.User() { Email = sigupDto.email, Password = sigupDto.password, isActive = false, keyActive = keyActive });
                     if (_dbContext.SaveChanges() > 0)
@@ -114,6 +130,7 @@ namespace StyleX.Controllers
 
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Logout()
         {

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "DmFOdBiZ3vTscajECg0JLyuJrc1pk0giPLq5I/l/BGo=",
+  "Hash": "8cxYexk2tyGqiQ7ry34Emgh1d4HyNQqw4461vQBc3ZU=",
   "Source": "StyleX",
   "BasePath": "_content/StyleX",
   "Mode": "Default",
@@ -929,25 +929,6 @@
       "OriginalItemSpec": "wwwroot\\images\\logo\\logo-no-background-blue.png"
     },
     {
-      "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\may.jpg",
-      "SourceId": "StyleX",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\",
-      "BasePath": "_content/StyleX",
-      "RelativePath": "images/may.jpg",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\may.jpg"
-    },
-    {
       "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\may-in.jpg",
       "SourceId": "StyleX",
       "SourceType": "Discovered",
@@ -965,6 +946,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\may-in.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\may.jpg",
+      "SourceId": "StyleX",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\",
+      "BasePath": "_content/StyleX",
+      "RelativePath": "images/may.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\may.jpg"
     },
     {
       "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\none.png",
@@ -1518,25 +1518,6 @@
       "OriginalItemSpec": "wwwroot\\library\\css\\aos.css"
     },
     {
-      "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\library\\css\\bootstrap.css",
-      "SourceId": "StyleX",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\",
-      "BasePath": "_content/StyleX",
-      "RelativePath": "library/css/bootstrap.css",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\library\\css\\bootstrap.css"
-    },
-    {
       "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\library\\css\\bootstrap-datepicker.css",
       "SourceId": "StyleX",
       "SourceType": "Discovered",
@@ -1554,6 +1535,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\library\\css\\bootstrap-datepicker.css"
+    },
+    {
+      "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\library\\css\\bootstrap.css",
+      "SourceId": "StyleX",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\",
+      "BasePath": "_content/StyleX",
+      "RelativePath": "library/css/bootstrap.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\library\\css\\bootstrap.css"
     },
     {
       "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\library\\css\\jquery.timepicker.css",
@@ -1708,6 +1708,25 @@
       "OriginalItemSpec": "wwwroot\\library\\js\\aos.js"
     },
     {
+      "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\library\\js\\bootstrap-datepicker.js",
+      "SourceId": "StyleX",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\",
+      "BasePath": "_content/StyleX",
+      "RelativePath": "library/js/bootstrap-datepicker.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\library\\js\\bootstrap-datepicker.js"
+    },
+    {
       "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\library\\js\\bootstrap.min.js",
       "SourceId": "StyleX",
       "SourceType": "Discovered",
@@ -1727,12 +1746,12 @@
       "OriginalItemSpec": "wwwroot\\library\\js\\bootstrap.min.js"
     },
     {
-      "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\library\\js\\bootstrap-datepicker.js",
+      "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\library\\js\\jquery-migrate-3.0.1.min.js",
       "SourceId": "StyleX",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\",
       "BasePath": "_content/StyleX",
-      "RelativePath": "library/js/bootstrap-datepicker.js",
+      "RelativePath": "library/js/jquery-migrate-3.0.1.min.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -1743,7 +1762,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\library\\js\\bootstrap-datepicker.js"
+      "OriginalItemSpec": "wwwroot\\library\\js\\jquery-migrate-3.0.1.min.js"
     },
     {
       "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\library\\js\\jquery.animateNumber.min.js",
@@ -1858,25 +1877,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\library\\js\\jquery.waypoints.min.js"
-    },
-    {
-      "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\library\\js\\jquery-migrate-3.0.1.min.js",
-      "SourceId": "StyleX",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\",
-      "BasePath": "_content/StyleX",
-      "RelativePath": "library/js/jquery-migrate-3.0.1.min.js",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\library\\js\\jquery-migrate-3.0.1.min.js"
     },
     {
       "Identity": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\library\\js\\owl.carousel.min.js",

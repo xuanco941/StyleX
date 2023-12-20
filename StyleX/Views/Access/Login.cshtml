@@ -145,7 +145,9 @@
             <input v-model="dataLogin.password" type="password" class="third inputLogin" name="password"
                    placeholder="Mật khẩu" autocomplete="on">
             <div class="text-danger" style="font-size:14px;">{{dataLogin.messagePassword}}</div>
-            <button type="button" v-on:click="logIn()" class="fourth mt-4 mb-3">Đăng nhập</button>
+            <button v-if="dataLogin.isLoad==false" type="button" v-on:click="logIn()" class="fourth mt-4 mb-3">Đăng nhập</button>
+            <button v-if="dataLogin.isLoad" type="button" class="fourth mt-4 mb-3"><i class="fa-solid fa-spinner fa-spin-pulse"></i></button>
+
 
         </div>
         <div v-if="!isLogin">
@@ -156,7 +158,9 @@
             <div class="text-danger" style="font-size:14px;">{{dataSignUp.messagePassword}}</div>
 
             <input v-model="dataSignUp.repeatPassword" type="password" class="third inputLogin" name="repeatPassword" placeholder="Nhập lại mật khẩu" autocomplete="off" />
-            <button type="button" v-on:click="signUp()" class="fourth mt-4 mb-3">Đăng ký</button>
+            <button v-if="dataSignUp.isLoad==false" type="button" v-on:click="signUp()" class="fourth mt-4 mb-3">Đăng ký</button>
+            <button v-if="dataSignUp.isLoad" type="button" class="fourth mt-4 mb-3"><i class="fa-solid fa-spinner fa-spin-pulse"></i></button>
+
 
         </div>
 
@@ -174,14 +178,13 @@
         var appLogin = new Vue({
             el: "#appLogin",
             data: {
-                model: {},
-                data: {},
                 isLogin: true,
                 dataLogin: {
                     email: '',
                     password: '',
                     messageEmail: '',
                     messagePassword: '',
+                    isLoad: false
                 },
                 dataSignUp: {
                     email: '',
@@ -189,10 +192,17 @@
                     repeatPassword: '',
                     messageEmail: '',
                     messagePassword: '',
-                }
+                    isLoad: false
+                },
+                isActive: '@ViewBag.IsActive'
             },
             methods: {
                 init: async function () {
+                    if (this.isActive == '1') {
+                        this.dataLogin.email = "@ViewBag.email";
+                        this.dataLogin.password = "@ViewBag.password";
+                        ShowAlert("Kích hoạt tài khoản thành công.", "success");
+                    }
                     this.$forceUpdate();
 
                 },
@@ -201,6 +211,7 @@
                 },
                 logIn: async function () {
                     var self = this;
+
                     if (!self.dataLogin.email) {
                         self.dataLogin.messageEmail = "Email không hợp lệ, vui lòng thử lại.";
                         return;
@@ -215,29 +226,34 @@
                     else {
                         self.dataLogin.messagePassword = "";
                     }
-                    await fetch('/Access/Login', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
+                    self.dataLogin.isLoad = true;
+
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "/Access/SignIn",
+                        data: JSON.stringify({
                             email: self.dataLogin.email,
                             password: self.dataLogin.password,
                         }),
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-
-                            if (data.status == -1) {
+                        success: function (data) {
+                            self.dataLogin.isLoad = false;
+                            if (data.status == 1) {
+                                window.location.href = "/";
+                            }
+                            else if (data.status == -1) {
                                 ShowAlert(data.message, "info");
                             }
                             else {
                                 ShowAlert(data.message, "danger");
                             }
-                        })
-                        .catch(error => {
+                        },
+                        error: function (xhr, status, error) {
+                            self.dataLogin.isLoad = false;
                             ShowAlert(error, "danger");
-                        });
+                        }
+                    });
+                    
                 },
                 signUp: async function () {
                     var self = this;
@@ -263,19 +279,18 @@
                     else {
                         self.dataSignUp.messagePassword = "";
                     }
-                    await fetch('/Access/SignUp', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
+                    self.dataSignUp.isLoad = true;
+
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "/Access/SignUp",
+                        data: JSON.stringify({
                             email: self.dataSignUp.email,
                             password: self.dataSignUp.password,
-                        })
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-
+                        }),
+                        success: function (data) {
+                            self.dataSignUp.isLoad = false;
                             if (data.status == 1) {
                                 ShowAlert(data.message, "success");
                             }
@@ -285,13 +300,109 @@
                             else {
                                 ShowAlert(data.message, "danger");
                             }
-                        })
-                        .catch(error => {
+                        },
+                        error: function (xhr, status, error) {
+                            self.dataSignUp.isLoad = false;
                             ShowAlert(error, "danger");
-                        });
-
-
+                        }
+                    });
                 },
+
+
+
+                // logIn2: async function () {
+                //     var self = this;
+                //     if (!self.dataLogin.email) {
+                //         self.dataLogin.messageEmail = "Email không hợp lệ, vui lòng thử lại.";
+                //         return;
+                //     }
+                //     else {
+                //         self.dataLogin.messageEmail = "";
+                //     }
+                //     if (!self.dataLogin.password) {
+                //         self.dataLogin.messagePassword = "Mật khẩu không hợp lệ, vui lòng thử lại.";
+                //         return;
+                //     }
+                //     else {
+                //         self.dataLogin.messagePassword = "";
+                //     }
+                //     await fetch('/Access/Login', {
+                //         method: 'POST',
+                //         headers: {
+                //             'Content-Type': 'application/json',
+                //         },
+                //         body: JSON.stringify({
+                //             email: self.dataLogin.email,
+                //             password: self.dataLogin.password,
+                //         }),
+                //     })
+                //         .then(response => response.json())
+                //         .then(data => {
+
+                //             if (data.status == -1) {
+                //                 ShowAlert(data.message, "info");
+                //             }
+                //             else {
+                //                 ShowAlert(data.message, "danger");
+                //             }
+                //         })
+                //         .catch(error => {
+                //             ShowAlert(error, "danger");
+                //         });
+                // },
+                // signUp2: async function () {
+                //     var self = this;
+                //     var regex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+                //     if (!regex.test(self.dataSignUp.email)) {
+                //         self.dataSignUp.messageEmail = "Email không hợp lệ, vui lòng thử lại.";
+                //         return;
+                //     }
+                //     else {
+                //         self.dataSignUp.messageEmail = "";
+                //     }
+                //     if (self.dataSignUp.password.length < 5) {
+                //         self.dataSignUp.messagePassword = "Mật khẩu tối thiểu 5 ký tự.";
+                //         return;
+                //     }
+                //     else {
+                //         self.dataSignUp.messagePassword = "";
+                //     }
+                //     if (self.dataSignUp.password != self.dataSignUp.repeatPassword) {
+                //         self.dataSignUp.messagePassword = "Mật khẩu nhập lại không trùng nhau.";
+                //         return;
+                //     }
+                //     else {
+                //         self.dataSignUp.messagePassword = "";
+                //     }
+                //     await fetch('/Access/SignUp', {
+                //         method: 'POST',
+                //         headers: {
+                //             'Content-Type': 'application/json',
+                //         },
+                //         body: JSON.stringify({
+                //             email: self.dataSignUp.email,
+                //             password: self.dataSignUp.password,
+                //         })
+                //     })
+                //         .then(response => response.json())
+                //         .then(data => {
+
+                //             if (data.status == 1) {
+                //                 ShowAlert(data.message, "success");
+                //             }
+                //             else if (data.status == -2) {
+                //                 ShowAlert(data.message, "info");
+                //             }
+                //             else {
+                //                 ShowAlert(data.message, "danger");
+                //             }
+                //         })
+                //         .catch(error => {
+                //             ShowAlert(error, "danger");
+                //         });
+
+
+                // },
 
 
             },
