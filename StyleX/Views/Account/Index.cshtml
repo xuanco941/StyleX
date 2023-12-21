@@ -10,42 +10,42 @@
 
 
 
-<section class="ftco-section bg-primary" id="appAccount">
+<section class="ftco-section" style="background-image: url('/images/bg.jpg'); background-size:cover" id="appAccount">
     <div class="container mt-5 mb-5">
-        <div class="row no-gutters">
-            <div class="col-md-4 col-lg-4"><img class="h-100 w-100" src="/images/avatar/@Html.Raw(user.Avatar)"></div>
-            <div class="col-md-8 col-lg-8">
+        <div class="row no-gutters shadow rounded">
+            <div class="col-md-5 col-lg-5"><img class="h-100 w-100" src="/images/avatar/@Html.Raw(user.Avatar)"></div>
+            <div class="col-md-7 col-lg-7">
                 <div class="d-flex flex-column">
-                    <div class="d-flex flex-row justify-content-between align-items-center p-5 bg-dark text-white">
-                        <h3 class="display-5 text-white">{{fullname}}</h3>
+                    <div class="d-flex flex-row justify-content-between align-items-center p-4 bg-dark text-white">
+                        <h2 class="display-5 text-white text-center w-100" style="font-family:'Segoe UI'">{{fullname}}</h2>
                     </div>
-                    <div class="p-3 bg-black text-white" style="background-color: #000">
+                    <div class="p-3 text-white" style="background-color: #343a40">
                         <div class="row d-flex align-items-center">
-                            <div class="col-5" style="font-size: 20px;">Tên đầy đủ :</div>
+                            <div class="col-5" style="font-size: 20px; font-family:'Segoe UI'">Tên đầy đủ :</div>
                             <div class="col-7">
                                 <input type="text" class="form-control form-control-sm" v-model="fullname" v-on:change="Update()">
                             </div>
                         </div>
                         <div class="row d-flex align-items-center mt-2">
-                            <div class="col-5" style="font-size: 20px;">Địa chỉ :</div>
+                            <div class="col-5" style="font-size: 20px;  font-family:'Segoe UI'">Địa chỉ :</div>
                             <div class="col-7">
                                 <input type="text" class="form-control form-control-sm" v-model="address" v-on:change="Update()">
                             </div>
                         </div>
                         <div class="row d-flex align-items-center mt-2">
-                            <div class="col-5" style="font-size: 20px;">Số điện thoại :</div>
+                            <div class="col-5" style="font-size: 20px;  font-family:'Segoe UI'">Số điện thoại :</div>
                             <div class="col-7">
                                 <input type="text" class="form-control form-control-sm" v-model="phoneNumber" v-on:change="Update()">
                             </div>
                         </div>
                         <div class="row d-flex align-items-center mt-2">
-                            <div class="col-5" style="font-size: 20px;">Email :</div>
+                            <div class="col-5" style="font-size: 20px;  font-family:'Segoe UI'">Email :</div>
                             <div class="col-7">
                                 <input type="text" class="form-control form-control-sm" readonly value="@Html.Raw(user.Email)">
                             </div>
                         </div>
                         <div class="row d-flex align-items-center mt-2">
-                            <div class="col-5" style="font-size: 20px;">Mật khẩu :</div>
+                            <div class="col-5" style="font-size: 20px; font-family:'Segoe UI'">Mật khẩu :</div>
                             <div class="col-7">
                                 <input type="password" class="form-control form-control-sm" v-model="password" v-on:change="Update()">
                                 <div class="text-danger" style="font-size:14px;">{{messagePassword}}</div>
@@ -53,19 +53,19 @@
                         </div>
                     </div>
                     <div class="d-flex flex-row text-white">
-                        <div class="p-2 bg-info text-center skill-block" style="width: 30%">
+                        <div class="p-2 bg-info text-center skill-block" style="width: 30%; font-family:'Segoe UI'">
                             <h3>@ViewBag.promotion1</h3>
                             <h6>Phiếu giảm giá 10% tổng hóa đơn</h6>
                         </div>
-                        <div class="p-2 bg-success text-center skill-block" style="width: 30%">
+                        <div class="p-2 bg-success text-center skill-block" style="width: 30%; font-family:'Segoe UI'">
                             <h3>@ViewBag.promotion2</h3>
                             <h6>Phiếu giảm giá 20% tổng hóa đơn</h6>
                         </div>
-                        <div class="p-2 bg-warning text-center skill-block" style="width: 30%">
+                        <div class="p-2 bg-warning text-center skill-block" style="width: 30%; font-family:'Segoe UI'">
                             <h3>@ViewBag.promotion3</h3>
                             <h6>Phiếu giảm giá 30% tổng hóa đơn</h6>
                         </div>
-                        <div class="p-2 bg-danger text-center skill-block" style="width: 30%">
+                        <div class="p-2 bg-danger text-center skill-block" style="width: 30%; font-family:'Segoe UI'">
                             <h3>@ViewBag.promotion4</h3>
                             <h6>Phiếu giảm giá 40% tổng hóa đơn</h6>
                         </div>
@@ -73,7 +73,7 @@
                 </div>
             </div>
         </div>
-        <div style="overflow-x: auto">
+        <div style="overflow-x: auto" class="shadow rounded">
             <table class="table table-dark mt-3 table-striped" style="vertical-align: middle">
                 <thead class="thead-dark">
                     <tr>

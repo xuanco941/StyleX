@@ -1,0 +1,882 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleX - Thiết kế</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+
+    <link rel="stylesheet" href="/css/design.css">
+</head>
+
+<body class="bg-color text-white">
+    <div class="container-fluid">
+        <div class="row gx-2">
+            <div class="col-12 col-md-3 col-lg-2 col-xl-2 mb-3 mb-md-0" style="height: 100vh; cursor: default;">
+                <div id="appSelectModel" style="height: calc(50% - 16px); padding-bottom: 8px;">
+                    <h6 class="text-center my-2" style="color: #ccc; height: 30px;">MODEL</h6>
+                    <div class="row g-1 pb-1" style="font-size: 16px;overflow-y: auto;max-height: calc(100% - 30px);">
+                        <div class="col-4 col-md-6 product">
+                            <img class="mw-100 mh-100" src="/model/1.webp" alt="" srcset="">
+                        </div>
+                    </div>
+                </div>
+                <div class="border-top my-2"></div>
+                <div id="appBackground" style="height: calc(50% - 16px); padding-bottom: 8px;">
+                    <div style="height: 70px;">
+                        <h6 class="text-center my-2" style="color: #ccc;">BACKGROUND</h6>
+                        <ul class="nav nav-pills mb-2 d-flex justify-content-between" id="pills-tab" role="tablist">
+                            <li class="nav-item" style="width: 48%;" role="presentation">
+                                <button style="font-size: 11px; letter-spacing: 1px;"
+                                    class="w-100 nav-link active button-universe mt-1 mb-1" data-bs-toggle="pill"
+                                    data-bs-target="#pills-background-image" type="button" role="tab"
+                                    aria-controls="pills-background-image" aria-selected="false">Hình ảnh</button>
+                            </li>
+                            <li class="nav-item" style="width: 48%;" role="presentation">
+                                <button style="font-size: 11px; letter-spacing: 1px;"
+                                    class="w-100 nav-link button-universe mt-1 mb-1" data-bs-toggle="pill"
+                                    data-bs-target="#pills-background-color" type="button" role="tab"
+                                    aria-controls="pills-background-color" aria-selected="true">Đơn màu</button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content" id="pills-tabContent"
+                        style="overflow-y: auto;max-height: calc(100% - 70px);">
+                        <div class="tab-pane fade show active" id="pills-background-image" role="tabpanel">
+                            <div class="form-check form-switch d-flex align-items-center justify-content-start p-0">
+                                <input class="form-check-input mt-0 mx-0" type="checkbox" v-model="typeImage"
+                                    id="stToanCanh" v-on:change="ChangeTypeImage()">
+                                <label class="form-check-label mx-1" for="stToanCanh" style="font-size: 10px;">Toàn
+                                    cảnh</label>
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <input style="box-shadow: none;" type="text" class="form-control form-control-sm"
+                                    placeholder="Tìm kiếm hình ảnh" aria-describedby="button-search-image-bg"
+                                    v-model="querySearch" v-on:keyup.enter="SearchImages()">
+                                <button class="btn btn-outline-primary" type="button" id="button-search-image-bg"
+                                    v-on:click="SearchImages()">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </button>
+                            </div>
+                            <div class="row mt-2 w-100 justify-content-center mx-0">
+                                <div v-if="loadingImage" class="d-flex justify-content-center align-items-center w-100"
+                                    style="height: 100px;">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                                <img v-if="!loadingImage" style="max-width: 100%;" class="col-4 px-1 py-1 product"
+                                    v-for="(url,index) in listImages" v-bind:src="url" v-bind:alt="index"
+                                    v-on:click="ChangeImage(url)">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="pills-background-color" role="tabpanel">
+                            <input style="height: 100px;" type="color" class="form-control form-control-color w-100"
+                                title="Chọn màu nền" v-on:input="ChangeBackground(0)" v-model="data.background">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-5 col-lg-7 col-xl-8 p-3" style="height: 100vh;">
+                <model-viewer id="model-main" class="w-100 h-100" alt=""
+                    src="/model/1.glb" ar shadow-intensity="1" camera-controls disable-pan
+                    disable-tap autoplay shadow-softness="0.1" min-camera-orbit="auto auto 50%"
+                    max-camera-orbit="auto auto 300%">
+                </model-viewer>
+            </div>
+            <div class="col-12 col-md-4 col-lg-3 col-xl-2 mt-3 mt-md-0"
+                style="height: 100vh; max-height: 100vh; cursor: default; overflow-y: auto;">
+                <nav class="mb-2" style="height: 36px;">
+                    <div class="nav nav-tabs justify-content-between h-100 flex-nowrap" id="nav-tab" role="tablist"
+                        style="font-size: 0.7rem; font-weight: 500;">
+                        <button class="nav-link active" id="nav-design-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-design" type="button" role="tab" aria-controls="nav-design"
+                            aria-selected="true" style="width: 32%; color: #149CEA;">Thiết kế</button>
+                        <button class="nav-link" id="nav-share-tab" data-bs-toggle="tab" data-bs-target="#nav-share"
+                            type="button" role="tab" aria-controls="nav-share" aria-selected="false"
+                            style="width: 32%; color: #149CEA;">Chia
+                            sẻ</button>
+                        <button class="nav-link" id="nav-download-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-download" type="button" role="tab" aria-controls="nav-download"
+                            aria-selected="false" style="width: 32%; color: #149CEA;">Tải về</button>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent" style="max-height: calc(100% - 36px);">
+                    <div class="tab-pane fade show active" id="nav-design" role="tabpanel"
+                        aria-labelledby="nav-design-tab">
+
+                        <div class="flex-shrink-0 w-100">
+                            <div id="app-select-position-model">
+                                <label for="selectPositionModel" class="form-label" style="font-size: 0.9rem;">Chọn
+                                    bộ phận thao tác:</label>
+                                <select id="selectPositionModel" class="form-select" v-model="materialSelectedName"
+                                    v-on:change="Select()">
+                                    <option value="">Toàn bộ phận</option>
+                                    <option v-for="mat in listMaterials" v-bind:value="mat.name">{{mat.name}}
+                                    </option>
+                                </select>
+                                <div
+                                    class="form-check form-switch d-flex align-items-center justify-content-end p-0 mt-1">
+                                    <input class="form-check-input mt-0 mx-0" type="checkbox"
+                                        v-model="isNotHidePositionOther" id="hideOther" v-on:change="Select()">
+                                    <label class="form-check-label mx-1" for="hideOther" style="font-size: 10px;">Không
+                                        ẩn bộ phận khác</label>
+                                </div>
+                            </div>
+                            <ul class="list-unstyled ps-0 mt-4">
+                                <li class="mb-3" id="appChangeColor">
+                                    <button class="btn btn-toggle align-items-center rounded collapsed"
+                                        data-bs-toggle="collapse" data-bs-target="#color-collapse"
+                                        aria-expanded="false">
+                                        Màu sắc
+                                    </button>
+                                    <div class="collapse mt-2" id="color-collapse"
+                                        style="padding-left: 1.5rem; max-height: 500px; overflow-y: auto; overflow-x: hidden;">
+                                        <div class="d-flex align-items-center">
+                                            <input v-model="data.color" v-on:input="ChangeColor()" type="color"
+                                                class="form-control form-control-color w-25 product"
+                                                id="colorDesignInput">
+                                            <label class="mx-2" style="font-size: 0.9rem;">Đơn màu</label>
+                                        </div>
+                                        <div class="border-top my-3"></div>
+                                        <div>
+                                            <div class="d-flex align-items-center">
+                                                <input hidden type="file" id="uploadImgColor" accept="image/*"
+                                                    v-on:change="GetUrlFileUpload">
+                                                <label for="uploadImgColor" class="w-25" role="button">
+                                                    <img v-bind:src="data.imageTexture" class="w-100 product"
+                                                        style="border-radius: 5px;">
+                                                </label>
+                                                <label class="mx-2" style="font-size: 0.9rem;">
+                                                    Kết cấu màu từ ảnh
+                                                </label>
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col-6">
+                                                    <label for="rotationIp" class="form-label m-0"
+                                                        style="font-size: 14px;">Rotation</label>
+                                                    <div class="position-relative d-flex flex-nowrap align-items-center"
+                                                        style="padding-right: 5px;">
+                                                        <span class="position-absolute"
+                                                            style="font-size: 10px; bottom: -9px; left: 0px;">0</span>
+                                                        <input v-on:change="ChangeRotationTexture()"
+                                                            v-model="data.rotationTexture" type="range"
+                                                            class="form-range" min="0" max="3.14" step="0.01"
+                                                            id="rotationIp">
+                                                        <input class="from-control form-control-sm text-center" disabled
+                                                            readonly
+                                                            style="width: 27px; font-size: 10px; margin-left: 3px;color: #fff; padding: 1px;"
+                                                            type="text" v-bind:value="data.rotationTexture">
+                                                        <span class="position-absolute"
+                                                            style="font-size: 10px; bottom: -9px; right: 33px;">3.14</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <label for="scaleIp" class="form-label m-0"
+                                                        style="font-size: 14px;">Scale</label>
+                                                    <div class="position-relative d-flex flex-nowrap align-items-center"
+                                                        style="padding-right: 5px;">
+                                                        <span class="position-absolute"
+                                                            style="font-size: 12px; bottom: -9px; left: 0px;">0</span>
+                                                        <input v-on:change="ChangeScaleTexture()"
+                                                            v-model="data.scaleTexture" type="range" class="form-range"
+                                                            min="0" max="2" step="0.1" id="scaleIp">
+                                                        <input class="from-control form-control-sm text-center" disabled
+                                                            readonly
+                                                            style="width: 27px; font-size: 10px; margin-left: 3px;color: #fff; padding: 1px;"
+                                                            type="text" v-bind:value="data.scaleTexture">
+                                                        <span class="position-absolute"
+                                                            style="font-size: 12px; bottom: -9px; right: 33px;">2</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="mt-4">
+                                                <div class="input-group input-group-sm mb-1">
+                                                    <input style="box-shadow: none;" type="text"
+                                                        class="form-control form-control-sm"
+                                                        placeholder="Tìm kiếm hình ảnh"
+                                                        aria-describedby="button-search-image-bg" v-model="querySearch"
+                                                        v-on:keyup.enter="SearchImages()">
+                                                    <button class="btn btn-outline-primary" type="button"
+                                                        id="button-search-image-bg" v-on:click="SearchImages()">
+                                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="row mt-2 w-100 justify-content-center mx-0">
+                                                    <div v-if="loadingImage"
+                                                        class="d-flex justify-content-center align-items-center w-100"
+                                                        style="height: 100px;">
+                                                        <div class="spinner-border" role="status">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                        </div>
+                                                    </div>
+                                                    <img v-if="!loadingImage" style="max-width: 100%;"
+                                                        class="col-4 px-1 py-1 product"
+                                                        v-for="(url,index) in listImages" v-bind:src="url"
+                                                        v-bind:alt="index" v-on:click="ChangeTexture(url)">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="mb-3" id="appChangeMetallicRoughness">
+                                    <button class="btn btn-toggle align-items-center rounded collapsed"
+                                        data-bs-toggle="collapse" data-bs-target="#metallic-roughness-collapse"
+                                        aria-expanded="true">
+                                        Chất liệu
+                                    </button>
+                                    <div class="collapse show" id="metallic-roughness-collapse"
+                                        style="margin-left: 1.5rem;">
+
+                                        <div v-if="loading" class="spinner-border" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <div v-if="!loading" class="radio-button-container">
+                                            <div class="radio-button">
+                                                <input type="radio" class="radio-button__input"
+                                                    v-on:change="changeMetallicRoughness(null)" value=""
+                                                    id="radio-change-r-default" name="radio-change-metallic-roughness">
+                                                <label class="radio-button__label" for="radio-change-r-default">
+                                                    <span class="radio-button__custom"></span>
+                                                    <span>
+                                                        <span>Mặc định</span>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                            <div v-for="item in listMetallicRoughness"
+                                                class="radio-button d-flex align-items-center">
+                                                <input type="radio" class="radio-button__input"
+                                                    v-on:change="changeMetallicRoughness(item.url)"
+                                                    v-bind:id="item.name" name="radio-change-metallic-roughness">
+                                                <label class="radio-button__label" v-bind:for="item.name">
+                                                    <span class="radio-button__custom" style="top: 9px;"></span>
+                                                    <span class="d-flex align-items-center">
+                                                        <span class="mx-1">{{item.name}}</span>
+                                                        <img style="width: 30px; height: 30px;" v-bind:src="item.url"
+                                                            v-bind:alt="item.name">
+                                                    </span>
+                                                </label>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+                                </li>
+                                <li class="mb-3" id="appChangeDecal">
+                                    <button class="btn btn-toggle align-items-center rounded collapsed"
+                                        data-bs-toggle="collapse" data-bs-target="#decal-collapse"
+                                        aria-expanded="false">
+                                        Dán decal
+                                    </button>
+                                    <div class="collapse" id="decal-collapse" style="margin-left: 1.5rem;">
+                                        <span>abc</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-share" role="tabpanel" aria-labelledby="nav-share-tab">...
+                    </div>
+                    <div class="tab-pane fade" id="nav-download" role="tabpanel" aria-labelledby="nav-download-tab">
+                        ...</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!--vue2 development-->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <!--vue2 production-->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@@^0.158.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@@^0.158.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js">
+    </script>
+
+    <script type="module">
+
+        import { SearchImages } from '/js/search-image.js';
+        // console.log(await SearchImages('cat', 10, 1));
+
+
+        function hexToRgb(hex) {
+
+            if (!hex) {
+                return null;
+            }
+
+            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+        function rgbToLinearRGB(rgb) {
+            // Chuẩn hóa giá trị màu từ 0-255 về 0-1
+            const linearRGB = rgb.map(val => val / 255.0);
+
+            // Chuyển đổi không gian màu sRGB sang không gian màu tuyến tính
+            const linearized = linearRGB.map(val => {
+                if (val <= 0.04045) {
+                    return val / 12.92;
+                } else {
+                    return Math.pow((val + 0.055) / 1.055, 2.4);
+                }
+            });
+
+            return { r: linearized[0], g: linearized[1], b: linearized[2] };
+        }
+
+        var appBackground = new Vue({
+            el: "#appBackground",
+            data: {
+                model: {},
+                data: {},
+                querySearch: '',
+                listImages: [],
+                typeImage: false,
+                loadingImage: true
+            },
+            methods: {
+                init: async function () {
+                    var self = this;
+
+                    this.data.type = 0; //2-toàn cảnh, 1-hình ảnh, 0 đơn màu
+                    this.data.background = 'transparent';
+
+                    document.getElementById("model-main").addEventListener('load', (e) => {
+                        self.model = e.target;
+                        self.ChangeBackground(self.data.type);
+                    });
+
+                    await this.SearchImages();
+
+                    this.$forceUpdate();
+                },
+                SearchImages: async function () {
+                    var self = this;
+                    self.loadingImage = true;
+                    var images = await SearchImages(self.querySearch, 15, 1);
+                    if (images.length > 0) {
+                        self.listImages = images.map(e => `https://images.unsplash.com/${e.url.trim()}?auto=format&fit=crop&w=500&h=500`);
+                    }
+                    self.loadingImage = false;
+                },
+                ChangeBackground: function (type) {
+                    var self = this;
+
+                    if (type == 2) self.data.type = 2;
+                    else if (type == 1) self.data.type = 1;
+                    else self.data.type = 0;
+
+                    if (self.data.type == 0 && self.data.background) {
+                        self.model.removeAttribute('skybox-image');
+                        self.model.style.backgroundImage = 'none';
+                        self.model.style.backgroundColor = self.data.background;
+                    }
+                    else if (self.data.type == 1 && self.data.background) {
+                        self.model.removeAttribute('skybox-image');
+                        self.model.style.backgroundImage = `url('${self.data.background}')`;
+                        self.model.style.backgroundColor = 'transparent';
+                    }
+                    else if (self.data.type == 2 && self.data.background) {
+                        self.model.setAttribute('skybox-image', self.data.background);
+                        self.model.style.backgroundImage = 'none';
+                        self.model.style.backgroundColor = 'transparent';
+                    }
+                    else {
+                        self.model.removeAttribute('skybox-image');
+                        self.model.style.backgroundImage = 'none';
+                        self.model.style.backgroundColor = 'transparent';
+                    }
+                },
+                ChangeImage: function (url) {
+                    this.data.background = url;
+                    this.ChangeTypeImage();
+                },
+                ChangeTypeImage: function () {
+                    var type = this.typeImage == true ? 2 : 1;
+                    this.ChangeBackground(type);
+                }
+
+
+            },
+            mounted() {
+                this.init();
+            },
+        });
+
+        var appSelect = new Vue({
+            el: "#app-select-position-model",
+            data: {
+                model: {},
+                listMaterials: [],
+                materialSelectedName: "",
+                isNotHidePositionOther: false,
+            },
+            methods: {
+                init: async function () {
+                    var self = this;
+
+                    document.getElementById("model-main").addEventListener('load', (e) => {
+                        self.model = e.target;
+                        self.listMaterials = e.target.model.materials;
+                    });
+
+                    this.$forceUpdate();
+                },
+                Select: function () {
+                    var self = this;
+
+                    if (!self.materialSelectedName || self.isNotHidePositionOther) {
+                        //set tất cả material của model về màu chưa opacity
+                        for (var m of self.listMaterials) {
+                            m.setAlphaMode("OPAQUE");
+                            m.pbrMetallicRoughness.setBaseColorFactor([m.pbrMetallicRoughness.baseColorFactor[0], m.pbrMetallicRoughness.baseColorFactor[1], m.pbrMetallicRoughness.baseColorFactor[2], 1]);
+                        }
+                        return;
+                    }
+
+                    for (var m of self.listMaterials) {
+                        if (m.name != self.materialSelectedName) {
+                            m.setAlphaMode("BLEND");
+                            m.pbrMetallicRoughness.setBaseColorFactor([m.pbrMetallicRoughness.baseColorFactor[0], m.pbrMetallicRoughness.baseColorFactor[1], m.pbrMetallicRoughness.baseColorFactor[2], 0.05]);
+                        }
+                        else {
+                            m.setAlphaMode("OPAQUE");
+                            m.pbrMetallicRoughness.setBaseColorFactor([m.pbrMetallicRoughness.baseColorFactor[0], m.pbrMetallicRoughness.baseColorFactor[1], m.pbrMetallicRoughness.baseColorFactor[2], 1]);
+                        }
+                    }
+                },
+                GetMaterialsSelected: function () {
+                    var self = this;
+                    if (self.materialSelectedName) {
+                        return self.listMaterials.filter(e => e.name == self.materialSelectedName);
+                    }
+                    else {
+                        return self.listMaterials;
+                    }
+                }
+            },
+            mounted() {
+                this.init();
+            },
+        });
+
+        var appChangeColor = new Vue({
+            el: "#appChangeColor",
+            data: {
+                data: {},
+                querySearch: '',
+                listImages: [],
+                loadingImage: true,
+                model: {},
+                modelViewer: {}
+            },
+            methods: {
+                init: async function () {
+                    var self = this;
+                    self.modelViewer = document.getElementById("model-main");
+                    self.modelViewer.addEventListener('load', (e) => {
+                        self.model = e.target;
+                    });
+                    this.data.imageTexture = "/images/none.svg";
+                    this.data.color = '#010101';
+                    this.data.rotationTexture = 0;
+                    this.data.scaleTexture = 1;
+
+                    await this.SearchImages();
+
+                    this.$forceUpdate();
+                },
+                SearchImages: async function () {
+                    var self = this;
+                    self.loadingImage = true;
+                    var images = await SearchImages(self.querySearch, 15, 1);
+                    if (images.length > 0) {
+                        self.listImages = images.map(e => `https://images.unsplash.com/${e.url.trim()}?auto=format&fit=crop&w=500&h=500`);
+                    }
+                    self.loadingImage = false;
+                },
+                ChangeColor: function () {
+                    var self = this;
+                    // var c = hexToRgb(color);
+                    // if (!c) {
+                    //     self.color = { r: 1, g: 1, b: 1 };
+                    // }
+                    // //chuyển thành linear RGB
+                    // var linear = rgbToLinearRGB([c.r, c.g, c.b]);
+
+                    //gọi app select lấy meterial đang select để thay đổi màu
+                    for (var m of appSelect.GetMaterialsSelected()) {
+                        m.pbrMetallicRoughness.setBaseColorFactor(self.data.color);
+                    }
+
+                },
+                ChangeTexture: async function (url) {
+                    var self = this;
+                    self.data.imageTexture = url;
+                    const texture = await self.modelViewer.createTexture(url);
+                    for (var m of appSelect.GetMaterialsSelected()) {
+                        m.pbrMetallicRoughness['baseColorTexture'].setTexture(texture);
+                    }
+                    this.$forceUpdate();
+                },
+                GetUrlFileUpload: async function (e) {
+                    var self = this;
+                    let file = e.target.files[0];
+                    //check file ảnh tải lên
+                    if (file && file['type'].split('/')[0] === 'image') {
+                        let url = URL.createObjectURL(file);
+                        await self.ChangeTexture(url);
+                    }
+                },
+                ChangeRotationTexture: function () {
+                    var rotation = this.data.rotationTexture;
+                    for (var m of appSelect.GetMaterialsSelected()) {
+                        m.pbrMetallicRoughness['baseColorTexture'].texture.sampler.setRotation(rotation);
+                    }
+                    this.$forceUpdate();
+
+                },
+                ChangeScaleTexture: function () {
+                    var scale = { u: this.data.scaleTexture, v: this.data.scaleTexture };
+                    for (var m of appSelect.GetMaterialsSelected()) {
+                        m.pbrMetallicRoughness['baseColorTexture'].texture.sampler.setScale(scale);
+                    }
+                    this.$forceUpdate();
+                }
+
+            },
+            mounted() {
+                this.init();
+            },
+        });
+
+
+        var appChangeMetallicRoughness = new Vue({
+            el: "#appChangeMetallicRoughness",
+            data: {
+                model: {},
+                modelViewer: {},
+                listMetallicRoughness: [],
+                loading: true
+            },
+            methods: {
+                init: async function () {
+                    var self = this;
+                    self.modelViewer = document.getElementById("model-main");
+                    self.modelViewer.addEventListener('load', (e) => {
+                        self.model = e.target;
+                    });
+
+                    await self.getListMetallicRoughness();
+
+
+                    this.$forceUpdate();
+                },
+                getListMetallicRoughness: async function () {
+                    var self = this;
+                    self.loading = true;
+                    var textures1 = { name: 'jean', url: '/textures/jean.jpg' };
+                    var textures2 = { name: 'coarse', url: '/textures/coarse-old-fabric_albedo.png' };
+
+                    this.listMetallicRoughness.push(textures1, textures2);
+                    self.loading = false;
+
+                },
+                changeMetallicRoughness: async function (url) {
+                    var self = this;
+                    if (url) {
+                        const texture = await self.modelViewer.createTexture(url);
+                        for (var m of appSelect.GetMaterialsSelected()) {
+                            m.pbrMetallicRoughness['metallicRoughnessTexture'].setTexture(texture);
+                        }
+                    }
+                    else {
+                        //url không tồn tại thì chuyển về chất liệu mặc định
+                        for (var m of appSelect.GetMaterialsSelected()) {
+                            m.pbrMetallicRoughness['metallicRoughnessTexture'].setTexture(null);
+                        }
+                    }
+
+                }
+
+            },
+            mounted() {
+                this.init();
+            },
+        });
+    </script>
+
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { DecalGeometry } from 'three/addons/geometries/DecalGeometry.js';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+        // Define the decal material
+        const textureLoader = new THREE.TextureLoader();
+        const decalDiffuse = textureLoader.load('/images/choose-1.jpg');
+        decalDiffuse.colorSpace = THREE.SRGBColorSpace;
+        const decalNormal = textureLoader.load('/images/choose-1.jpg');
+
+        const decalMaterial = new THREE.MeshStandardMaterial({
+            // specular: 0x444444,
+            map: decalDiffuse,
+            normalMap: decalNormal,
+            normalScale: new THREE.Vector2(1, 1),
+            // shininess: 30,
+            transparent: true,
+            depthTest: true,
+            depthWrite: false,
+            polygonOffset: true,
+            polygonOffsetFactor: - 4,
+            wireframe: false
+        });
+
+        var modelViewer = document.getElementById('model-main');
+
+        modelViewer.addEventListener('load', (elm) => {
+            var scene = elm.target[Object.getOwnPropertySymbols(elm.target).find(e => e.description === 'scene')];
+
+            let mesh;
+            let raycaster;
+            let line;
+            const decals = []; // lịch sử in
+            const intersects = [];
+
+            const mouse = new THREE.Vector2();
+            const position = new THREE.Vector3();
+            const orientation = new THREE.Euler();
+            const size = new THREE.Vector3(1, 1, 1);
+
+            let mouseHelper;
+
+            const intersection = {
+                intersects: false,
+                point: new THREE.Vector3(),
+                normal: new THREE.Vector3()
+            };
+
+            const geometry = new THREE.BufferGeometry();
+            geometry.setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
+
+            line = new THREE.Line(geometry, new THREE.LineBasicMaterial());
+            scene.add(line);
+            raycaster = new THREE.Raycaster();
+
+            mouseHelper = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 10), new THREE.MeshNormalMaterial());
+            mouseHelper.visible = false;
+            scene.add(mouseHelper);
+
+
+
+            function checkIntersection(x, y) {
+
+                if (mesh === undefined) return;
+
+                mouse.x = (x / window.innerWidth) * 2 - 1;
+                mouse.y = - (y / window.innerHeight) * 2 + 1;
+
+                raycaster.setFromCamera(mouse, scene.camera);
+                raycaster.intersectObject(mesh, false, intersects);
+
+                if (intersects.length > 0) {
+
+                    const p = intersects[0].point;
+                    mouseHelper.position.copy(p);
+                    intersection.point.copy(p);
+
+                    const n = intersects[0].face.normal.clone();
+                    n.transformDirection(mesh.matrixWorld);
+                    n.multiplyScalar(10);
+                    n.add(intersects[0].point);
+
+                    intersection.normal.copy(intersects[0].face.normal);
+                    mouseHelper.lookAt(n);
+
+                    const positions = line.geometry.attributes.position;
+                    positions.setXYZ(0, p.x, p.y, p.z);
+                    positions.setXYZ(1, n.x, n.y, n.z);
+                    positions.needsUpdate = true;
+
+                    intersection.intersects = true;
+
+                    intersects.length = 0;
+
+                } else {
+
+                    intersection.intersects = false;
+
+                }
+
+            }
+
+            function shoot() {
+
+                position.copy(intersection.point);
+                orientation.copy(mouseHelper.rotation);
+
+                const rotate = false;
+                if (rotate) orientation.z = Math.random() * 2 * Math.PI;
+
+                size.set(10, 10, 10);
+
+                const m = new THREE.Mesh(new DecalGeometry(mesh, position, orientation, size), decalMaterial.clone());
+                m.renderOrder = decals.length; // give decals a fixed render order
+
+                decals.push(m);
+                scene.add(m);
+
+                console.log(decals);
+
+            }
+
+
+            modelViewer.addEventListener('click', (event) => {
+                var matSelected = event.target.materialFromPoint(event.clientX, event.clientY);
+                if (!matSelected) return;
+
+                scene.traverse(function (object) {
+
+                    if (object.isMesh && object.material && object.material.name.toLowerCase() == matSelected.name.toLowerCase()) {
+                        mesh = object;
+                    }
+
+                });
+
+
+
+                checkIntersection(event.clientX, event.clientY);
+
+                if (intersection.intersects) shoot();
+                return;
+
+
+            })
+        })
+
+
+
+
+
+
+        var appChangeDecal = new Vue({
+            el: "#appChangeDecal",
+            data: {
+                model: {},
+                modelViewer: {},
+            },
+            methods: {
+                init: async function () {
+                    var self = this;
+                    self.modelViewer = document.getElementById("model-main");
+                    self.modelViewer.addEventListener('load', (e) => {
+                        self.model = e.target;
+                    });
+
+
+
+
+                    this.$forceUpdate();
+                },
+
+
+            },
+            mounted() {
+                this.init();
+            },
+        });
+
+
+    </script>
+
+
+
+     <script type="module">
+        async function exportGLB() {
+            const modelViewer = document.getElementById("model-main");
+            const glTF = await modelViewer.exportScene();
+            const file = new File([glTF], "export.glb");
+            const link = document.createElement("a");
+            link.download = file.name;
+            link.href = URL.createObjectURL(file);
+            link.click();
+        }
+
+
+
+                import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+
+        function save(blob, filename) {
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(blob);
+          link.download = filename;
+          link.click();
+          URL.revokeObjectURL(link);
+        }
+
+        function saveString(text, filename) {
+          save(new Blob([text], { type: "text/plain" }), filename);
+        }
+
+        function saveArrayBuffer(buffer, filename) {
+          save(new Blob([buffer], { type: "application/octet-stream" }), filename);
+        }
+
+        function Expr(){
+                        const modelViewer = document.getElementById("model-main");
+
+            var scene = modelViewer[Object.getOwnPropertySymbols(modelViewer).find(e => e.description === 'scene')];
+
+             const exporter = new GLTFExporter();
+        exporter.parse(
+          scene,
+          function (result) {
+            const name = `$exp.glb`;
+            if (result instanceof ArrayBuffer) {
+              saveArrayBuffer(result, name);
+            } else {
+              const output = JSON.stringify(result, null, 2);
+              saveString(output, name);
+            }
+          },
+          function (error) {
+            console.log(error);
+          },
+          {
+            binary: true
+          }
+        );
+        }
+        Expr();
+       
+    </script>
+
+</body>
+
+</html>

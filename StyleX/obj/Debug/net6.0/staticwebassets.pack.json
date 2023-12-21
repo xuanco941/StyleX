@@ -97,12 +97,16 @@
       "PackagePath": "staticwebassets\\cocos2d-js-min.31478.js"
     },
     {
-      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\css\\demo2.css",
-      "PackagePath": "staticwebassets\\css\\demo2.css"
+      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\css\\design.css",
+      "PackagePath": "staticwebassets\\css\\design.css"
     },
     {
       "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\favicon.8de18.ico",
       "PackagePath": "staticwebassets\\favicon.8de18.ico"
+    },
+    {
+      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\1.png",
+      "PackagePath": "staticwebassets\\images\\1.png"
     },
     {
       "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\ar.jpg",
@@ -111,6 +115,22 @@
     {
       "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\avatar\\2.jpg",
       "PackagePath": "staticwebassets\\images\\avatar\\2.jpg"
+    },
+    {
+      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\avatar\\avatar.svg",
+      "PackagePath": "staticwebassets\\images\\avatar\\avatar.svg"
+    },
+    {
+      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\bg.jpg",
+      "PackagePath": "staticwebassets\\images\\bg.jpg"
+    },
+    {
+      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\bg2.webp",
+      "PackagePath": "staticwebassets\\images\\bg2.webp"
+    },
+    {
+      "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\category-1.jpg",
+      "PackagePath": "staticwebassets\\images\\category-1.jpg"
     },
     {
       "Id": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\wwwroot\\images\\chat-lieu.jpg",
