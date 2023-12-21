@@ -26,7 +26,6 @@ namespace StyleX.Controllers
         [HttpPost]
         public IActionResult GetNumberPlay()
         {
-
             try
             {
                 string userEmail = User.FindFirstValue(ClaimTypes.Email);
@@ -88,10 +87,17 @@ namespace StyleX.Controllers
                         }
                         if (count > 0)
                         {
-                            _dbContext.Promotions.Add(new Promotion() { UserID = user.UserID, Status = false, Number = count * 5, ResultSpin = result1.ToString() + " " + result2.ToString() + " " + result3.ToString() });
-                        }
 
-                        return new OkObjectResult(new { status = 1, message = "success.", result = new { result1, result2, result3 }, numberSale = count * 5 }); ;
+                            string resultString = "";
+                            for (int i = 0; i < 7; i++)
+                            {
+                                resultString = resultString + $"{i+1}: {result1[i]}-{result2[i]}-{result3[i]}   ";
+                            }
+                            _dbContext.Promotions.Add(new Promotion() { UserID = user.UserID, Status = false, Number = count * 5, ResultSpin = resultString });
+                        }
+                        _dbContext.SaveChanges();
+
+                        return new OkObjectResult(new { status = 1, message = "success", result1, result2, result3, numberSale = count * 5, numberPlayGame=user.NumberPlayGame }); ;
 
                     }
                     else

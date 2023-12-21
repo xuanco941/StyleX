@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\mini-game\**" />
+    <Content Remove="wwwroot\mini-game\**" />
+    <EmbeddedResource Remove="wwwroot\mini-game\**" />
+    <None Remove="wwwroot\mini-game\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="Views\Cart\Index.cshtml" />
     <Content Remove="Views\Product\detail.cshtml" />
   </ItemGroup>
@@ -40,7 +47,6 @@
     <Folder Include="Views\Design\" />
     <Folder Include="wwwroot\images\avatar\" />
     <Folder Include="wwwroot\images\products\" />
-    <Folder Include="wwwroot\mini-game\" />
   </ItemGroup>
 
 </Project>

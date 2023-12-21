@@ -325,7 +325,7 @@ namespace StyleX.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("UsedAt")
+                    b.Property<DateTime?>("UsedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("UserID")

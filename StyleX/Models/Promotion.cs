@@ -15,7 +15,7 @@ namespace StyleX.Models
         public int? OrderID { get; set; }
         public string ResultSpin { get; set; } = null!;
         public DateTime CreateAt { get; set; } = DateTime.Now;
-        public DateTime UsedAt { get; set; }
+        public DateTime? UsedAt { get; set; }
 
         public int UserID { get; set; }
         public User User { get; set; } = null!;
