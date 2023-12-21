@@ -102,6 +102,7 @@ namespace StyleX.Migrations
                 {
                     OrderID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    TransportFee = table.Column<double>(type: "float", nullable: false),
                     BasePrice = table.Column<double>(type: "float", nullable: false),
                     NetPrice = table.Column<double>(type: "float", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -110,6 +111,7 @@ namespace StyleX.Migrations
                     Status = table.Column<int>(type: "int", nullable: false),
                     PercentSale = table.Column<double>(type: "float", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

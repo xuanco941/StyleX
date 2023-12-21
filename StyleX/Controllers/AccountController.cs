@@ -22,22 +22,22 @@ namespace StyleX.Controllers
 		{
             try
             {
-                string userEmail = User.FindFirstValue(ClaimTypes.Email);
+                string userEmail = HttpContext.User.FindFirstValue(ClaimTypes.Email);
                 User? user = _dbContext.Users.FirstOrDefault(u => u.Email == userEmail);
                 if (user != null)
                 {
-                    int promotion5Percent = _dbContext.Promotions.Where(p => p.UserID == user.UserID && p.Status == true && p.Number == 5).Count();
-                    int promotion10Percent = _dbContext.Promotions.Where(p => p.UserID == user.UserID && p.Status == true && p.Number == 10).Count();
-                    int promotion15Percent = _dbContext.Promotions.Where(p => p.UserID == user.UserID && p.Status == true && p.Number == 15).Count();
-                    int promotion20Percent = _dbContext.Promotions.Where(p => p.UserID == user.UserID && p.Status == true && p.Number == 20).Count();
+                    int promotion1 = _dbContext.Promotions.Where(p => p.UserID == user.UserID && p.Status == true && p.Number == 10).Count();
+                    int promotion2 = _dbContext.Promotions.Where(p => p.UserID == user.UserID && p.Status == true && p.Number == 20).Count();
+                    int promotion3 = _dbContext.Promotions.Where(p => p.UserID == user.UserID && p.Status == true && p.Number == 30).Count();
+                    int promotion4 = _dbContext.Promotions.Where(p => p.UserID == user.UserID && p.Status == true && p.Number == 40).Count();
 
                     List<Order> orders = _dbContext.Orders.Where(o => o.UserID == user.UserID).ToList();
 
                     ViewBag.user = user;
-                    ViewBag.promotion5Percent = promotion5Percent;
-                    ViewBag.promotion10Percent = promotion10Percent;
-                    ViewBag.promotion15Percent = promotion15Percent;
-                    ViewBag.promotion20Percent = promotion20Percent;
+                    ViewBag.promotion1 = promotion1;
+                    ViewBag.promotion2 = promotion2;
+                    ViewBag.promotion3 = promotion3;
+                    ViewBag.promotion4 = promotion4;
                     ViewBag.orders = orders;
 
                 }
@@ -58,7 +58,7 @@ namespace StyleX.Controllers
 
             try
             {
-                string userEmail = User.FindFirstValue(ClaimTypes.Email);
+                string userEmail = HttpContext.User.FindFirstValue(ClaimTypes.Email);
 
                 User? user = _dbContext.Users.FirstOrDefault(u => u.Email == userEmail);
                 if(user != null) {

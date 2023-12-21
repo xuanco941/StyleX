@@ -169,6 +169,12 @@ namespace StyleX.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<double>("TransportFee")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("UpdateAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("UserID")
                         .HasColumnType("int");
 

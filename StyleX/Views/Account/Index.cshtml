@@ -53,62 +53,144 @@
                         </div>
                     </div>
                     <div class="d-flex flex-row text-white">
-                        <div class="p-2 bg-primary text-center skill-block" style="width: 30%">
-                            <h3>@ViewBag.promotion5Percent</h3>
-                            <h6>Phiếu giảm giá 5% tổng hóa đơn</h6>
-                        </div>
-                        <div class="p-2 bg-success text-center skill-block" style="width: 30%">
-                            <h3>@ViewBag.promotion10Percent</h3>
+                        <div class="p-2 bg-info text-center skill-block" style="width: 30%">
+                            <h3>@ViewBag.promotion1</h3>
                             <h6>Phiếu giảm giá 10% tổng hóa đơn</h6>
                         </div>
+                        <div class="p-2 bg-success text-center skill-block" style="width: 30%">
+                            <h3>@ViewBag.promotion2</h3>
+                            <h6>Phiếu giảm giá 20% tổng hóa đơn</h6>
+                        </div>
                         <div class="p-2 bg-warning text-center skill-block" style="width: 30%">
-                            <h3>@ViewBag.promotion15Percent</h3>
-                            <h6>Phiếu giảm giá 15% tổng hóa đơn</h6>
+                            <h3>@ViewBag.promotion3</h3>
+                            <h6>Phiếu giảm giá 30% tổng hóa đơn</h6>
                         </div>
                         <div class="p-2 bg-danger text-center skill-block" style="width: 30%">
-                            <h3>@ViewBag.promotion20Percent</h3>
-                            <h6>Phiếu giảm giá 20% tổng hóa đơn</h6>
+                            <h3>@ViewBag.promotion4</h3>
+                            <h6>Phiếu giảm giá 40% tổng hóa đơn</h6>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <table class="table mt-3 table-striped">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Mã đơn hàng</th>
-                    <th scope="col">Địa chỉ</th>
-                    <th scope="col">Số điện thoại</th>
-                    <th scope="col">Ghi chú</th>
-                    <th scope="col">Khuyến mại</th>
-                    <th scope="col">Giá gốc</th>
-                    <th scope="col">Thành tiền</th>
-                    <th scope="col">Thao tác</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach(Order order in orders)
-                {
+        <div style="overflow-x: auto">
+            <table class="table table-dark mt-3 table-striped" style="vertical-align: middle">
+                <thead class="thead-dark">
                     <tr>
-                        <td>@index</td>
-                        <td>@order.OrderID</td>
-                        <td>@order.Address</td>
-                        <td>@order.PhoneNumber</td>
-                        <td>@order.Message</td>
-                        <td>@order.PercentSale.ToString("#,##0") %</td>
-                        <td>@order.BasePrice.ToString("#,##0") &#8363;</td>
-                        <td>@order.NetPrice.ToString("#,##0") &#8363;</td>
-                        <td><button class="btn btn-primary">Chi tiết</button></td>
+                        <th scope="col">#</th>
+                        <th scope="col">Mã đơn hàng</th>
+                        <th scope="col">Địa chỉ</th>
+                        <th scope="col">Số điện thoại</th>
+                        <th scope="col">Ghi chú</th>
+                        <th scope="col">Phí vận chuyển</th>
+                        <th scope="col">Tổng tiền</th>
+                        <th scope="col">Khuyến mại</th>
+                        <th scope="col">Thành tiền</th>
+                        <th scope="col">Trạng thái</th>
+                        <th scope="col">Ngày tạo</th>
+                        <th scope="col">Cập nhật lúc</th>
+                        <th scope="col"></th>
 
                     </tr>
-                    index++;
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (Order order in orders)
+                    {
+                        <tr>
+                            <td>@index</td>
+                            <td>@order.OrderID</td>
+                            <td>@order.Address</td>
+                            <td>@order.PhoneNumber</td>
+                            <td>@order.Message</td>
+                            <td>@order.TransportFee.ToString("#,##0") &#8363;</td>
+                            <td>@order.BasePrice.ToString("#,##0") &#8363;</td>
+                            <td>@order.PercentSale.ToString("#,##0") %</td>
+                            <td>@order.NetPrice.ToString("#,##0") &#8363;</td>
+                            @{
+                                if (order.Status==0)
+                                {
+                                    <td>Đang xử lý</td>
+                                }
+                                else if (order.Status == 1)
+                                {
+                                    <td>Đang giao hàng</td>
+                                }
+                                else if (order.Status == 2)
+                                {
+                                    <td>Giao hàng thành công</td>
+                                }
+                                else if (order.Status == 3)
+                                {
+                                    <td>Đã hủy</td>
+                                }
+                            }
+                            <td>@order.CreateAt.ToString("HH:mm:ss dd/MM/yyyy")</td>
+                            <td>@order.UpdateAt.ToString("HH:mm:ss dd/MM/yyyy")</td>
+                            <td><button class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter" v-on:click="ViewDetail(@order.OrderID)">Chi tiết</button></td>
+                        </tr>
+                        index++;
+                    }
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 70vw">
+            <div class="modal-content" style="margin-bottom: 150px">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Chi tiết hóa đơn</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="overflow-x: auto; overflow-y: auto; max-height: 600px;">
+                    <table class="table table-striped">
+                        <thead class="thead-dark">
+                            <tr style="vertical-align: middle">
+                                <th scope="col">#</th>
+                                <th scope="col">Sản phẩm</th>
+                                <th scope="col">Tên sản phẩm</th>
+                                <th scope="col">Mô tả</th>
+                                <th scope="col">Số lượng</th>
+                                <th scope="col">Kích cỡ</th>
+                                <th scope="col">Giá</th>
+                                <th scope="col">Khuyến mại</th>
+                                <th scope="col">Thành tiền</th>
+                                <th scope="col">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-if="loadOrderItems">
+                                <td colspan="9"><i class="fa-solid fa-spinner fa-spin-pulse"></i></td>
+                            </tr>
+                            <tr v-if="!loadOrderItems" v-for="(item,index) in orderItems">
+                                <td>{{index+1}}</td>
+                                <td><img v-bind:src="item.posterUrl" style="width: 100px;" /></td>
+                                <td>{{item.name}}</td>
+                                <td>{{item.description}}</td>
+                                <td>{{Number(item.quantity).toLocaleString('en-US')}}</td>
+                                <td>{{item.size}}</td>
+                                <td>{{Number(item.price).toLocaleString('en-US')}}</td>
+                                <td>{{Number(item.sale).toLocaleString('en-US')}}%</td>
+                                <td>{{Number((item.price*item.quantity) - (item.price/100*item.sale) * item.quantity).toLocaleString('en-US')}}</td>
+                                <td><button class="btn btn-success">Xem 3D</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- <div class="modal-footer">
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                     <button type="button" class="btn btn-primary">Save changes</button>
+                 </div> -->
+            </div>
+        </div>
     </div>
 </section>
+
 
 
 
@@ -122,7 +204,9 @@
                 address: '@Html.Raw(user.Address)',
                 phoneNumber: '@Html.Raw(user.PhoneNumber)',
                 password: '@Html.Raw(user.Password)',
-                messagePassword: ''
+                messagePassword: '',
+                orderItems: [],
+                loadOrderItems: false
             },
             methods: {
                 init: async function () {
@@ -165,7 +249,36 @@
                     });
 
                 },
-               
+                ViewDetail: async function (orderId) {
+                    var self = this;
+                    self.orderItems = [];
+                    self.loadOrderItems = true;
+
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "/Order/GetOrderItems",
+                        data: JSON.stringify({
+                            ID: orderId
+                        }),
+                        success: function (res) {
+                            self.loadOrderItems = false;
+                            if (res.status == 1) {
+                                self.orderItems = res.data;
+                                console.log(self.orderItems)
+                            }
+                            else {
+                                ShowAlert(res.message, "danger");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            self.loadOrderItems = false;
+                            ShowAlert(error, "danger");
+                        }
+                    });
+
+                }
+
 
             },
             mounted() {

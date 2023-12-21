@@ -12,7 +12,7 @@ using StyleX.Models;
 namespace StyleX.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20231221043833_v1")]
+    [Migration("20231221114732_v1")]
     partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -170,6 +170,12 @@ namespace StyleX.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<double>("TransportFee")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("UpdateAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("UserID")
                         .HasColumnType("int");

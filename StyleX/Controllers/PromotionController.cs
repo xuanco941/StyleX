@@ -50,10 +50,10 @@ namespace StyleX.Controllers
         {
             //kết quả của 1 lượt quay là 3 mảng gồm 7 số sắp xếp ngẫu nhiên,
             //trong 3 mảng ấy nếu phần tử thứ 3,4,5 của mỗi mảng mà bằng nhau thì win
-            //1 dãy trùng nhau phiếu 5%
-            //2 dãy trùng nhau phiếu 10%
-            //3 dãy trùng nhau phiếu 15%
-            //3 dãy trùng nhau và 1 trong 3 có phần tử là 1 thì nhận phiếu 20%
+            //1 dãy trùng nhau phiếu 10%
+            //2 dãy trùng nhau phiếu 20%
+            //3 dãy trùng nhau phiếu 30%
+            //3 dãy trùng nhau và 1 trong 3 có phần tử là 1 thì nhận phiếu 40%
 
             try
             {
@@ -93,7 +93,7 @@ namespace StyleX.Controllers
                             {
                                 resultString = resultString + $"{i+1}: {result1[i]}-{result2[i]}-{result3[i]}   ";
                             }
-                            _dbContext.Promotions.Add(new Promotion() { UserID = user.UserID, Status = false, Number = count * 5, ResultSpin = resultString });
+                            _dbContext.Promotions.Add(new Promotion() { UserID = user.UserID, Status = false, Number = count * 10, ResultSpin = resultString });
                         }
                         _dbContext.SaveChanges();
 
