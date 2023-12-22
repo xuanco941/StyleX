@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StyleX.Models;
 using System.Collections.Generic;
-using System.Reflection.Emit;
+using System.Diagnostics;
 
 namespace StyleX.Models
 {
@@ -9,13 +9,12 @@ namespace StyleX.Models
     {
         private readonly IConfiguration _configuration;
 
-        public DbSet<User> Users { get; set; } = null!;
-        public DbSet<Admin> Admins { get; set; } = null!;
-        public DbSet<Cart> Carts { get; set; } = null!;
+        public DbSet<Account> Accounts { get; set; } = null!;
         public DbSet<Category> Categories { get; set; } = null!;
         public DbSet<Material> Materials { get; set; } = null!;
         public DbSet<Order> Orders { get; set; } = null!;
-        public DbSet<OrderItem> OrderItems { get; set; } = null!;
+        public DbSet<ProductDesign> ProductDesigns { get; set; } = null!;
+        public DbSet<DesignInfo> DesignInfos { get; set; } = null!;
         public DbSet<Product> Products { get; set; } = null!;
         public DbSet<Promotion> Promotions { get; set; } = null!;
         public DbSet<Warehouse> Warehouses { get; set; } = null!;
@@ -41,24 +40,18 @@ namespace StyleX.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //User
-            modelBuilder.Entity<User>(entity =>
+            //Account
+            modelBuilder.Entity<Account>(entity =>
             {
                 entity.HasIndex(e => e.Email).IsUnique();
                 entity.HasIndex(e => e.keyActive).IsUnique();
-            });
-            //Admin
-            modelBuilder.Entity<Admin>(entity =>
-            {
-                entity.HasIndex(e => e.Username).IsUnique();
             });
             //Admin
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.HasIndex(e => e.Name).IsUnique();
             });
-
-
         }
+
     }
 }

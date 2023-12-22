@@ -10,17 +10,25 @@ namespace StyleX.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Admin",
+                name: "Account",
                 columns: table => new
                 {
-                    AdminID = table.Column<int>(type: "int", nullable: false)
+                    AccountID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    FullName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
+                    isActive = table.Column<bool>(type: "bit", nullable: false),
+                    keyActive = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Avatar = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NumberPlayGame = table.Column<int>(type: "int", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Admin", x => x.AdminID);
+                    table.PrimaryKey("PK_Account", x => x.AccountID);
                 });
 
             migrationBuilder.CreateTable(
@@ -29,7 +37,8 @@ namespace StyleX.Migrations
                 {
                     CategoryID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -51,24 +60,58 @@ namespace StyleX.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Order",
                 columns: table => new
                 {
-                    UserID = table.Column<int>(type: "int", nullable: false)
+                    OrderID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FullName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
-                    isActive = table.Column<bool>(type: "bit", nullable: false),
-                    keyActive = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Avatar = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NumberPlayGame = table.Column<int>(type: "int", nullable: false)
+                    TransportFee = table.Column<double>(type: "float", nullable: false),
+                    BasePrice = table.Column<double>(type: "float", nullable: false),
+                    NetPrice = table.Column<double>(type: "float", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    PercentSale = table.Column<double>(type: "float", nullable: false),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AccountID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.UserID);
+                    table.PrimaryKey("PK_Order", x => x.OrderID);
+                    table.ForeignKey(
+                        name: "FK_Order_Account_AccountID",
+                        column: x => x.AccountID,
+                        principalTable: "Account",
+                        principalColumn: "AccountID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Promotion",
+                columns: table => new
+                {
+                    PromotionID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Number = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false),
+                    OrderID = table.Column<int>(type: "int", nullable: true),
+                    ResultSpin = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UsedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ExpiredAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AccountID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Promotion", x => x.PromotionID);
+                    table.ForeignKey(
+                        name: "FK_Promotion_Account_AccountID",
+                        column: x => x.AccountID,
+                        principalTable: "Account",
+                        principalColumn: "AccountID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -97,89 +140,38 @@ namespace StyleX.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Order",
+                name: "ProductDesign",
                 columns: table => new
                 {
-                    OrderID = table.Column<int>(type: "int", nullable: false)
+                    ProductDesignID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TransportFee = table.Column<double>(type: "float", nullable: false),
-                    BasePrice = table.Column<double>(type: "float", nullable: false),
-                    NetPrice = table.Column<double>(type: "float", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Amount = table.Column<int>(type: "int", nullable: false),
+                    PosterUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Size = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    PercentSale = table.Column<double>(type: "float", nullable: false),
-                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Order", x => x.OrderID);
-                    table.ForeignKey(
-                        name: "FK_Order_User_UserID",
-                        column: x => x.UserID,
-                        principalTable: "User",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Promotion",
-                columns: table => new
-                {
-                    PromotionID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Number = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false),
                     OrderID = table.Column<int>(type: "int", nullable: true),
-                    ResultSpin = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UsedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UserID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Promotion", x => x.PromotionID);
-                    table.ForeignKey(
-                        name: "FK_Promotion_User_UserID",
-                        column: x => x.UserID,
-                        principalTable: "User",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Cart",
-                columns: table => new
-                {
-                    CartID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageTexture = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TextureRotation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TextureScale = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MaterialID = table.Column<int>(type: "int", nullable: true),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ProductID = table.Column<int>(type: "int", nullable: false),
-                    UserID = table.Column<int>(type: "int", nullable: false)
+                    AccountID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cart", x => x.CartID);
+                    table.PrimaryKey("PK_ProductDesign", x => x.ProductDesignID);
                     table.ForeignKey(
-                        name: "FK_Cart_Product_ProductID",
+                        name: "FK_ProductDesign_Account_AccountID",
+                        column: x => x.AccountID,
+                        principalTable: "Account",
+                        principalColumn: "AccountID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductDesign_Order_OrderID",
+                        column: x => x.OrderID,
+                        principalTable: "Order",
+                        principalColumn: "OrderID");
+                    table.ForeignKey(
+                        name: "FK_ProductDesign_Product_ProductID",
                         column: x => x.ProductID,
                         principalTable: "Product",
                         principalColumn: "ProductID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Cart_User_UserID",
-                        column: x => x.UserID,
-                        principalTable: "User",
-                        principalColumn: "UserID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -189,6 +181,7 @@ namespace StyleX.Migrations
                 {
                     ProductMaterialID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductMaterialName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductID = table.Column<int>(type: "int", nullable: false),
                     MaterialID = table.Column<int>(type: "int", nullable: false)
                 },
@@ -215,7 +208,7 @@ namespace StyleX.Migrations
                 {
                     WarehouseID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<int>(type: "int", nullable: false),
                     Size = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductID = table.Column<int>(type: "int", nullable: false)
                 },
@@ -231,61 +224,53 @@ namespace StyleX.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderItem",
+                name: "DesignInfo",
                 columns: table => new
                 {
-                    OrderItemID = table.Column<int>(type: "int", nullable: false)
+                    DesignInfoID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    ModelUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PosterUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Price = table.Column<double>(type: "float", nullable: false),
-                    Sale = table.Column<double>(type: "float", nullable: false),
+                    DesignName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Color = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ColorTexture = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TextureRotation = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TextureScale = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Size = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OrderID = table.Column<int>(type: "int", nullable: false)
+                    ImageTexture = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TextureRotation = table.Column<double>(type: "float", nullable: true),
+                    TextureScale = table.Column<double>(type: "float", nullable: true),
+                    ImageMaterial = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageDecal = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DesignItemID = table.Column<int>(type: "int", nullable: false),
+                    ProductDesignID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderItem", x => x.OrderItemID);
+                    table.PrimaryKey("PK_DesignInfo", x => x.DesignInfoID);
                     table.ForeignKey(
-                        name: "FK_OrderItem_Order_OrderID",
-                        column: x => x.OrderID,
-                        principalTable: "Order",
-                        principalColumn: "OrderID",
+                        name: "FK_DesignInfo_ProductDesign_ProductDesignID",
+                        column: x => x.ProductDesignID,
+                        principalTable: "ProductDesign",
+                        principalColumn: "ProductDesignID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Admin_Username",
-                table: "Admin",
-                column: "Username",
+                name: "IX_Account_Email",
+                table: "Account",
+                column: "Email",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cart_ProductID",
-                table: "Cart",
-                column: "ProductID");
+                name: "IX_Account_keyActive",
+                table: "Account",
+                column: "keyActive",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cart_UserID",
-                table: "Cart",
-                column: "UserID");
+                name: "IX_DesignInfo_ProductDesignID",
+                table: "DesignInfo",
+                column: "ProductDesignID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Order_UserID",
+                name: "IX_Order_AccountID",
                 table: "Order",
-                column: "UserID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderItem_OrderID",
-                table: "OrderItem",
-                column: "OrderID");
+                column: "AccountID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_CategoryID",
@@ -299,6 +284,21 @@ namespace StyleX.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProductDesign_AccountID",
+                table: "ProductDesign",
+                column: "AccountID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductDesign_OrderID",
+                table: "ProductDesign",
+                column: "OrderID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductDesign_ProductID",
+                table: "ProductDesign",
+                column: "ProductID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductMaterial_MaterialID",
                 table: "ProductMaterial",
                 column: "MaterialID");
@@ -309,21 +309,9 @@ namespace StyleX.Migrations
                 column: "ProductID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Promotion_UserID",
+                name: "IX_Promotion_AccountID",
                 table: "Promotion",
-                column: "UserID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_User_Email",
-                table: "User",
-                column: "Email",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_User_keyActive",
-                table: "User",
-                column: "keyActive",
-                unique: true);
+                column: "AccountID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Warehouse_ProductID",
@@ -334,13 +322,7 @@ namespace StyleX.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Admin");
-
-            migrationBuilder.DropTable(
-                name: "Cart");
-
-            migrationBuilder.DropTable(
-                name: "OrderItem");
+                name: "DesignInfo");
 
             migrationBuilder.DropTable(
                 name: "ProductMaterial");
@@ -352,16 +334,19 @@ namespace StyleX.Migrations
                 name: "Warehouse");
 
             migrationBuilder.DropTable(
-                name: "Order");
+                name: "ProductDesign");
 
             migrationBuilder.DropTable(
                 name: "Material");
 
             migrationBuilder.DropTable(
+                name: "Order");
+
+            migrationBuilder.DropTable(
                 name: "Product");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Account");
 
             migrationBuilder.DropTable(
                 name: "Category");

@@ -19,7 +19,7 @@ namespace StyleX.Models
         public double PercentSale { get; set; } // số % khuyến mại
         public DateTime CreateAt { get; set; } = DateTime.Now;
         public DateTime UpdateAt { get; set; } = DateTime.Now;
-        public int UserID { get; set; }
-        public User User { get; set; } = null!;
+        public int AccountID { get; set; }
+        public Account Account { get; set; } = null!;
     }
 }

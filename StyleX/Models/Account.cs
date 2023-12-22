@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace StyleX.Models
 {
-    [Table("User")]
-    public class User
+    [Table("Account")]
+    public class Account
     {
         [Key]
-        public int UserID { get; set; }
+        public int AccountID { get; set; }
         [StringLength(50)]
         public string? FullName { get; set; } = string.Empty;
         [Required]
@@ -24,6 +24,7 @@ namespace StyleX.Models
         public string keyActive { get; set; } = string.Empty;
         public string Avatar { get; set; } = "2.jpg";
         public int NumberPlayGame { get; set; } = 0;
+        public string Role { get; set; } = "user"; // user/admin
 
     }
 }

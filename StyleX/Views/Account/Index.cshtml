@@ -3,7 +3,7 @@
     ViewBag.pageName = "Tài khoản";
     Layout = "_Layout";
 
-    User user = ViewBag.user as User ?? new User();
+    Account user = ViewBag.user as Account ?? new Account();
     List<Order> orders = ViewBag.orders as List<Order> ?? new List<Order>();
     int index = 1;
 }
@@ -170,13 +170,13 @@
                             <tr v-if="!loadOrderItems" v-for="(item,index) in orderItems">
                                 <td>{{index+1}}</td>
                                 <td><img v-bind:src="item.posterUrl" style="width: 100px;" /></td>
-                                <td>{{item.name}}</td>
-                                <td>{{item.description}}</td>
-                                <td>{{Number(item.quantity).toLocaleString('en-US')}}</td>
+                                <td>{{item.product.name}}</td>
+                                <td>{{item.product.description}}</td>
+                                <td>{{Number(item.amount).toLocaleString('en-US')}}</td>
                                 <td>{{item.size}}</td>
-                                <td>{{Number(item.price).toLocaleString('en-US')}}</td>
-                                <td>{{Number(item.sale).toLocaleString('en-US')}}%</td>
-                                <td>{{Number((item.price*item.quantity) - (item.price/100*item.sale) * item.quantity).toLocaleString('en-US')}}</td>
+                                <td>{{Number(item.product.price).toLocaleString('en-US')}}</td>
+                                <td>{{Number(item.product.sale).toLocaleString('en-US')}}%</td>
+                                <td>{{Number((item.product.price*item.amount) - (item.product.price/100*item.product.sale) * item.amount).toLocaleString('en-US')}}</td>
                                 <td><button class="btn btn-success">Xem 3D</button></td>
                             </tr>
                         </tbody>

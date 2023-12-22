@@ -23,7 +23,7 @@ namespace StyleX.Controllers
         {
             if (!string.IsNullOrEmpty(keyActive))
             {
-                User? user = _dbContext.Users.FirstOrDefault(u => u.keyActive == keyActive && u.isActive == false);
+                Account? user = _dbContext.Accounts.FirstOrDefault(u => u.keyActive == keyActive && u.isActive == false);
                 if (user != null)
                 {
                     user.isActive = true;
@@ -51,14 +51,14 @@ namespace StyleX.Controllers
             }
             try
             {
-                User? user = _dbContext.Users.SingleOrDefault(u => u.Email == loginDTO.email && u.Password == loginDTO.password);
+                Account? user = _dbContext.Accounts.SingleOrDefault(u => u.Email == loginDTO.email && u.Password == loginDTO.password);
 
                 if (user != null)
                 {
                     ViewBag.Status = 200;
                     if (user.isActive == true)
                     {
-                        List<Claim> claims = new List<Claim>() { new Claim(ClaimTypes.Email, user.Email), new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()) };
+                        List<Claim> claims = new List<Claim>() { new Claim(ClaimTypes.Email, user.Email), new Claim(ClaimTypes.NameIdentifier, user.AccountID.ToString()), new Claim(ClaimTypes.Role,user.Role) };
                         ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                         AuthenticationProperties properties = new AuthenticationProperties() { AllowRefresh = true, IsPersistent = true };
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), properties);
@@ -94,7 +94,7 @@ namespace StyleX.Controllers
                     return new OkObjectResult(new { status = -1, message = "Tài khoản hoặc mật khẩu không được để trống." });
                 }
 
-                User? user = _dbContext.Users.FirstOrDefault(u => u.Email == sigupDto.email);
+                Account? user = _dbContext.Accounts.FirstOrDefault(u => u.Email == sigupDto.email);
                 if (user != null)
                 {
                     if (user.isActive == false)
@@ -110,7 +110,7 @@ namespace StyleX.Controllers
                     string keyActive = Guid.NewGuid().ToString();
                     string linkActive = $"<a href=\"https://{HttpContext.Request.Host.Value}/Access/Login/?keyActive={keyActive}\">StyleX - Nhấn vào đây để kích hoạt tài khoản của bạn.</a>";
 
-                    _dbContext.Users.Add(new Models.User() { Email = sigupDto.email, Password = sigupDto.password, isActive = false, keyActive = keyActive });
+                    _dbContext.Accounts.Add(new Models.Account() { Email = sigupDto.email, Password = sigupDto.password, isActive = false, keyActive = keyActive });
                     if (_dbContext.SaveChanges() > 0)
                     {
                         new SendMail().SendEmailByGmail(sigupDto.email, "Kích hoạt tài khoản", "<html><body>" + linkActive + "</body></html>");

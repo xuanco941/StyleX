@@ -29,7 +29,7 @@ namespace StyleX.Controllers
             try
             {
                 string userEmail = User.FindFirstValue(ClaimTypes.Email);
-                User? user = _dbContext.Users.FirstOrDefault(u => u.Email == userEmail);
+                Account? user = _dbContext.Accounts.FirstOrDefault(u => u.Email == userEmail);
                 if (user != null)
                 {
                     return new OkObjectResult(new { status = 1, message = "success", number = user.NumberPlayGame });
@@ -58,7 +58,7 @@ namespace StyleX.Controllers
             try
             {
                 string userEmail = User.FindFirstValue(ClaimTypes.Email);
-                User? user = _dbContext.Users.FirstOrDefault(u => u.Email == userEmail);
+                Account? user = _dbContext.Accounts.FirstOrDefault(u => u.Email == userEmail);
                 if (user != null)
                 {
                     if (user.NumberPlayGame > 0)
@@ -93,7 +93,8 @@ namespace StyleX.Controllers
                             {
                                 resultString = resultString + $"{i+1}: {result1[i]}-{result2[i]}-{result3[i]}   ";
                             }
-                            _dbContext.Promotions.Add(new Promotion() { UserID = user.UserID, Status = false, Number = count * 10, ResultSpin = resultString });
+                            DateTime createAt = DateTime.Now;
+                            _dbContext.Promotions.Add(new Promotion() { AccountID = user.AccountID, Status = false, Number = count * 10, ResultSpin = resultString, CreateAt = createAt, ExpiredAt = createAt.AddDays(30) });
                         }
                         _dbContext.SaveChanges();
 

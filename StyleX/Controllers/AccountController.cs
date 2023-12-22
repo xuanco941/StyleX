@@ -23,15 +23,15 @@ namespace StyleX.Controllers
             try
             {
                 string userEmail = HttpContext.User.FindFirstValue(ClaimTypes.Email);
-                User? user = _dbContext.Users.FirstOrDefault(u => u.Email == userEmail);
+                Account? user = _dbContext.Accounts.FirstOrDefault(u => u.Email == userEmail);
                 if (user != null)
                 {
-                    int promotion1 = _dbContext.Promotions.Where(p => p.UserID == user.UserID && p.Status == true && p.Number == 10).Count();
-                    int promotion2 = _dbContext.Promotions.Where(p => p.UserID == user.UserID && p.Status == true && p.Number == 20).Count();
-                    int promotion3 = _dbContext.Promotions.Where(p => p.UserID == user.UserID && p.Status == true && p.Number == 30).Count();
-                    int promotion4 = _dbContext.Promotions.Where(p => p.UserID == user.UserID && p.Status == true && p.Number == 40).Count();
+                    int promotion1 = _dbContext.Promotions.Where(p => p.AccountID == user.AccountID && p.Status == true && p.Number == 10).Count();
+                    int promotion2 = _dbContext.Promotions.Where(p => p.AccountID == user.AccountID && p.Status == true && p.Number == 20).Count();
+                    int promotion3 = _dbContext.Promotions.Where(p => p.AccountID == user.AccountID && p.Status == true && p.Number == 30).Count();
+                    int promotion4 = _dbContext.Promotions.Where(p => p.AccountID == user.AccountID && p.Status == true && p.Number == 40).Count();
 
-                    List<Order> orders = _dbContext.Orders.Where(o => o.UserID == user.UserID).ToList();
+                    List<Order> orders = _dbContext.Orders.Where(o => o.AccountID == user.AccountID).ToList();
 
                     ViewBag.user = user;
                     ViewBag.promotion1 = promotion1;
@@ -60,7 +60,7 @@ namespace StyleX.Controllers
             {
                 string userEmail = HttpContext.User.FindFirstValue(ClaimTypes.Email);
 
-                User? user = _dbContext.Users.FirstOrDefault(u => u.Email == userEmail);
+                Account? user = _dbContext.Accounts.FirstOrDefault(u => u.Email == userEmail);
                 if(user != null) {
                     user.FullName = userUpdate.fullName;
                     user.Password = userUpdate.password;

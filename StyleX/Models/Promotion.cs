@@ -16,9 +16,11 @@ namespace StyleX.Models
         public string ResultSpin { get; set; } = null!;
         public DateTime CreateAt { get; set; } = DateTime.Now;
         public DateTime? UsedAt { get; set; }
+        public DateTime? ExpiredAt { get; set; }
 
-        public int UserID { get; set; }
-        public User User { get; set; } = null!;
+
+        public int AccountID { get; set; }
+        public Account Account { get; set; } = null!;
 
 
     }

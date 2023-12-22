@@ -24,13 +24,12 @@ namespace StyleX.Controllers
         {
             try
             {
-                List<OrderItem>? list = _dbContext.OrderItems.Where(u => u.OrderID == iDModel.ID).ToList();
+                List<ProductDesign>? list = _dbContext.ProductDesigns.Include(d => d.Product).Where(u => u.OrderID == iDModel.ID).ToList();
                 if (list == null)
                 {
-                    list = new List<OrderItem>();
+                    list = new List<ProductDesign>();
                 }
                 return new OkObjectResult(new { status = 1, message = "success.", data = list });
-
 
             }
             catch (Exception e)
