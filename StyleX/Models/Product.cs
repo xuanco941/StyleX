@@ -14,6 +14,7 @@ namespace StyleX.Models
         public string? Description { get; set; }
         public double Price { get; set; }
         public double Sale { get; set; } // % giảm giá
+        public DateTime? SaleEndAt { get; set; }
 
         public int CategoryID { get; set; }
         public Category Category { get; set; } = null!;

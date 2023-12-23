@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
+using StyleX;
 using StyleX.Models;
-using StyleX.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,12 +10,23 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 
-//auth
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
+//auth 
+builder.Services.AddAuthentication(options => {
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+}).AddCookie(Common.CookieAuthUser ,option =>
 {
-    option.LoginPath = "/Access/Login";
-    option.ExpireTimeSpan = TimeSpan.FromDays(10);
+    option.LoginPath = "/access/login";
+    option.LogoutPath = "/access/logout";
+    option.ExpireTimeSpan = TimeSpan.FromDays(30);
+}).AddCookie(Common.CookieAuthAdmin, option =>
+{
+    option.LoginPath = "/AdminAccess/login";
+    option.LogoutPath = "/AdminAccess/logout";
+    option.ExpireTimeSpan = TimeSpan.FromDays(30);
 });
+
 
 //service db 
 builder.Services.AddDbContext<DatabaseContext>(options =>
@@ -56,5 +67,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 app.Run();

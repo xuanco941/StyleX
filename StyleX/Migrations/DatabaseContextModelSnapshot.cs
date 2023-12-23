@@ -248,6 +248,9 @@ namespace StyleX.Migrations
                     b.Property<double>("Sale")
                         .HasColumnType("float");
 
+                    b.Property<DateTime?>("SaleEndAt")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("ProductID");
 
                     b.HasIndex("CategoryID");

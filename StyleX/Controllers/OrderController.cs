@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace StyleX.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = Common.CookieAuthUser)]
     public class OrderController : Controller
     {
         private readonly DatabaseContext _dbContext;

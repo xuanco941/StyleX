@@ -9,7 +9,8 @@ using System.Security.Claims;
 
 namespace StyleX.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = Common.CookieAuthUser)]
+
     public class AccountController : Controller
 	{
         private readonly DatabaseContext _dbContext;
@@ -48,6 +49,7 @@ namespace StyleX.Controllers
             }
             return View();
 		}
+
         [HttpPost]
         public IActionResult Update([FromBody] UserModel userUpdate)
         {

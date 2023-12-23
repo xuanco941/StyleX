@@ -44,9 +44,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Admin\" />
     <Folder Include="wwwroot\images\avatar\" />
     <Folder Include="wwwroot\images\products\" />
+    <Folder Include="wwwroot\admin\" />
   </ItemGroup>
 
 </Project>

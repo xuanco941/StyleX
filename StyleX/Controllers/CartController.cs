@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace StyleX.Controllers
 {
-	public class CartController : Controller
+    [Authorize(AuthenticationSchemes = Common.CookieAuthUser)]
+    public class CartController : Controller
 	{
 		public IActionResult Index()
 		{

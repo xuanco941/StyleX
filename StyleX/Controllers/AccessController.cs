@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using StyleX.Models;
 using StyleX.Utils;
 using StyleX.DTOs;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace StyleX.Controllers
 {
@@ -17,13 +17,14 @@ namespace StyleX.Controllers
         {
             _dbContext = dbContext;
         }
+
         [AllowAnonymous]
         [HttpGet]
-        public IActionResult Login(string keyActive)
+        public IActionResult Login(string? keyActive)
         {
             if (!string.IsNullOrEmpty(keyActive))
             {
-                Account? user = _dbContext.Accounts.FirstOrDefault(u => u.keyActive == keyActive && u.isActive == false);
+                Account? user = _dbContext.Accounts.FirstOrDefault(u => u.keyActive == keyActive && u.isActive == false && u.Role == Common.RoleUser);
                 if (user != null)
                 {
                     user.isActive = true;
@@ -33,7 +34,6 @@ namespace StyleX.Controllers
                     ViewBag.password = user.Password;
                 }
             }
-
             ClaimsPrincipal claimsPrincipal = HttpContext.User;
             if (claimsPrincipal.Identity.IsAuthenticated)
                 return RedirectToAction("Index", "Home");
@@ -51,7 +51,7 @@ namespace StyleX.Controllers
             }
             try
             {
-                Account? user = _dbContext.Accounts.SingleOrDefault(u => u.Email == loginDTO.email && u.Password == loginDTO.password);
+                Account? user = _dbContext.Accounts.SingleOrDefault(u => u.Email == loginDTO.email && u.Password == loginDTO.password && u.Role == Common.RoleUser);
 
                 if (user != null)
                 {
@@ -61,7 +61,7 @@ namespace StyleX.Controllers
                         List<Claim> claims = new List<Claim>() { new Claim(ClaimTypes.Email, user.Email), new Claim(ClaimTypes.NameIdentifier, user.AccountID.ToString()), new Claim(ClaimTypes.Role,user.Role) };
                         ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                         AuthenticationProperties properties = new AuthenticationProperties() { AllowRefresh = true, IsPersistent = true };
-                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), properties);
+                        await HttpContext.SignInAsync(Common.CookieAuthUser, new ClaimsPrincipal(claimsIdentity), properties);
                         return new OkObjectResult(new { status = 1, message = "/" });
 
                     }
@@ -110,7 +110,7 @@ namespace StyleX.Controllers
                     string keyActive = Guid.NewGuid().ToString();
                     string linkActive = $"<a href=\"https://{HttpContext.Request.Host.Value}/Access/Login/?keyActive={keyActive}\">StyleX - Nhấn vào đây để kích hoạt tài khoản của bạn.</a>";
 
-                    _dbContext.Accounts.Add(new Models.Account() { Email = sigupDto.email, Password = sigupDto.password, isActive = false, keyActive = keyActive });
+                    _dbContext.Accounts.Add(new Models.Account() { Email = sigupDto.email, Password = sigupDto.password, isActive = false, keyActive = keyActive, Role = Common.RoleUser });
                     if (_dbContext.SaveChanges() > 0)
                     {
                         new SendMail().SendEmailByGmail(sigupDto.email, "Kích hoạt tài khoản", "<html><body>" + linkActive + "</body></html>");
@@ -130,13 +130,12 @@ namespace StyleX.Controllers
 
         }
 
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(Common.CookieAuthUser);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Access");
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace StyleX.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = Common.CookieAuthUser)]
     public class PromotionController : Controller
     {
         private readonly DatabaseContext _dbContext;
