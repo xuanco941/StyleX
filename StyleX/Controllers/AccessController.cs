@@ -58,7 +58,7 @@ namespace StyleX.Controllers
                     ViewBag.Status = 200;
                     if (user.isActive == true)
                     {
-                        List<Claim> claims = new List<Claim>() { new Claim(ClaimTypes.Email, user.Email), new Claim(ClaimTypes.NameIdentifier, user.AccountID.ToString()), new Claim(ClaimTypes.Role,user.Role) };
+                        List<Claim> claims = new List<Claim>() { new Claim(ClaimTypes.Email, user.Email), new Claim(ClaimTypes.NameIdentifier, user.AccountID.ToString()), new Claim(ClaimTypes.Role, user.Role) };
                         ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                         AuthenticationProperties properties = new AuthenticationProperties() { AllowRefresh = true, IsPersistent = true };
                         await HttpContext.SignInAsync(Common.CookieAuthUser, new ClaimsPrincipal(claimsIdentity), properties);
@@ -114,7 +114,7 @@ namespace StyleX.Controllers
                     if (_dbContext.SaveChanges() > 0)
                     {
                         new SendMail().SendEmailByGmail(sigupDto.email, "Kích hoạt tài khoản", "<html><body>" + linkActive + "</body></html>");
-                        return new OkObjectResult(new { status = 1, message = "Đã gửi link kích hoạt về email của bạn."});
+                        return new OkObjectResult(new { status = 1, message = "Đã gửi link kích hoạt về email của bạn." });
 
                     }
                     else
@@ -136,6 +136,28 @@ namespace StyleX.Controllers
             await HttpContext.SignOutAsync(Common.CookieAuthUser);
 
             return RedirectToAction("Login", "Access");
+        }
+
+        [HttpPost]
+        [Authorize(AuthenticationSchemes = Common.CookieAuthUser)]
+        public IActionResult CheckLogin()
+        {
+            try
+            {
+                if (HttpContext.User.Identity.IsAuthenticated)
+                {
+                    return new OkObjectResult(new { status = 1, message = "success" });
+                }
+                else
+                {
+                    return new OkObjectResult(new { status = -1, message = "" });
+                }
+            }
+            catch (Exception e)
+            {
+                return new OkObjectResult(new { status = -2, message = e.Message });
+
+            }
         }
     }
 }

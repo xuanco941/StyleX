@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\xuanc\\Desktop\\GraduationProject\\StyleX\\StyleX\\StyleX.csproj": {}
+    "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\StyleX.csproj": {}
   },
   "projects": {
-    "C:\\Users\\xuanc\\Desktop\\GraduationProject\\StyleX\\StyleX\\StyleX.csproj": {
+    "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\StyleX.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\xuanc\\Desktop\\GraduationProject\\StyleX\\StyleX\\StyleX.csproj",
+        "projectUniqueName": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\StyleX.csproj",
         "projectName": "StyleX",
-        "projectPath": "C:\\Users\\xuanc\\Desktop\\GraduationProject\\StyleX\\StyleX\\StyleX.csproj",
+        "projectPath": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\StyleX.csproj",
         "packagesPath": "C:\\Users\\xuanc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\xuanc\\Desktop\\GraduationProject\\StyleX\\StyleX\\obj\\",
+        "outputPath": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\xuanc\\AppData\\Roaming\\NuGet\\NuGet.Config",
