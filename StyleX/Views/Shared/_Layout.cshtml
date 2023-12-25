@@ -182,6 +182,13 @@
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
 
     <script>
+
+        //check image upload
+        function isFileImage(file) {
+            return file && file['type'].split('/')[0] === 'image';
+        }
+
+        //alert
         var timeoutAlertID;
         function ShowAlert(html, type) {
             var alertBox = document.querySelector('#alertBox');

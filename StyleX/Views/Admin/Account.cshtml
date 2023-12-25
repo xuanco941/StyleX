@@ -1,5 +1,103 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    Layout = "_LayoutAdmin";
 }
+<div id="appMaterial">
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label>Mã giao dịch:</label>
+            <input type="text" class="form-control">
+        </div>
+        <div class="col-md-4">
+            <label>Req code:</label>
+            <input type="text" class="form-control">
+        </div>
+        <div class="col-md-4">
+            <label>Loại thanh toán:</label>
+            <select class="form-control">
+                <option value="">Tất cả</option>
+                <option value="0">Nạp</option>
+                <option value="1">Rút</option>
+            </select>
+        </div>
+    </div>
+
+    <table class="table" style="vertical-align: middle; text-align:center">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Loại vải</th>
+                <th scope="col">Trạng thái</th>
+                <th scope="col">Mô tả</th>
+                <th scope="col">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-if="isLoad">
+                <td style="font-size: 25px; text-align:center;" colspan="5"><i class="fa-solid fa-spinner fa-spin-pulse"></i></td>
+            </tr>
+            <tr v-if="isLoad == false">
+                <td>1</td>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>mdo</td>
+                <td><button class="btn btn-dark">Cập nhật</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+@section Scripts{
+    <script>
+        var appMaterial = new Vue({
+            el: "#appMaterial",
+            data: {
+                dataTable: [],
+                isLoad: true
+            },
+            methods: {
+                init: async function () {
+
+                    await this.GetMaterial();
+                    this.$forceUpdate();
+                },
+                GetMaterial: async function () {
+                    var self = this;
+                    self.isLoad = true;
+                    self.dataTable = [];
+
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "/admin/GetMaterials",
+                        data: JSON.stringify({
+
+                        }),
+                        success: function (res) {
+                            self.isLoad = false;
+                            if (res.status == 1) {
+                                self.dataTable = res.data;
+                            }
+                            else {
+                                ShowAlert(res.message, "danger");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            self.isLoad = false;
+                            ShowAlert(error, "danger");
+                        }
+                    });
+
+                }
+
+
+
+            },
+            mounted() {
+                this.init();
+            },
+        });
+
+    </script>
+
+    }

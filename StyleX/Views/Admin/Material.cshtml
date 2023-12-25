@@ -2,55 +2,77 @@
     Layout = "_LayoutAdmin";
 }
 <div id="appMaterial">
-    <div class="row mb-3">
-        <div class="col-md-4">
-            <label>Mã giao dịch:</label>
-            <input type="text" class="form-control">
-        </div>
-        <div class="col-md-4">
-            <label>Req code:</label>
-            <input type="text" class="form-control">
-        </div>
-        <div class="col-md-4">
-            <label>Loại thanh toán:</label>
-            <select class="form-control">
-                <option value="">Tất cả</option>
-                <option value="0">Nạp</option>
-                <option value="1">Rút</option>
-            </select>
-        </div>
+    <div class="w-100 justify-content-end d-flex mb-3 mt-2">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#modalAdd">Thêm mới</button>
+
     </div>
 
-    <table class="table">
+    <table class="table" style="vertical-align: middle; text-align:center">
         <thead class="thead-dark">
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
+                <th scope="col">Loại vải</th>
+                <th scope="col">Trạng thái</th>
+                <th scope="col">Mô tả</th>
+                <th scope="col">Thao tác</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <th scope="row">1</th>
+            <tr v-if="isLoad">
+                <td style="font-size: 25px; text-align:center;" colspan="5"><i class="fa-solid fa-spinner fa-spin-pulse"></i></td>
+            </tr>
+            <tr v-if="isLoad == false">
+                <td>1</td>
                 <td>Mark</td>
                 <td>Otto</td>
                 <td>mdo</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>fat</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>twitter</td>
+                <td><button class="btn btn-warning" data-toggle="modal" data-target="#modalUpdate">Cập nhật</button></td>
             </tr>
         </tbody>
     </table>
+
+    <div class="modal fade" id="modalAdd" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+            <div class="modal-content" style="margin-bottom: 150px">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Thêm chất liệu vải mới</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="overflow-x: auto; overflow-y: auto; max-height: 600px;">
+                    <div>
+                        <div class="form-group">
+                            <label for="ip1">Tên loại vải</label>
+                            <input type="text" class="form-control" id="ip1" v-model="dataAdd.name">
+                            <div class="text-danger" style="font-size: 14px;">{{dataAdd.messageName}}</div>
+                        </div>                        
+                        <div class="form-group">
+                            <label for="inputState">Trạng thái</label>
+                            <select id="inputState" class="form-control" v-model="dataAdd.status">
+                                <option value="true">Còn hàng</option>
+                                <option value="false">Hết hàng</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="ip3">Chọn ảnh</label>
+                            <input type="file" class="form-control" id="ip3" v-on:change="ChangeImage">
+                            <div class="text-danger" style="font-size: 14px;">{{dataAdd.messageFile}}</div>
+                            <div class="mt-2">
+                                <img style="width: 100px;" v-bind:src="dataAdd.image" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" v-on:click="AddMaterial()">Xác nhận</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 
@@ -60,7 +82,15 @@
             el: "#appMaterial",
             data: {
                 dataTable: [],
-                isLoad: false
+                isLoad: true,
+                dataAdd:{
+                    name: "",
+                    status: true,
+                    file: "",
+                    image: "",
+                    messageFile: "",
+                    messageName: ""
+                }
             },
             methods: {
                 init: async function () {
@@ -84,8 +114,6 @@
                             self.isLoad = false;
                             if (res.status == 1) {
                                 self.dataTable = res.data;
-                                ShowAlert(res.message, "success");
-
                             }
                             else {
                                 ShowAlert(res.message, "danger");
@@ -97,7 +125,25 @@
                         }
                     });
 
-                }
+                },
+                ChangeImage: function(e){
+                    var self = this;
+                    var file = e.target.files[0];
+                    if (isFileImage(file)) {
+                        self.dataAdd.image = URL.createObjectURL(file);
+                        self.dataAdd.file = file;
+                    }
+                    else{
+                        self.dataAdd.messageFile = "Định dạng file không phù hợp.";
+                        self.dataAdd.image = "";
+                        self.dataAdd.file = "";
+                    }
+                    
+                },
+                AddMaterial: async function () {
+                    var self = this;
+                },
+
 
 
 
