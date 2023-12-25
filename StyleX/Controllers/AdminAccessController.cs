@@ -44,7 +44,6 @@ namespace StyleX.Controllers
 
                 if (user != null)
                 {
-                    ViewBag.Status = 200;
                     if (user.isActive == true)
                     {
                         List<Claim> claims = new List<Claim>() { new Claim(ClaimTypes.Email, user.Email), new Claim(ClaimTypes.NameIdentifier, user.AccountID.ToString()), new Claim(ClaimTypes.Role, user.Role) };

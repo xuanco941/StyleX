@@ -139,7 +139,7 @@
         </div>
 
         <!-- Login Form -->
-        <div v-if="isLogin">
+        <div v-if="isLogin==1">
             <input v-model="dataLogin.email" type="text" class="second inputLogin" name="email" placeholder="Email">
             <div class="text-danger" style="font-size:14px;">{{dataLogin.messageEmail}}</div>
             <input v-model="dataLogin.password" type="password" class="third inputLogin" name="password"
@@ -147,10 +147,16 @@
             <div class="text-danger" style="font-size:14px;">{{dataLogin.messagePassword}}</div>
             <button v-if="dataLogin.isLoad==false" type="button" v-on:click="logIn()" class="fourth mt-4 mb-3">Đăng nhập</button>
             <button v-if="dataLogin.isLoad" type="button" class="fourth mt-4 mb-3"><i class="fa-solid fa-spinner fa-spin-pulse"></i></button>
-
+        </div>
+        <div v-if="isLogin==2">
+            <input v-model="dataForgotPassword.email" type="text" class="second inputLogin" name="email" placeholder="Email">
+            <div class="text-danger" style="font-size:14px;">{{dataForgotPassword.messageEmail}}</div>
+            <button v-if="dataForgotPassword.isLoad==false" type="button" v-on:click="forgotPassword()" class="fourth mt-4 mb-3">Nhận mật khẩu mới</button>
+            <button v-if="dataForgotPassword.isLoad" type="button" class="fourth mt-4 mb-3"><i class="fa-solid fa-spinner fa-spin-pulse"></i></button>
 
         </div>
-        <div v-if="!isLogin">
+
+        <div v-if="isLogin==3">
             <input v-model="dataSignUp.email" type="text" class="second inputLogin" name="email" placeholder="Email">
             <div class="text-danger" style="font-size:14px;">{{dataSignUp.messageEmail}}</div>
 
@@ -160,13 +166,14 @@
             <input v-model="dataSignUp.repeatPassword" type="password" class="third inputLogin" name="repeatPassword" placeholder="Nhập lại mật khẩu" autocomplete="off" />
             <button v-if="dataSignUp.isLoad==false" type="button" v-on:click="signUp()" class="fourth mt-4 mb-3">Đăng ký</button>
             <button v-if="dataSignUp.isLoad" type="button" class="fourth mt-4 mb-3"><i class="fa-solid fa-spinner fa-spin-pulse"></i></button>
-
-
         </div>
 
         <div id="formFooter">
-            <a v-if="isLogin" v-on:click="changeForm()" class="underlineHover linkSignup w-50" href="#">Đăng ký</a>
-            <a v-if="!isLogin" v-on:click="changeForm()" class="underlineHover linkSignup w-50" href="#">Đăng nhập</a>
+            <a v-if="isLogin==3 || isLogin==2" v-on:click="changeForm(1)" class="underlineHover linkSignup w-50" href="#">Đăng nhập</a>
+            <a v-if="isLogin==1 || isLogin==2 " v-on:click="changeForm(3)" class="underlineHover linkSignup w-50" href="#">Đăng ký</a>
+            <a v-if="isLogin==1 || isLogin==3" v-on:click="changeForm(2)" class="underlineHover linkSignup w-50 mt-2" href="#">Quên mật khẩu</a>
+
+
         </div>
 
     </div>
@@ -178,12 +185,17 @@
         var appLogin = new Vue({
             el: "#appLogin",
             data: {
-                isLogin: true,
+                isLogin: 1,
                 dataLogin: {
                     email: '',
                     password: '',
                     messageEmail: '',
                     messagePassword: '',
+                    isLoad: false
+                },
+                dataForgotPassword: {
+                    email: '',
+                    messageEmail: '',
                     isLoad: false
                 },
                 dataSignUp: {
@@ -206,8 +218,8 @@
                     this.$forceUpdate();
 
                 },
-                changeForm: function () {
-                    this.isLogin = !this.isLogin;
+                changeForm: function (v) {
+                    this.isLogin = v;
                 },
                 logIn: async function () {
                     var self = this;
@@ -306,6 +318,43 @@
                             ShowAlert(error, "danger");
                         }
                     });
+                },
+                forgotPassword: async function () {
+                    var self = this;
+
+                    if (!self.dataForgotPassword.email) {
+                        self.dataForgotPassword.messageEmail = "Email không hợp lệ, vui lòng thử lại.";
+                        return;
+                    }
+                    else {
+                        self.dataForgotPassword.messageEmail = "";
+                    }
+
+                    self.dataForgotPassword.isLoad = true;
+
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "/Access/ForgotPassword",
+                        data: JSON.stringify({
+                            email: self.dataForgotPassword.email,
+                            password: "",
+                        }),
+                        success: function (data) {
+                            self.dataForgotPassword.isLoad = false;
+                            if (data.status == 1) {
+                                ShowAlert(data.message, "success");
+                            }
+                            else {
+                                ShowAlert(data.message, "danger");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            self.dataForgotPassword.isLoad = false;
+                            ShowAlert(error, "danger");
+                        }
+                    });
+
                 },
 
 

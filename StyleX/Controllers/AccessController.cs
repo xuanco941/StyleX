@@ -55,7 +55,6 @@ namespace StyleX.Controllers
 
                 if (user != null)
                 {
-                    ViewBag.Status = 200;
                     if (user.isActive == true)
                     {
                         List<Claim> claims = new List<Claim>() { new Claim(ClaimTypes.Email, user.Email), new Claim(ClaimTypes.NameIdentifier, user.AccountID.ToString()), new Claim(ClaimTypes.Role, user.Role) };
@@ -156,6 +155,41 @@ namespace StyleX.Controllers
             catch (Exception e)
             {
                 return new OkObjectResult(new { status = -2, message = e.Message });
+
+            }
+        }
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword([FromBody] LoginModel loginDTO)
+        {
+            try
+            {
+                Account? user = _dbContext.Accounts.SingleOrDefault(u => u.Email == loginDTO.email && u.Role == Common.RoleUser);
+
+                if (user != null)
+                {
+                    if (user.isActive == true)
+                    {
+
+                        user.Password = Guid.NewGuid().ToString().Substring(0, 5);
+                        _dbContext.SaveChanges();
+                        new SendMail().SendEmailByGmail(user.Email, "Đặt lại mật khẩu", $"StyleX - Mật khẩu mới trên của bạn là: {user.Password}");
+
+                        return new OkObjectResult(new { status = 1, message = "Mật khẩu mới đã được gửi về email của bạn." });
+                    }
+                    else
+                    {
+                        return new OkObjectResult(new { status = -1, message = "Tài khoản của bạn chưa được kích hoạt." });
+                    }
+                }
+                else
+                {
+                    return new OkObjectResult(new { status = -2, message = "Tài khoản không tồn tại." });
+                }
+            }
+            catch (Exception e)
+            {
+                return new OkObjectResult(new { status = -3, message = e.Message });
 
             }
         }
