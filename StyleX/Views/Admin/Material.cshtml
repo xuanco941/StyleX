@@ -1,0 +1,171 @@
+﻿@{
+    Layout = "_LayoutAdmin";
+}
+<div class="row mb-3">
+    <div class="col-md-4">
+        <label>Mã giao dịch:</label>
+        <input type="text" class="form-control">
+    </div>
+    <div class="col-md-4">
+        <label>Req code:</label>
+        <input type="text" class="form-control" >
+    </div>
+    <div class="col-md-4">
+        <label>Loại thanh toán:</label>
+        <select class="form-control" >
+            <option value="">Tất cả</option>
+            <option value="0">Nạp</option>
+            <option value="1">Rút</option>
+        </select>
+    </div>
+</div>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>mdo</td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>fat</td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>Larry</td>
+            <td>the Bird</td>
+            <td>twitter</td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="table">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>mdo</td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>at</td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>Larry</td>
+            <td>the Bird</td>
+            <td>witter</td>
+        </tr>
+    </tbody>
+</table>
+
+
+@section Scripts{
+    <script>
+        var appLogin = new Vue({
+            el: "#appLogin",
+            data: {
+                dataLogin: {
+                    email: '',
+                    password: '',
+                    messageEmail: '',
+                    messagePassword: '',
+                    isLoad: false
+                },
+
+                isActive: '@ViewBag.IsActive'
+            },
+            methods: {
+                init: async function () {
+                    if (this.isActive == '1') {
+                        this.dataLogin.email = "@ViewBag.email";
+                        this.dataLogin.password = "@ViewBag.password";
+                        ShowAlert("Kích hoạt tài khoản thành công.", "success");
+                    }
+                    this.$forceUpdate();
+
+                },
+                changeForm: function () {
+                    this.isLogin = !this.isLogin;
+                },
+                logIn: async function () {
+                    var self = this;
+
+                    if (!self.dataLogin.email) {
+                        self.dataLogin.messageEmail = "Tài khoản không hợp lệ, vui lòng thử lại.";
+                        return;
+                    }
+                    else {
+                        self.dataLogin.messageEmail = "";
+                    }
+                    if (!self.dataLogin.password) {
+                        self.dataLogin.messagePassword = "Mật khẩu không hợp lệ, vui lòng thử lại.";
+                        return;
+                    }
+                    else {
+                        self.dataLogin.messagePassword = "";
+                    }
+                    self.dataLogin.isLoad = true;
+
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "/AdminAccess/SignIn",
+                        data: JSON.stringify({
+                            email: self.dataLogin.email,
+                            password: self.dataLogin.password,
+                        }),
+                        success: function (data) {
+                            self.dataLogin.isLoad = false;
+                            if (data.status == 1) {
+                                window.location.href = "/admin";
+                            }
+                            else if (data.status == -1) {
+                                ShowAlert(data.message, "info");
+                            }
+                            else {
+                                ShowAlert(data.message, "danger");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            self.dataLogin.isLoad = false;
+                            ShowAlert(error, "danger");
+                        }
+                    });
+
+                }
+
+
+
+            },
+            mounted() {
+                this.init();
+            },
+        });
+
+    </script>
+
+    }

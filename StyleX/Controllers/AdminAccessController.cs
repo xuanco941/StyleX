@@ -25,7 +25,7 @@ namespace StyleX.Controllers
 
             ClaimsPrincipal claimsPrincipal = HttpContext.User;
             if (claimsPrincipal.Identity.IsAuthenticated)
-                return RedirectToAction("Index", "AdminDashboard");
+                return RedirectToAction("Index", "Admin");
 
             return View();
 

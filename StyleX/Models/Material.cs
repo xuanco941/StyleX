@@ -10,5 +10,6 @@ namespace StyleX.Models
         public int MaterialID { get; set; }
         public string Name { get; set; } = null!;
         public string Url { get; set; } = null!; //link ảnh tạo vật liệu
+        public bool Status { get; set; } //=false thì vật liệu này ngừng hđ
     }
 }
