@@ -32,6 +32,8 @@ builder.Services.AddAuthentication(options => {
 builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));// shorthand getSection("ConnectionStrings")["DefaultConnection"]
 
+builder.Services.AddSingleton<IWebHostEnvironment>(builder.Environment);
+
 //http context
 builder.Services.AddHttpContextAccessor();
 

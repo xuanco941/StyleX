@@ -160,7 +160,7 @@ namespace StyleX.Controllers
         }
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> ForgotPassword([FromBody] LoginModel loginDTO)
+        public IActionResult ForgotPassword([FromBody] LoginModel loginDTO)
         {
             try
             {
@@ -173,7 +173,7 @@ namespace StyleX.Controllers
 
                         user.Password = Guid.NewGuid().ToString().Substring(0, 5);
                         _dbContext.SaveChanges();
-                        new SendMail().SendEmailByGmail(user.Email, "Đặt lại mật khẩu", $"StyleX - Mật khẩu mới trên của bạn là: {user.Password}");
+                        new SendMail().SendEmailByGmail(user.Email, "Đặt lại mật khẩu", $"StyleX - Mật khẩu mới của bạn là: {user.Password}");
 
                         return new OkObjectResult(new { status = 1, message = "Mật khẩu mới đã được gửi về email của bạn." });
                     }

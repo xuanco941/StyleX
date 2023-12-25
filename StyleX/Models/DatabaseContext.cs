@@ -19,7 +19,6 @@ namespace StyleX.Models
         public DbSet<Promotion> Promotions { get; set; } = null!;
         public DbSet<Warehouse> Warehouses { get; set; } = null!;
         public DbSet<ProductMaterial> ProductMaterials { get; set; } = null!;
-        public DbSet<ProductSetting> ProductSettings { get; set; } = null!;
 
 
 
@@ -48,10 +47,6 @@ namespace StyleX.Models
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.HasIndex(e => e.Name).IsUnique();
-            });
-            modelBuilder.Entity<ProductSetting>(entity =>
-            {
-                entity.HasIndex(e => e.Uuid).IsUnique();
             });
         }
 

@@ -156,6 +156,9 @@ namespace StyleX.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Url")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -310,6 +313,9 @@ namespace StyleX.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductMaterialID"), 1L, 1);
 
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
+
                     b.Property<int>("MaterialID")
                         .HasColumnType("int");
 
@@ -317,6 +323,10 @@ namespace StyleX.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ProductMaterialName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Uuid")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
