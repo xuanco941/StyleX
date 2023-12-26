@@ -88,6 +88,47 @@ namespace StyleX.Controllers
             }
 
         }
+        [HttpPost]
+        public IActionResult UpdateMaterial([FromForm] UpdateMaterialModel md)
+        {
+            try
+            {
+                var mat = _dbContext.Materials.Find(md.materialID);
+                if (mat == null)
+                {
+                    return new OkObjectResult(new { status = -1, message = "Chất liệu này không khả dụng." });
+                }
+                mat.Name = md.name;
+                mat.Status = md.status;
+
+                if (md.file != null && md.file.Length > 0)
+                {
+                    // Xóa file cũ
+                    var oldFilePath = Path.Combine(_environment.WebRootPath, mat.Url.TrimStart('/'));
+                    if (System.IO.File.Exists(oldFilePath))
+                    {
+                        System.IO.File.Delete(oldFilePath);
+                    }
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(md.file.FileName);
+                    var filePath = Path.Combine(_environment.WebRootPath, "materials", fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        md.file.CopyTo(stream);
+                    }
+                    mat.Url = $"/materials/{fileName}";
+
+                }
+                _dbContext.SaveChanges();
+                return new OkObjectResult(new { status = 1, message = "Cập nhật chất liệu thành công." });
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message });
+            }
+
+        }
         public IActionResult GetMaterials()
         {
             try

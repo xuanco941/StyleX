@@ -4,8 +4,8 @@ namespace StyleX.DTOs
 {
     public class LoginModel
     {
-        public string email { get; set; }
-        public string password { get; set; }
+        public string email { get; set; } = null!;
+        public string password { get; set; } = null!;
     }
     public class UserModel
     {
