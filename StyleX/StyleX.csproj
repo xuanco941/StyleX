@@ -7,9 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\images\products\**" />
     <Compile Remove="wwwroot\mini-game\**" />
+    <Content Remove="wwwroot\images\products\**" />
     <Content Remove="wwwroot\mini-game\**" />
+    <EmbeddedResource Remove="wwwroot\images\products\**" />
     <EmbeddedResource Remove="wwwroot\mini-game\**" />
+    <None Remove="wwwroot\images\products\**" />
     <None Remove="wwwroot\mini-game\**" />
   </ItemGroup>
 
@@ -45,8 +49,8 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\avatar\" />
-    <Folder Include="wwwroot\images\products\" />
     <Folder Include="wwwroot\admin\" />
+    <Folder Include="wwwroot\materials\" />
   </ItemGroup>
 
 </Project>

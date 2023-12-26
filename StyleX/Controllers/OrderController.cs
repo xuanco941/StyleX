@@ -24,10 +24,10 @@ namespace StyleX.Controllers
         {
             try
             {
-                List<ProductDesign>? list = _dbContext.ProductDesigns.Include(d => d.Product).Where(u => u.OrderID == iDModel.ID).ToList();
+                List<CartItem>? list = _dbContext.CartItems.Include(d => d.Product).Where(u => u.OrderID == iDModel.ID).ToList();
                 if (list == null)
                 {
-                    list = new List<ProductDesign>();
+                    list = new List<CartItem>();
                 }
                 return new OkObjectResult(new { status = 1, message = "success.", data = list });
 

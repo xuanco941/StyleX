@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StyleX.Models
 {
+    //chỉ số design của từng bộ phận trên product cart item
     [Table("DesignInfo")]
     public class DesignInfo
     {
@@ -15,7 +16,7 @@ namespace StyleX.Models
         public double? TextureScale { get; set; }
         public string? ImageMaterial { get; set; } // image url
         public string? ImageDecal { get; set; }
-        public int DesignItemID { get; set; }
-        public ProductDesign ProductDesign { get; set; } = null!;
+        public int CartItemID { get; set; }
+        public CartItem CartItem { get; set; } = null!;
     }
 }

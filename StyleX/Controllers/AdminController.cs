@@ -56,7 +56,7 @@ namespace StyleX.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult AddMaterial([FromBody] AddMaterialModel addMaterialModel)
+        public IActionResult AddMaterial([FromForm] AddMaterialModel addMaterialModel)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace StyleX.Controllers
                         addMaterialModel.file.CopyTo(stream);
                     }
 
-                    _dbContext.Materials.Add(new Material() { Name = addMaterialModel.name, Status = addMaterialModel.status, Url = $"/material/{fileName}" });
+                    _dbContext.Materials.Add(new Material() { Name = addMaterialModel.name, Status = addMaterialModel.status, Url = $"/materials/{fileName}" });
                     _dbContext.SaveChanges();
                     return new OkObjectResult(new { status = 1, message = "Tải lên chất liệu mới thành công." });
 

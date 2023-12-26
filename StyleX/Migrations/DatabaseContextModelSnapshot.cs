@@ -81,6 +81,47 @@ namespace StyleX.Migrations
                     b.ToTable("Account");
                 });
 
+            modelBuilder.Entity("StyleX.Models.CartItem", b =>
+                {
+                    b.Property<int>("CartItemID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartItemID"), 1L, 1);
+
+                    b.Property<int>("AccountID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OrderID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PosterUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Size")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("CartItemID");
+
+                    b.HasIndex("AccountID");
+
+                    b.HasIndex("OrderID");
+
+                    b.HasIndex("ProductID");
+
+                    b.ToTable("CartItem");
+                });
+
             modelBuilder.Entity("StyleX.Models.Category", b =>
                 {
                     b.Property<int>("CategoryID")
@@ -109,11 +150,11 @@ namespace StyleX.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DesignInfoID"), 1L, 1);
 
+                    b.Property<int>("CartItemID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Color")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DesignItemID")
-                        .HasColumnType("int");
 
                     b.Property<string>("DesignName")
                         .IsRequired()
@@ -128,9 +169,6 @@ namespace StyleX.Migrations
                     b.Property<string>("ImageTexture")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductDesignID")
-                        .HasColumnType("int");
-
                     b.Property<double?>("TextureRotation")
                         .HasColumnType("float");
 
@@ -139,7 +177,7 @@ namespace StyleX.Migrations
 
                     b.HasKey("DesignInfoID");
 
-                    b.HasIndex("ProductDesignID");
+                    b.HasIndex("CartItemID");
 
                     b.ToTable("DesignInfo");
                 });
@@ -264,65 +302,25 @@ namespace StyleX.Migrations
                     b.ToTable("Product");
                 });
 
-            modelBuilder.Entity("StyleX.Models.ProductDesign", b =>
+            modelBuilder.Entity("StyleX.Models.ProductSetting", b =>
                 {
-                    b.Property<int>("ProductDesignID")
+                    b.Property<int>("ProductSettingID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductDesignID"), 1L, 1);
-
-                    b.Property<int>("AccountID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("OrderID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PosterUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Size")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductDesignID");
-
-                    b.HasIndex("AccountID");
-
-                    b.HasIndex("OrderID");
-
-                    b.HasIndex("ProductID");
-
-                    b.ToTable("ProductDesign");
-                });
-
-            modelBuilder.Entity("StyleX.Models.ProductMaterial", b =>
-                {
-                    b.Property<int>("ProductMaterialID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductMaterialID"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductSettingID"), 1L, 1);
 
                     b.Property<bool>("IsDefault")
                         .HasColumnType("bit");
 
-                    b.Property<int>("MaterialID")
-                        .HasColumnType("int");
-
                     b.Property<int>("ProductID")
                         .HasColumnType("int");
 
-                    b.Property<string>("ProductMaterialName")
+                    b.Property<string>("ProductPartNameCustom")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProductPartNameDefault")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -330,13 +328,34 @@ namespace StyleX.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ProductMaterialID");
-
-                    b.HasIndex("MaterialID");
+                    b.HasKey("ProductSettingID");
 
                     b.HasIndex("ProductID");
 
-                    b.ToTable("ProductMaterial");
+                    b.ToTable("ProductSetting");
+                });
+
+            modelBuilder.Entity("StyleX.Models.ProductSettingMaterial", b =>
+                {
+                    b.Property<int>("ProductSettingMaterialID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductSettingMaterialID"), 1L, 1);
+
+                    b.Property<int>("MaterialID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductSettingID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductSettingMaterialID");
+
+                    b.HasIndex("MaterialID");
+
+                    b.HasIndex("ProductSettingID");
+
+                    b.ToTable("ProductSettingMaterial");
                 });
 
             modelBuilder.Entity("StyleX.Models.Promotion", b =>
@@ -404,40 +423,7 @@ namespace StyleX.Migrations
                     b.ToTable("Warehouse");
                 });
 
-            modelBuilder.Entity("StyleX.Models.DesignInfo", b =>
-                {
-                    b.HasOne("StyleX.Models.ProductDesign", "ProductDesign")
-                        .WithMany()
-                        .HasForeignKey("ProductDesignID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ProductDesign");
-                });
-
-            modelBuilder.Entity("StyleX.Models.Order", b =>
-                {
-                    b.HasOne("StyleX.Models.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
-                });
-
-            modelBuilder.Entity("StyleX.Models.Product", b =>
-                {
-                    b.HasOne("StyleX.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("StyleX.Models.ProductDesign", b =>
+            modelBuilder.Entity("StyleX.Models.CartItem", b =>
                 {
                     b.HasOne("StyleX.Models.Account", "Account")
                         .WithMany()
@@ -462,7 +448,51 @@ namespace StyleX.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("StyleX.Models.ProductMaterial", b =>
+            modelBuilder.Entity("StyleX.Models.DesignInfo", b =>
+                {
+                    b.HasOne("StyleX.Models.CartItem", "CartItem")
+                        .WithMany()
+                        .HasForeignKey("CartItemID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CartItem");
+                });
+
+            modelBuilder.Entity("StyleX.Models.Order", b =>
+                {
+                    b.HasOne("StyleX.Models.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
+            modelBuilder.Entity("StyleX.Models.Product", b =>
+                {
+                    b.HasOne("StyleX.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("StyleX.Models.ProductSetting", b =>
+                {
+                    b.HasOne("StyleX.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("StyleX.Models.ProductSettingMaterial", b =>
                 {
                     b.HasOne("StyleX.Models.Material", "Material")
                         .WithMany()
@@ -470,15 +500,15 @@ namespace StyleX.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StyleX.Models.Product", "Product")
+                    b.HasOne("StyleX.Models.ProductSetting", "ProductSetting")
                         .WithMany()
-                        .HasForeignKey("ProductID")
+                        .HasForeignKey("ProductSettingID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Material");
 
-                    b.Navigation("Product");
+                    b.Navigation("ProductSetting");
                 });
 
             modelBuilder.Entity("StyleX.Models.Promotion", b =>

@@ -13,19 +13,24 @@
                 <th scope="col">#</th>
                 <th scope="col">Loại vải</th>
                 <th scope="col">Trạng thái</th>
-                <th scope="col">Mô tả</th>
+                <th scope="col">Hình ảnh</th>
                 <th scope="col">Thao tác</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody style="vertical-align:middle;">
             <tr v-if="isLoad">
                 <td style="font-size: 25px; text-align:center;" colspan="5"><i class="fa-solid fa-spinner fa-spin-pulse"></i></td>
             </tr>
-            <tr v-if="isLoad == false">
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>mdo</td>
+            <tr v-if="isLoad == false" v-for="(item,index) in dataTable">
+                <td>{{index+1}}</td>
+                <td>{{item.name}}</td>
+                <td>
+                    <span class="badge badge-success" v-if="item.status==true">Còn hàng</span>
+                    <span class="badge badge-danger" v-if="item.status==false">Hết hàng</span>
+                </td>
+                <td>
+                    <img v-bind:src="item.url" style="width: 250px"/>
+                </td>
                 <td><button class="btn btn-warning" data-toggle="modal" data-target="#modalUpdate">Cập nhật</button></td>
             </tr>
         </tbody>
@@ -67,11 +72,57 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary" v-on:click="AddMaterial()">Xác nhận</button>
+                    <button v-if="dataAdd.isLoad == false" type="button" class="btn btn-primary" v-on:click="AddMaterial()">Xác nhận</button>
+                    <button v-if="dataAdd.isLoad" type="button" class="btn btn-primary">Đang xử lý...</button>
+
                 </div>
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalUpdate" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+            <div class="modal-content" style="margin-bottom: 150px">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Cập nhật chất liệu vải</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="overflow-x: auto; overflow-y: auto; max-height: 600px;">
+                    <div>
+                        <div class="form-group">
+                            <label for="ipu1">Tên loại vải</label>
+                            <input type="text" class="form-control" id="ipu1" v-model="dataUpdate.name">
+                            <div class="text-danger" style="font-size: 14px;">{{dataUpdate.messageName}}</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputStateu">Trạng thái</label>
+                            <select id="inputStateu" class="form-control" v-model="dataUpdate.status">
+                                <option value="true">Còn hàng</option>
+                                <option value="false">Hết hàng</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="ipu3">Chọn ảnh</label>
+                            <input type="file" class="form-control" id="ipu3" v-on:change="ChangeImageUpdate">
+                            <div class="text-danger" style="font-size: 14px;">{{dataUpdate.messageFile}}</div>
+                            <div class="mt-2">
+                                <img style="width: 100px;" v-bind:src="dataUpdate.image" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button v-if="dataUpdate.isLoad == false" type="button" class="btn btn-primary" v-on:click="UpdateMaterial()">Xác nhận</button>
+                    <button v-if="dataUpdate.isLoad" type="button" class="btn btn-primary">Đang xử lý...</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </div>
 
@@ -89,7 +140,17 @@
                     file: "",
                     image: "",
                     messageFile: "",
-                    messageName: ""
+                    messageName: "",
+                    isLoad: false
+                },
+                dataUpdate: {
+                    name: "",
+                    status: true,
+                    file: "",
+                    image: "",
+                    messageFile: "",
+                    messageName: "",
+                    isLoad: false
                 }
             },
             methods: {
@@ -140,8 +201,75 @@
                     }
                     
                 },
+                ChangeImageUpdate: function (e) {
+                    var self = this;
+                    var file = e.target.files[0];
+                    if (isFileImage(file)) {
+                        self.dataUpdate.image = URL.createObjectURL(file);
+                        self.dataUpdate.file = file;
+                    }
+                    else {
+                        self.dataUpdate.messageFile = "Định dạng file không phù hợp.";
+                        self.dataUpdate.image = "";
+                        self.dataUpdate.file = "";
+                    }
+
+                },
+
                 AddMaterial: async function () {
                     var self = this;
+
+                    if (!self.dataAdd.name) {
+                        self.dataAdd.messageName = "Bạn chưa đặt tên cho chất liệu này.";
+                        return;
+                    }
+                    else {
+                        self.dataAdd.messageName = "";
+                    }
+                    if (!self.dataAdd.file && isFileImage(file) == false) {
+                        self.dataAdd.messageFile = "Bạn chưa chọn file chất liệu.";
+                        return;
+                    }
+                    else {
+                        self.dataAdd.messageFile = "";
+                    }
+
+                    var formData = new FormData();
+                    formData.append('name', self.dataAdd.name);
+                    formData.append('file', self.dataAdd.file);
+                    formData.append('status', self.dataAdd.status);
+
+                    self.dataAdd.isLoad = true;
+                    $.ajax({
+                        url: '/admin/addmaterial',
+                        type: 'POST',
+                        data: formData,
+                        processData: false, // không xử lý data
+                        contentType: false, // không đặt
+                        success: function (res) {
+                            self.dataAdd.isLoad = false;
+                            if (res.status == 1) {
+                                self.GetMaterial();
+                                ShowAlert(res.message, "success");
+                                self.dataAdd.name = "";
+                                self.dataAdd.status = true;
+                                self.dataAdd.file = "";
+                                self.dataAdd.image = "";
+                                self.dataAdd.messageFile = "";
+                                self.dataAdd.messageName = "";
+                            }
+                            else {
+                                ShowAlert(res.message, "danger");
+                            }
+                            $('#modalAdd').modal('hide');
+
+                        },
+                        error: function (error) {
+                            self.dataAdd.isLoad = false;
+                            ShowAlert(error, "danger");
+                        }
+                    });
+
                 },
 
 
