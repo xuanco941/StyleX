@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "fLAoSGcxPhoLywk0oCCkFuJ38iGzaQBEog+ZC9SuEVTmuGoFKvsIArLVNmuyAAzKbTM4m9UW2dkUs1HP+QnW5g==",
+  "dgSpecHash": "lHy5pWHdkJz1Ofmw+ySfZCh+tY2+lBbefZ1fiESdqS6o5D6y26EdZxofCEJodrTdkgZ8UfnvLISOXpFkPhfMzg==",
   "success": true,
   "projectFilePath": "C:\\Users\\xuanc\\Desktop\\StyleX\\StyleX\\StyleX.csproj",
   "expectedPackageFiles": [
@@ -60,11 +60,7 @@
     "C:\\Users\\xuanc\\.nuget\\packages\\system.text.encodings.web\\6.0.0\\system.text.encodings.web.6.0.0.nupkg.sha512",
     "C:\\Users\\xuanc\\.nuget\\packages\\system.text.json\\6.0.0\\system.text.json.6.0.0.nupkg.sha512",
     "C:\\Users\\xuanc\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
-    "C:\\Users\\xuanc\\.nuget\\packages\\system.windows.extensions\\4.7.0\\system.windows.extensions.4.7.0.nupkg.sha512",
-    "C:\\Users\\xuanc\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.25\\microsoft.windowsdesktop.app.ref.6.0.25.nupkg.sha512",
-    "C:\\Users\\xuanc\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.25\\microsoft.netcore.app.ref.6.0.25.nupkg.sha512",
-    "C:\\Users\\xuanc\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.25\\microsoft.aspnetcore.app.ref.6.0.25.nupkg.sha512",
-    "C:\\Users\\xuanc\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.25\\microsoft.netcore.app.host.win-x64.6.0.25.nupkg.sha512"
+    "C:\\Users\\xuanc\\.nuget\\packages\\system.windows.extensions\\4.7.0\\system.windows.extensions.4.7.0.nupkg.sha512"
   ],
   "logs": []
 }

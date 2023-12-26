@@ -7,6 +7,7 @@
         public const string RoleUser = "user";
         public const string RoleAdmin = "admin";
 
+        public const string FolderImageMaterials = "materials"; 
 
     }
 }

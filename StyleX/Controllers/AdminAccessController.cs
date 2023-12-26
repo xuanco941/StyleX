@@ -24,7 +24,7 @@ namespace StyleX.Controllers
             ViewBag.Title = "StyleXCMS - Đăng nhập";
 
             ClaimsPrincipal claimsPrincipal = HttpContext.User;
-            if (claimsPrincipal.Identity.IsAuthenticated)
+            if (claimsPrincipal.Identity != null && claimsPrincipal.Identity.IsAuthenticated)
                 return RedirectToAction("Index", "Admin");
 
             return View();
