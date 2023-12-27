@@ -33,6 +33,10 @@ namespace StyleX.Controllers
                     ViewBag.email = user.Email;
                     ViewBag.password = user.Password;
                 }
+                else
+                {
+                    ViewBag.errorActive = "Link kích hoạt không khả dụng.";
+                }
             }
             ClaimsPrincipal claimsPrincipal = HttpContext.User;
             if (claimsPrincipal.Identity !=null && claimsPrincipal.Identity.IsAuthenticated)

@@ -283,12 +283,18 @@ namespace StyleX.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult GetAccounts([FromBody] SearchAccounrModel model)
+        public IActionResult GetAccounts([FromBody] SearchAccountModel model)
         {
             try
             {
-                var data = _dbContext.Accounts.Where(a => (model.isActive == null || a.isActive == model.isActive) && (model.accountName == null || a.Email.Contains(model.accountName)));
-                return new OkObjectResult(new { status = 1, message = "success", data });
+                //var data = _dbContext.Accounts.Where(a => (model.isActive == null || a.isActive == model.isActive) && (string.IsNullOrEmpty(model.accountName) || a.Email.Contains(model.accountName))).ToList();
+
+                var data = from account in _dbContext.Accounts
+                           where account.Role == Common.RoleUser
+                           && (model.isActive == 0 || (model.isActive==1 && account.isActive == true) || (model.isActive == 2 && account.isActive == false))
+                           && (string.IsNullOrEmpty(model.accountName) || account.Email.Contains(model.accountName))
+                           select account;
+                return new OkObjectResult(new { status = 1, message = "success", data = data.ToList() });
 
             }
             catch (Exception e)
@@ -297,6 +303,54 @@ namespace StyleX.Controllers
             }
 
         }
+        public IActionResult UpdateAccount([FromBody] UpdateAccountModel md)
+        {
+            try
+            {
+                var account = _dbContext.Accounts.Find(md.accountID);
+                if (account == null)
+                {
+                    return new OkObjectResult(new { status = -1, message = "Không tìm thấy tài khoản này." });
+                }
+                account.FullName = md.fullName;
+                account.NumberPlayGame = md.numberPlayGame;
+                account.Password = md.password;
+                account.PhoneNumber = md.phoneNumber;
+                account.Address = md.address;
+
+                _dbContext.SaveChanges();
+                return new OkObjectResult(new { status = 1, message = "Cập nhật tài khoản thành công." });
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message });
+            }
+
+        }
+        public IActionResult DeleteAccount([FromBody] IDModel md)
+        {
+            try
+            {
+                var account = _dbContext.Accounts.Find(md.ID);
+                if (account == null)
+                {
+                    return new OkObjectResult(new { status = -1, message = "Không tìm thấy tài khoản này." });
+                }
+
+                _dbContext.Accounts.Remove(account);
+
+                _dbContext.SaveChanges();
+                return new OkObjectResult(new { status = 1, message = "Xóa thành công." });
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message });
+            }
+
+        }
+
 
         #endregion
 

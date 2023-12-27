@@ -4,18 +4,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    @if (ViewBag.Title != null)
-    {
-        <title>
-            @ViewBag.Title
-        </title>
-    }
-    else
-    {
-        <title>
-            StyleX
-        </title>
-    }
+
+    <title> StyleX </title>
 
     <link rel="stylesheet" href="/library/css/animate.css">
     <link rel="stylesheet" href="/library/css/owl.carousel.min.css">
@@ -193,9 +183,9 @@
         function ShowAlert(html, type) {
             var alertBox = document.querySelector('#alertBox');
             var alert = `<div class="alert alert-${type} alert-dismissible" role="alert">
-                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                                ${html}
-                                                            </div>`;
+                                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                                                ${html}
+                                                                            </div>`;
 
             if (timeoutAlertID) {
                 alertBox.innerHTML = '';
@@ -244,7 +234,7 @@
 
 
     <script>
-        
+
         var appCheckLogin = new Vue({
             el: "#appCheckLogin",
             data: {
