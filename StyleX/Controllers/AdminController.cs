@@ -24,10 +24,6 @@ namespace StyleX.Controllers
         {
             return View();
         }
-        public IActionResult Account()
-        {
-            return View();
-        }
         public IActionResult Category()
         {
             return View();
@@ -154,7 +150,7 @@ namespace StyleX.Controllers
                 string folderName = cacPhan[cacPhan.Length - 2];
                 string pathSave = $"/{Common.FolderImageMaterials}/{folderName}/";
 
-                if (md.file != null && md.file.Length>0)
+                if (md.file != null && md.file.Length > 0)
                 {
 
                     // Xóa file cũ
@@ -166,13 +162,13 @@ namespace StyleX.Controllers
 
                     }
                     string fileName = "preview" + Path.GetExtension(md.file.FileName);
-                    var filePath = Path.Combine(_environment.WebRootPath, Common.FolderImageMaterials,folderName,fileName);
+                    var filePath = Path.Combine(_environment.WebRootPath, Common.FolderImageMaterials, folderName, fileName);
 
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
                         md.file.CopyTo(stream);
                     }
-                    mat.Url = pathSave+fileName;
+                    mat.Url = pathSave + fileName;
                 }
                 if (md.aoMap != null && md.aoMap.Length > 0)
                 {
@@ -264,6 +260,7 @@ namespace StyleX.Controllers
             }
 
         }
+        [HttpPost]
         public IActionResult GetMaterials()
         {
             try
@@ -275,6 +272,28 @@ namespace StyleX.Controllers
             catch (Exception e)
             {
                 return new BadRequestObjectResult(new { status = -99, message = e.Message, data = DBNull.Value });
+            }
+
+        }
+
+        #endregion
+        #region Account
+        public IActionResult Account()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult GetAccounts([FromBody] SearchAccounrModel model)
+        {
+            try
+            {
+                var data = _dbContext.Accounts.Where(a => (model.isActive == null || a.isActive == model.isActive) && (model.accountName == null || a.Email.Contains(model.accountName)));
+                return new OkObjectResult(new { status = 1, message = "success", data });
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message, data = new List<Account>() });
             }
 
         }

@@ -35,7 +35,7 @@ namespace StyleX.Controllers
                 }
             }
             ClaimsPrincipal claimsPrincipal = HttpContext.User;
-            if (claimsPrincipal.Identity.IsAuthenticated)
+            if (claimsPrincipal.Identity !=null && claimsPrincipal.Identity.IsAuthenticated)
                 return RedirectToAction("Index", "Home");
 
             return View();
@@ -143,7 +143,7 @@ namespace StyleX.Controllers
         {
             try
             {
-                if (HttpContext.User.Identity.IsAuthenticated)
+                if (HttpContext.User.Identity!=null && HttpContext.User.Identity.IsAuthenticated)
                 {
                     return new OkObjectResult(new { status = 1, message = "success" });
                 }
