@@ -18,7 +18,6 @@ namespace StyleX.Controllers
             _dbContext = dbContext;
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public IActionResult Login(string? keyActive)
         {
@@ -39,8 +38,10 @@ namespace StyleX.Controllers
                 }
             }
             ClaimsPrincipal claimsPrincipal = HttpContext.User;
-            if (claimsPrincipal.Identity !=null && claimsPrincipal.Identity.IsAuthenticated)
-                return RedirectToAction("Index", "Home");
+            //if (claimsPrincipal.Identity != null && claimsPrincipal.Identity.IsAuthenticated && claimsPrincipal.Identity.AuthenticationType == Common.CookieAuthUser)
+            //{
+            //    return RedirectToAction("Index", "Home");
+            //}
 
             return View();
 

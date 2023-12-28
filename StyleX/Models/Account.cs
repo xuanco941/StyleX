@@ -21,7 +21,7 @@ namespace StyleX.Models
         [StringLength(300)]
         public string? Address { get; set; } = string.Empty;
         public bool isActive { get; set; } = false;
-        public string keyActive { get; set; } = string.Empty;
+        public string? keyActive { get; set; } = string.Empty;
         public string? Avatar { get; set; } = "2.jpg";
         public int? NumberPlayGame { get; set; } = 0;
         public string Role { get; set; } = "user"; // user/admin

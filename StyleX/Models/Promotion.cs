@@ -10,7 +10,7 @@ namespace StyleX.Models
     {
         [Key]
         public int PromotionID { get; set; }
-        public int Number { get; set; } //% phần trăm giảm giá 4 loại 5%,10%,15%,20%
+        public int Number { get; set; } //% phần trăm giảm giá 4 loại 10%,20%,30%,40%
         public bool Status { get; set; } = false; // false là chưa dùng
         public string ResultSpin { get; set; } = null!;
         public DateTime CreateAt { get; set; } = DateTime.Now;

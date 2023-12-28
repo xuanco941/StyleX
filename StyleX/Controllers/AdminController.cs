@@ -24,19 +24,11 @@ namespace StyleX.Controllers
         {
             return View();
         }
-        public IActionResult Category()
-        {
-            return View();
-        }
         public IActionResult Order()
         {
             return View();
         }
         public IActionResult Product()
-        {
-            return View();
-        }
-        public IActionResult Promotion()
         {
             return View();
         }
@@ -351,8 +343,201 @@ namespace StyleX.Controllers
 
         }
 
+        #endregion
+        #region Category
+        public IActionResult Category()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult AddCategory([FromForm] AddCategoryModel model)
+        {
+            try
+            {
+                if (model.file != null)
+                {
+                    string folderName = Guid.NewGuid().ToString();
+                    string fileNameImagePreview = "preview" + Path.GetExtension(model.file.FileName);
+
+
+                    var filePath1 = Path.Combine(_environment.WebRootPath, Common.FolderImageCategories, folderName, fileNameImagePreview);
+
+                    //tạo folder
+                    if (!string.IsNullOrEmpty(filePath1))
+                    {
+                        string? directoryPath = Path.GetDirectoryName(filePath1);
+                        if (directoryPath != null && !Directory.Exists(directoryPath))
+                        {
+                            Directory.CreateDirectory(directoryPath);
+                        }
+                    }
+
+
+                    using (var stream = new FileStream(filePath1, FileMode.Create))
+                    {
+                        model.file.CopyTo(stream);
+                    }
+
+                    string pathSave = $"/{Common.FolderImageCategories}/{folderName}/";
+
+                    _dbContext.Categories.Add(new Category()
+                    {
+                        Name = model.name,
+                        Description = model.description,
+                        Image = pathSave + fileNameImagePreview
+                    });
+                    _dbContext.SaveChanges();
+                    return new OkObjectResult(new { status = 1, message = "Tạo danh mục mới thành công." });
+
+                }
+                else
+                {
+                    return new OkObjectResult(new { status = -1, message = "File không khả dụng." });
+                }
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message });
+            }
+
+        }
+        [HttpPost]
+        public IActionResult UpdateCategory([FromForm] UpdateCategoryModel model)
+        {
+            try
+            {
+                var mat = _dbContext.Categories.Find(model.categoryID);
+                if (mat == null)
+                {
+                    return new OkObjectResult(new { status = -1, message = "Chất liệu này không khả dụng." });
+                }
+                mat.Name = model.name;
+                mat.Description = model.description;
+
+                if (string.IsNullOrEmpty(mat.Image) == false && model.file != null && model.file.Length > 0)
+                {
+                    string[] cacPhan = mat.Image.Split('/');
+                    string folderName = cacPhan[cacPhan.Length - 2];
+                    string pathSave = $"/{Common.FolderImageCategories}/{folderName}/";
+                    // Xóa file cũ
+                    var oldFilePath1 = Path.Combine(_environment.WebRootPath, mat.Image.TrimStart('/'));
+
+                    if (System.IO.File.Exists(oldFilePath1))
+                    {
+                        System.IO.File.Delete(oldFilePath1);
+
+                    }
+                    string fileName = "preview" + Path.GetExtension(model.file.FileName);
+                    var filePath = Path.Combine(_environment.WebRootPath, Common.FolderImageCategories, folderName, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        model.file.CopyTo(stream);
+                    }
+                    mat.Image = pathSave + fileName;
+                }
+                _dbContext.SaveChanges();
+                return new OkObjectResult(new { status = 1, message = "Cập nhật danh mục thành công." });
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message });
+            }
+
+        }
+        [HttpPost]
+        public IActionResult GetCategories()
+        {
+            try
+            {
+                var result = _dbContext.Categories.ToList();
+                return new OkObjectResult(new { status = 1, message = "success", data = result });
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message, data = DBNull.Value });
+            }
+
+        }
+        [HttpPost]
+        public IActionResult DeleteCategory([FromBody] IDModel md)
+        {
+            try
+            {
+                var account = _dbContext.Categories.Find(md.ID);
+                if (account == null)
+                {
+                    return new OkObjectResult(new { status = -1, message = "Không tìm thấy danh mục này." });
+                }
+
+                _dbContext.Categories.Remove(account);
+
+                _dbContext.SaveChanges();
+                return new OkObjectResult(new { status = 1, message = "Xóa thành công." });
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message });
+            }
+
+        }
 
         #endregion
+        #region Promotion
+        public IActionResult Promotion()
+        {
+            return View();
+        }
+        public IActionResult GetPromotions([FromBody] SearchPromotionModel model)
+        {
+            try
+            {
+                //var data = from p in _dbContext.Promotions
+                //           join a in _dbContext.Accounts on p.AccountID equals a.AccountID
+                //           join o in _dbContext.Orders on p.OrderID equals o.OrderID into temp
+                //           from t in temp.DefaultIfEmpty()
+                //           where (model.status == 0 || (model.status == 1 && p.Status == true) || (model.status == 2 && p.Status == false))
+                //           && (string.IsNullOrEmpty(model.accountName) || a.Email.Contains(model.accountName))
+                //           select new
+                //           {
+                //               p.ResultSpin,
+                //               p.Number,
+                //               p.Status,
+                //               a.Email,
+                //               p.CreateAt,
+                //               p.UsedAt,
+                //               p.ExpiredAt,
+                //               p.OrderID
+                //           };
+                var data = from p in _dbContext.Promotions
+                           join a in _dbContext.Accounts on p.AccountID equals a.AccountID
+                           where (model.status == 0 || (model.status == 1 && p.Status == true) || (model.status == 2 && p.Status == false))
+                           && (string.IsNullOrEmpty(model.accountName) || a.Email.Contains(model.accountName))
+                           select new
+                           {
+                               p.ResultSpin,
+                               p.Number,
+                               p.Status,
+                               a.Email,
+                               p.CreateAt,
+                               p.UsedAt,
+                               p.ExpiredAt,
+                               p.OrderID
+                           };
+                return new OkObjectResult(new { status = 1, message = "success", data = data.ToList() });
 
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message, data = DBNull.Value});
+            }
+
+        }
+
+        #endregion
     }
 }

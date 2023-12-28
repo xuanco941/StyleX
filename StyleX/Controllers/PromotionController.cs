@@ -89,16 +89,16 @@ namespace StyleX.Controllers
                         {
 
                             string resultString = "";
-                            for (int i = 0; i < 7; i++)
+                            for (int i = 2; i < 5; i++)
                             {
-                                resultString = resultString + $"{i+1}: {result1[i]}-{result2[i]}-{result3[i]}   ";
+                                resultString = resultString + $"{result1[i]}-{result2[i]}-{result3[i]}  ";
                             }
                             DateTime createAt = DateTime.Now;
-                            _dbContext.Promotions.Add(new Promotion() { AccountID = user.AccountID, Status = false, Number = count * 10, ResultSpin = resultString, CreateAt = createAt, ExpiredAt = createAt.AddDays(30) });
+                            _dbContext.Promotions.Add(new Promotion() { AccountID = user.AccountID, Status = false, Number = count * 10, ResultSpin = resultString.Trim(), CreateAt = createAt, ExpiredAt = createAt.AddDays(30) });
                         }
                         _dbContext.SaveChanges();
 
-                        return new OkObjectResult(new { status = 1, message = "success", result1, result2, result3, numberSale = count * 5, numberPlayGame=user.NumberPlayGame }); ;
+                        return new OkObjectResult(new { status = 1, message = "success", result1, result2, result3, numberSale = count * 10, numberPlayGame=user.NumberPlayGame }); ;
 
                     }
                     else
