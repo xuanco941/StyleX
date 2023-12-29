@@ -11,10 +11,11 @@ namespace StyleX.Models
         public string ModelUrl { get; set; } = null!; // url model
         public string PosterUrl { get; set; } = null!; // ảnh hiển thị của product;  
         public string Name { get; set; } = null!;
-        public string? Description { get; set; }
+        public string? Description { get; set; } = string.Empty;
         public double Price { get; set; }
         public double Sale { get; set; } // % giảm giá
         public DateTime? SaleEndAt { get; set; }
+        public bool Status { get; set; } = true; //true = đang bán
 
         public int CategoryID { get; set; }
         public Category Category { get; set; } = null!;

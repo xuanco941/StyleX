@@ -10,6 +10,9 @@
         public const string FolderImageMaterials = "materials";
         public const string FolderImageCategories = "categories";
 
+        public const string FolderImageProducts = "products";
+
+
 
     }
 }

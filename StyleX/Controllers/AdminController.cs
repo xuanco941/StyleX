@@ -28,10 +28,6 @@ namespace StyleX.Controllers
         {
             return View();
         }
-        public IActionResult Product()
-        {
-            return View();
-        }
         public IActionResult Warehouse()
         {
             return View();
@@ -283,7 +279,7 @@ namespace StyleX.Controllers
 
                 var data = from account in _dbContext.Accounts
                            where account.Role == Common.RoleUser
-                           && (model.isActive == 0 || (model.isActive==1 && account.isActive == true) || (model.isActive == 2 && account.isActive == false))
+                           && (model.isActive == 0 || (model.isActive == 1 && account.isActive == true) || (model.isActive == 2 && account.isActive == false))
                            && (string.IsNullOrEmpty(model.accountName) || account.Email.Contains(model.accountName))
                            select account;
                 return new OkObjectResult(new { status = 1, message = "success", data = data.ToList() });
@@ -533,7 +529,66 @@ namespace StyleX.Controllers
             }
             catch (Exception e)
             {
-                return new BadRequestObjectResult(new { status = -99, message = e.Message, data = DBNull.Value});
+                return new BadRequestObjectResult(new { status = -99, message = e.Message, data = DBNull.Value });
+            }
+
+        }
+
+        #endregion
+
+        #region Product
+        public IActionResult Product()
+        {
+            return View();
+        }
+        public IActionResult GetProducts([FromBody] SearchProductModel model)
+        {
+            try
+            {
+                var query1 = from p in _dbContext.Products
+                             join c in _dbContext.Categories on p.CategoryID equals c.CategoryID
+                             join wh in _dbContext.Warehouses on p.ProductID equals wh.ProductID into leftJoinTableW 
+                             from w in leftJoinTableW.DefaultIfEmpty()
+                             where (model.status == 0 || (model.status == 1 && p.Status == true) || (model.status == 2 && p.Status == false))
+                           && (model.categoryID == 0 || (model.categoryID == c.CategoryID))
+                             select new
+                             {
+                                 p.ProductID,
+                                 p.PosterUrl,
+                                 p.Name,
+                                 p.Description,
+                                 p.Price,
+                                 p.Sale,
+                                 p.SaleEndAt,
+                                 p.Status,
+                                 Warehouse = w,
+                                 CategoryID = c.CategoryID,
+                                 CategoryName = c.Name
+
+                             };
+
+                var query2 = from p in query1
+                             group p by p.ProductID into g
+                             select new
+                             {
+                                 ProductID = g.Key,
+                                 PosterUrl = g.First().PosterUrl,
+                                 Name = g.First().Name,
+                                 Description = g.First().Description,
+                                 Price = g.First().Price,
+                                 Sale = g.First().Sale,
+                                 SaleEndAt = g.First().SaleEndAt,
+                                 Status = g.First().Status,
+                                 Warehouses = g.Select(x => x.Warehouse).ToList(),
+                                 CategoryID = g.First().CategoryID,
+                                 CategoryName = g.First().CategoryName
+                             };
+                return new OkObjectResult(new { status = 1, message = "success", data = query2.ToList() });
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message, data = DBNull.Value });
             }
 
         }

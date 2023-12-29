@@ -1,5 +1,324 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    Layout = "_LayoutAdmin";
+}
+<div id="appProduct" style="overflow-x:auto;">
+    <div class="row">
+        <div class="row align-items-end col-9">
+            <div class="col-md-3 mb-3">
+                <label>Thuộc danh mục:</label>
+                <select class="form-control" v-model="categoryID">
+                    <option value="0">Tất cả</option>
+                </select>
+            </div>
+            <div class="col-md-3 mb-3">
+                <label>Trạng thái:</label>
+                <select class="form-control" v-model="status">
+                    <option value="0">Tất cả</option>
+                    <option value="1">Đang bán</option>
+                    <option value="2">Ngừng bán</option>
+                </select>
+            </div>
+            <div class="col-md-3 mb-3">
+                <button class="btn btn-success" style="width: 120px;" v-on:click="GetProducts()">Tìm kiếm</button>
+            </div>
+        </div>
+        <div class="col-4 col-md-3 justify-content-end d-flex align-items-end">
+            <button style="height:39px; min-width:150px;" class="btn btn-primary mb-3" data-toggle="modal" data-target="#modalAdd">Thêm sản phẩm</button>
+        </div>
+    </div>
+
+
+
+    <table class="table table-bordered" style="vertical-align: middle; text-align:center">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Hình ảnh</th>
+                <th scope="col">Tên sản phẩm</th>
+                <th scope="col">Mô tả</th>
+                <th scope="col">Giá</th>
+                <th scope="col">Giảm giá(%)</th>
+                <th scope="col">Hạn giảm giá</th>
+                <th scope="col">Trạng thái</th>
+                <th scope="col">Kho</th>
+                <th scope="col">Thuộc danh mục</th>
+                <th scope="col">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody style="vertical-align:middle; font-size: 18px;">
+            <tr v-if="isLoad">
+                <td style="font-size: 40px; text-align:center;" colspan="11"><i class="fa-solid fa-spinner fa-spin-pulse"></i></td>
+            </tr>
+            <tr v-if="isLoad == false" v-for="(item,index) in dataTable">
+                <td>{{index+1}}</td>
+                <td>
+                    <a v-bind:href="item.posterUrl" alt="preview" target="_blank">
+                        <img v-bind:src="item.posterUrl" style="height: 100px" />
+                    </a>
+                </td>
+                <td>{{item.name}}</td>
+                <td>{{item.description}}</td>
+                <td>{{item.price}}</td>
+                <td>{{item.sale}}</td>
+                <td>{{item.saleEndAt}}</td>
+                <td>
+                    <span class="badge badge-info" v-if="item.status==false">Ngừng bán</span>
+                    <span class="badge badge-success" v-if="item.status==true">Đang bán</span>
+                </td>
+                <td>
+                    <div v-if="item.warehouses && item.warehouses[0]">
+                        <div v-for="itemW in item.warehouses">
+                            Size {{itemW.size}}: Còn {{itemW.amount}} sản phẩm
+                        </div>
+                    </div>
+                    <div v-if="!item.warehouses || !item.warehouses[0]">
+                        Chưa có trong kho
+                    </div>
+                </td>
+                <td>{{item.categoryName}}</td>
+                <td>
+                    <button class="btn btn-primary mx-2 my-1" data-toggle="modal" data-target="#modalDetail" v-on:click="PopupDetail(item.productID)">Chi tiết</button>
+                    <button class="btn btn-warning mx-2 my-1" data-toggle="modal" data-target="#modalUpdate" v-on:click="PopupProduct(item)">Cập nhật</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="d-flex justify-content-center mt-3">
+        <ul id="pagination" class="pagination-md">
+        </ul>
+    </div>
+
+    <div class="modal fade" id="modalAdd" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 900px">
+            <div class="modal-content" style="margin-bottom: 150px">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Thêm sản phẩm mới</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="max-height: 700px;">
+                    <div class="d-flex align-items-stretch">
+                        <div class="col-md-5">
+                            <model-viewer id="model-add" class="w-100 h-100" alt=""
+                                          ar shadow-intensity="1" camera-controls disable-pan
+                                          disable-tap autoplay auto-rotation shadow-softness="0.1" min-camera-orbit="auto auto 100%"
+                                          max-camera-orbit="auto auto 100%">
+                            </model-viewer>
+                        </div>
+                        <div class="col-md-7" style="overflow-x: auto; overflow-y: auto;">
+                            <div class="form-group">
+                                <label>Chọn file mô hình (glb, gltf)</label>
+                                <input type="file" class="form-control" v-on:change="ChangeModel">
+                                <div class="text-danger" style="font-size: 14px;">{{dataAdd.messageModel}}</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Chọn ảnh xem trước</label>
+                                <input type="file" class="form-control" v-on:change="ChangeImage">
+                                <div class="text-danger" style="font-size: 14px;">{{dataAdd.messageFile}}</div>
+                                <div class="mt-2">
+                                    <img style="width: 80px;" v-bind:src="dataAdd.image" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Tên sản phẩm</label>
+                                <input type="text" class="form-control" v-model="dataAdd.name">
+                                <div class="text-danger" style="font-size: 14px;">{{dataAdd.messageName}}</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Mô tả</label>
+                                <input type="text" class="form-control" v-model="dataAdd.description">
+                            </div>
+                            <div class="form-group">
+                                <label>Giá bán (&#8363;)</label>
+                                <input type="text" class="form-control" v-model="dataAdd.price">
+                            </div>
+                            <div class="form-group">
+                                <label>Khuyến mại (%)</label>
+                                <input type="text" class="form-control" v-model="dataAdd.sale">
+                            </div>
+                            <div class="form-group">
+                                <label>Hạn khuyến mại</label>
+                                <input type="datetime" class="form-control" v-model="dataAdd.saleEndAt">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputState">Trạng thái</label>
+                                <select id="inputState" class="form-control" v-model="dataAdd.status">
+                                    <option value="true">Đang bán</option>
+                                    <option value="false">Ngừng bán</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button v-if="dataAdd.isLoad == false" type="button" class="btn btn-primary" v-on:click="AddProduct()">Xác nhận</button>
+                    <button v-if="dataAdd.isLoad" type="button" class="btn btn-primary">Đang xử lý...</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+@section Scripts {
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js">
+    </script>
+    <script>
+        var appProduct = new Vue({
+            el: "#appProduct",
+            data: {
+                resData: [],
+                dataTable: [],
+                isLoad: true,
+                categoryID: 0,
+                status: 0,
+                totalPages: 1,
+                pageSize: 10,
+
+
+                dataAdd: {
+                    model: {},
+                    fileModel: "",
+                    messageModel: "",
+
+
+
+                    name: "",
+                    messageName: "",
+
+                    file: "",
+                    image: "",
+                    messageFile: "",
+
+                    description: "",
+
+                    price: 0,
+                    messagePrice: "",
+
+                    sale: 0,
+                    messageSale: "",
+
+                    saleEndAt: new Date(),
+                    status: true,
+
+
+                    isLoad: false
+                },
+
+
+
+
+
+            },
+            methods: {
+                init: async function () {
+                    var self = this;
+                    document.getElementById('model-add').addEventListener("load", (e) => {
+                        self.dataAdd.model = e.target;
+                    });
+                    await this.GetProducts();
+                    this.$forceUpdate();
+                },
+                GetProducts: async function () {
+                    var self = this;
+                    self.isLoad = true;
+                    self.dataTable = [];
+
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "/admin/GetProducts",
+                        data: JSON.stringify({
+                            categoryID: self.categoryID,
+                            status: self.status
+                        }),
+                        success: function (res) {
+                            self.isLoad = false;
+                            if (res.status == 1) {
+                                self.resData = res.data;
+                                self.dataTable = self.resData.slice(0, self.pageSize);
+                                self.totalPages = Math.ceil(self.resData.length / self.pageSize);
+
+                                $('#pagination').twbsPagination({
+                                    totalPages: self.totalPages,
+                                    visiblePages: 6,
+                                    first: "Trang đầu",
+                                    last: "Trang cuối",
+                                    next: 'Trang tiếp',
+                                    prev: 'Trang trước',
+                                    onPageClick: function (event, page) {
+                                        var start = (page - 1) * self.pageSize;
+                                        var end = page * self.pageSize;
+                                        self.dataTable = self.resData.slice(start, end);
+                                    }
+                                });
+                            }
+                            else {
+                                ShowAlert(res.message, "danger");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            self.isLoad = false;
+                            ShowAlert(error, "danger");
+                        }
+                    });
+
+                },
+                ChangeImage: function (e) {
+                    var self = this;
+                    var file = e.target.files[0];
+                    if (isFileImage(file)) {
+                        self.dataAdd.image = URL.createObjectURL(file);
+                        self.dataAdd.file = file;
+                        self.dataAdd.messageFile = "";
+                    }
+                    else {
+                        self.dataAdd.messageFile = "Định dạng file không phù hợp.";
+                        self.dataAdd.image = "";
+                        self.dataAdd.file = "";
+                    }
+
+                },
+                ChangeModel: function (e) {
+                    var self = this;
+                    var file = e.target.files[0];
+                    const fileExtension = file.name.split('.').pop().toLowerCase();
+
+                    if (fileExtension === 'glb' || fileExtension === 'gltf') {
+                        self.dataAdd.model.setAttribute('src', URL.createObjectURL(file));
+                        self.dataAdd.fileModel = file;
+                        self.dataAdd.messageModel = "";
+                    }
+                    else {
+                        self.dataAdd.messageModel = "Định dạng file không phù hợp.";
+                        self.dataAdd.model = {};
+                        self.dataAdd.fileModel = "";
+                    }
+
+                },
+
+
+
+
+
+
+
+
+
+            },
+            mounted() {
+                this.init();
+            },
+        });
+
+    </script>
+
 }

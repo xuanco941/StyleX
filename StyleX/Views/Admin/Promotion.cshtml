@@ -47,9 +47,9 @@
                     <span class="badge badge-warning" v-if="item.status==true">Đã sử dụng</span>
                 </td>
                 <td>{{item.email}}</td>
-                <td>{{item.createAt}}</td>
-                <td>{{item.usedAt}}</td>
-                <td>{{item.expiredAt}}</td>
+                <td>{{formatDateDisplay(item.createAt)}}</td>
+                <td>{{formatDateDisplay(item.usedAt)}}</td>
+                <td>{{formatDateDisplay(item.expiredAt)}}</td>
 
                 <td>
                     <a v-if="item.orderID" class="btn btn-primary mx-2" v-bind:href="'/admin/order?orderID='+item.orderID">Chi tiết</a>
@@ -136,6 +136,31 @@
                         }
                     });
 
+                },
+                formatDateDisplay: function (inputDateString) {
+                    if (!inputDateString) {
+                        return "";
+                    }
+
+                    // Tạo một đối tượng Date từ chuỗi đầu vào
+                    var inputDate = new Date(inputDateString);
+
+                    // Lấy các thông tin thời gian từ đối tượng Date
+                    var hours = inputDate.getHours().toString().padStart(2, '0');
+                    var minutes = inputDate.getMinutes().toString().padStart(2, '0');
+                    var seconds = inputDate.getSeconds().toString().padStart(2, '0');
+                    var day = inputDate.getDate().toString().padStart(2, '0');
+                    var month = (inputDate.getMonth() + 1).toString().padStart(2, '0'); //Tháng trong JavaScript bắt đầu từ 0, nên cần cộng thêm 1
+                    var year = inputDate.getFullYear();
+
+
+                    if (isNaN(day) || isNaN(month) || isNaN(year)) {
+                        return '';
+                    }
+
+
+                    var formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+                    return formattedDate;
                 }
 
 
