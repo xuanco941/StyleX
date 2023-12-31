@@ -8,6 +8,7 @@
                 <label>Thuộc danh mục:</label>
                 <select class="form-control" v-model="categoryID">
                     <option value="0">Tất cả</option>
+                    <option v-for="item in tableCategory" v-bind:value="item.categoryID">{{item.name}}</option>
                 </select>
             </div>
             <div class="col-md-3 mb-3">
@@ -60,7 +61,7 @@
                 <td>{{item.description}}</td>
                 <td>{{item.price}}</td>
                 <td>{{item.sale}}</td>
-                <td>{{item.saleEndAt}}</td>
+                <td>{{formatDateDisplay(item.saleEndAt)}}</td>
                 <td>
                     <span class="badge badge-info" v-if="item.status==false">Ngừng bán</span>
                     <span class="badge badge-success" v-if="item.status==true">Đang bán</span>
@@ -77,14 +78,14 @@
                 </td>
                 <td>{{item.categoryName}}</td>
                 <td>
-                    <button class="btn btn-primary mx-2 my-1" data-toggle="modal" data-target="#modalDetail" v-on:click="PopupDetail(item.productID)">Chi tiết</button>
-                    <button class="btn btn-warning mx-2 my-1" data-toggle="modal" data-target="#modalUpdate" v-on:click="PopupProduct(item)">Cập nhật</button>
+                    <button style="width:120px" class="btn btn-info mx-1 my-1" data-toggle="modal" data-target="#modalUpdate" v-on:click="PopupProduct(item)">Cập nhật</button>
+                    <button style="width:120px" class="btn btn-primary mx-1 my-1" data-toggle="modal" data-target="#modalDetail" v-on:click="PopupDetail(item.productID)">Thiết lập</button>
                 </td>
             </tr>
         </tbody>
     </table>
 
-    <div class="d-flex justify-content-center mt-3">
+    <div class="d-flex justify-content-center mt-3" id="div-pagination">
         <ul id="pagination" class="pagination-md">
         </ul>
     </div>
@@ -107,48 +108,56 @@
                                           max-camera-orbit="auto auto 100%">
                             </model-viewer>
                         </div>
-                        <div class="col-md-7" style="overflow-x: auto; overflow-y: auto;">
-                            <div class="form-group">
-                                <label>Chọn file mô hình (glb, gltf)</label>
-                                <input type="file" class="form-control" v-on:change="ChangeModel">
-                                <div class="text-danger" style="font-size: 14px;">{{dataAdd.messageModel}}</div>
-                            </div>
-                            <div class="form-group">
-                                <label>Chọn ảnh xem trước</label>
-                                <input type="file" class="form-control" v-on:change="ChangeImage">
-                                <div class="text-danger" style="font-size: 14px;">{{dataAdd.messageFile}}</div>
-                                <div class="mt-2">
-                                    <img style="width: 80px;" v-bind:src="dataAdd.image" />
+                        <div class="col-md-7">
+                            <div style="overflow-y:auto; max-height:668px;">
+                                <div class="form-group">
+                                    <label>Thuộc danh mục</label>
+                                    <select class="form-control" v-model="dataAdd.categoryID">
+                                        <option v-for="item in tableCategory" v-bind:value="item.categoryID">{{item.name}}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Chọn file mô hình (glb, gltf)</label>
+                                    <input type="file" class="form-control" v-on:change="ChangeModel" id="input-model">
+                                    <div class="text-danger" style="font-size: 14px;">{{dataAdd.messageModel}}</div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Chọn ảnh xem trước</label>
+                                    <input type="file" class="form-control" v-on:change="ChangeImage" id="input-image">
+                                    <div class="text-danger" style="font-size: 14px;">{{dataAdd.messageFile}}</div>
+                                        <img v-if="dataAdd.image" style="width: 80px;" v-bind:src="dataAdd.image" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Tên sản phẩm</label>
+                                    <input type="text" class="form-control" v-model="dataAdd.name">
+                                    <div class="text-danger" style="font-size: 14px;">{{dataAdd.messageName}}</div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Mô tả</label>
+                                    <input type="text" class="form-control" v-model="dataAdd.description">
+                                </div>
+                                <div class="form-group">
+                                    <label>Giá bán (&#8363;)</label>
+                                    <input type="text" class="form-control" v-model="dataAdd.price">
+                                    <div class="text-danger" style="font-size: 14px;">{{dataAdd.messagePrice}}</div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Khuyến mại(%)</label>
+                                    <input type="text" class="form-control" v-model="dataAdd.sale">
+                                </div>
+                                <div class="form-group">
+                                    <label>Hạn khuyến mại</label>
+                                    <input type="datetime-local" class="form-control" v-model="dataAdd.saleEndAt">
+                                </div>
+                                <div class="form-group">
+                                    <label>Trạng thái</label>
+                                    <select class="form-control" v-model="dataAdd.status">
+                                        <option value="true">Đang bán</option>
+                                        <option value="false">Ngừng bán</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label>Tên sản phẩm</label>
-                                <input type="text" class="form-control" v-model="dataAdd.name">
-                                <div class="text-danger" style="font-size: 14px;">{{dataAdd.messageName}}</div>
-                            </div>
-                            <div class="form-group">
-                                <label>Mô tả</label>
-                                <input type="text" class="form-control" v-model="dataAdd.description">
-                            </div>
-                            <div class="form-group">
-                                <label>Giá bán (&#8363;)</label>
-                                <input type="text" class="form-control" v-model="dataAdd.price">
-                            </div>
-                            <div class="form-group">
-                                <label>Khuyến mại (%)</label>
-                                <input type="text" class="form-control" v-model="dataAdd.sale">
-                            </div>
-                            <div class="form-group">
-                                <label>Hạn khuyến mại</label>
-                                <input type="datetime" class="form-control" v-model="dataAdd.saleEndAt">
-                            </div>
-                            <div class="form-group">
-                                <label for="inputState">Trạng thái</label>
-                                <select id="inputState" class="form-control" v-model="dataAdd.status">
-                                    <option value="true">Đang bán</option>
-                                    <option value="false">Ngừng bán</option>
-                                </select>
-                            </div>
+
                         </div>
 
                     </div>
@@ -169,8 +178,7 @@
 
 
 @section Scripts {
-    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js">
-    </script>
+
     <script>
         var appProduct = new Vue({
             el: "#appProduct",
@@ -182,13 +190,12 @@
                 status: 0,
                 totalPages: 1,
                 pageSize: 10,
+                tableCategory: [],
 
 
                 dataAdd: {
-                    model: {},
                     fileModel: "",
                     messageModel: "",
-
 
 
                     name: "",
@@ -200,14 +207,16 @@
 
                     description: "",
 
-                    price: 0,
+                    price: "",
                     messagePrice: "",
 
-                    sale: 0,
+                    sale: "",
                     messageSale: "",
 
-                    saleEndAt: new Date(),
+                    saleEndAt: new Date().toISOString().slice(0, 16),
                     status: true,
+                    categoryID: "",
+                    messageCategory: "",
 
 
                     isLoad: false
@@ -221,10 +230,9 @@
             methods: {
                 init: async function () {
                     var self = this;
-                    document.getElementById('model-add').addEventListener("load", (e) => {
-                        self.dataAdd.model = e.target;
-                    });
+                    await this.GetCategory();
                     await this.GetProducts();
+
                     this.$forceUpdate();
                 },
                 GetProducts: async function () {
@@ -247,6 +255,8 @@
                                 self.dataTable = self.resData.slice(0, self.pageSize);
                                 self.totalPages = Math.ceil(self.resData.length / self.pageSize);
 
+                                document.getElementById("div-pagination").innerHTML = `<ul id="pagination" class="pagination-md"></ul>`;
+
                                 $('#pagination').twbsPagination({
                                     totalPages: self.totalPages,
                                     visiblePages: 6,
@@ -267,7 +277,7 @@
                         },
                         error: function (xhr, status, error) {
                             self.isLoad = false;
-                            ShowAlert(error, "danger");
+                            ShowAlert(error.responseJSON.message, "danger");
                         }
                     });
 
@@ -284,6 +294,7 @@
                         self.dataAdd.messageFile = "Định dạng file không phù hợp.";
                         self.dataAdd.image = "";
                         self.dataAdd.file = "";
+                        document.getElementById('input-image').value = "";
                     }
 
                 },
@@ -293,17 +304,175 @@
                     const fileExtension = file.name.split('.').pop().toLowerCase();
 
                     if (fileExtension === 'glb' || fileExtension === 'gltf') {
-                        self.dataAdd.model.setAttribute('src', URL.createObjectURL(file));
+                        document.getElementById('model-add').style.display = "block";
+                        document.getElementById('model-add').src = URL.createObjectURL(file);
                         self.dataAdd.fileModel = file;
                         self.dataAdd.messageModel = "";
                     }
                     else {
+                                                document.getElementById('model-add').style.display = "none";
+                        document.getElementById('model-add').src = "";
                         self.dataAdd.messageModel = "Định dạng file không phù hợp.";
-                        self.dataAdd.model = {};
                         self.dataAdd.fileModel = "";
+                        document.getElementById('input-model').value = "";
                     }
 
                 },
+                GetCategory: async function () {
+                    var self = this;
+                    self.tableCategory = [];
+
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "/admin/GetCategories",
+                        data: JSON.stringify({
+                        }),
+                        success: function (res) {
+                            if (res.status == 1) {
+                                self.tableCategory = res.data;
+                                if (self.tableCategory && self.tableCategory.length > 0) {
+                                    self.dataAdd.categoryID = self.tableCategory[0].categoryID;
+                                }
+                                else{
+                                    self.dataAdd.categoryID = "";
+                                }
+                            }
+                            else {
+                                ShowAlert(res.message, "danger");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            ShowAlert(error, "danger");
+                        }
+                    });
+
+                },
+                AddProduct: async function () {
+                    var self = this;
+                    console.log(self.dataAdd);
+
+                    if (!self.dataAdd.categoryID) {
+                        self.dataAdd.messageCategory = "Bạn chưa chọn nhóm danh mục.";
+                        return;
+                    }
+                    else {
+                        self.dataAdd.messageCategory = "";
+                    }
+
+                    if (!self.dataAdd.fileModel) {
+                        self.dataAdd.messageModel = "Bạn chưa chọn file model.";
+                        return;
+                    }
+                    else {
+                        self.dataAdd.messageModel = "";
+                    }
+                    if (!self.dataAdd.file) {
+                        self.dataAdd.messageFile = "Bạn chưa chọn ảnh xem trước cho sản phẩm.";
+                        return;
+                    }
+                    else {
+                        self.dataAdd.messageFile = "";
+                    }
+                    if (!self.dataAdd.name) {
+                        self.dataAdd.messageName = "Bạn chưa đặt tên cho sản phẩm này.";
+                        return;
+                    }
+                    else {
+                        self.dataAdd.messageName = "";
+                    }
+                    if (!self.dataAdd.price || isNaN(self.dataAdd.price)) {
+                        self.dataAdd.messagePrice = "Bạn chưa nhập giá tiền cho sản phẩm.";
+                        return;
+                    }
+                    else {
+                        self.dataAdd.messagePrice = "";
+                    }
+                    if (!self.dataAdd.sale || isNaN(self.dataAdd.sale)) {
+                        self.dataAdd.sale = 0;
+                    }
+
+                    var formData = new FormData();
+                    formData.append('name', self.dataAdd.name);
+                    formData.append('file', self.dataAdd.file);
+                    formData.append('status', self.dataAdd.status);
+                    formData.append('categoryID', self.dataAdd.categoryID);
+                    formData.append('fileModel', self.dataAdd.fileModel);
+                    formData.append('description', self.dataAdd.description);
+                    formData.append('price', self.dataAdd.price);
+                    formData.append('sale', self.dataAdd.sale);
+                    formData.append('saleEndAt', self.dataAdd.saleEndAt);
+
+
+
+                    self.dataAdd.isLoad = true;
+                    $.ajax({
+                        url: '/admin/addproduct',
+                        type: 'POST',
+                        data: formData,
+                        processData: false, 
+                        contentType: false, 
+                        success: function (res) {
+                            self.dataAdd.isLoad = false;
+                            if (res.status == 1) {
+                                self.GetProducts();
+                                ShowAlert(res.message, "success");
+                                self.dataAdd.name = "";
+                                self.dataAdd.status = true;
+                                self.dataAdd.file = null;
+                                self.dataAdd.image = "";
+                                self.dataAdd.fileModel = null;
+                                self.dataAdd.description = "";
+                                self.dataAdd.price = "";
+                                self.dataAdd.sale = "";
+                                self.dataAdd.saleEndAt = new Date();
+                                document.getElementById('input-model').value = "";
+                                document.getElementById('input-image').value = "";
+                                document.getElementById('model-add').src = "";
+                                document.getElementById('model-add').style.display = "none";
+
+                                $('#modalAdd').modal('hide');
+                            }
+                            else {
+                                ShowAlert(res.message, "danger");
+                            }
+
+                        },
+                        error: function (error) {
+                            console.log(error)
+                            self.dataAdd.isLoad = false;
+                            ShowAlert(error.responseJSON.message, "danger");
+                        }
+                    });
+
+                },
+                formatDateDisplay: function (inputDateString) {
+                    if (!inputDateString) {
+                        return "";
+                    }
+
+                    // Tạo một đối tượng Date từ chuỗi đầu vào
+                    var inputDate = new Date(inputDateString);
+
+                    // Lấy các thông tin thời gian từ đối tượng Date
+                    var hours = inputDate.getHours().toString().padStart(2, '0');
+                    var minutes = inputDate.getMinutes().toString().padStart(2, '0');
+                    var seconds = inputDate.getSeconds().toString().padStart(2, '0');
+                    var day = inputDate.getDate().toString().padStart(2, '0');
+                    var month = (inputDate.getMonth() + 1).toString().padStart(2, '0'); //Tháng trong JavaScript bắt đầu từ 0, nên cần cộng thêm 1
+                    var year = inputDate.getFullYear();
+
+
+                    if (isNaN(day) || isNaN(month) || isNaN(year)) {
+                        return '';
+                    }
+
+
+                    var formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+                    return formattedDate;
+                },
+
+
 
 
 

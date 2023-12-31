@@ -43,21 +43,6 @@ namespace StyleX.Models
             {
                 entity.HasIndex(e => e.Email).IsUnique();
             });
-            //Product
-            modelBuilder.Entity<Product>(entity =>
-            {
-                entity.HasIndex(e => e.Name).IsUnique();
-            });
-            //Material
-            modelBuilder.Entity<Material>(entity =>
-            {
-                entity.HasIndex(e => e.Name).IsUnique();
-            });
-            //Category
-            modelBuilder.Entity<Category>(entity =>
-            {
-                entity.HasIndex(e => e.Name).IsUnique();
-            });
         }
 
 

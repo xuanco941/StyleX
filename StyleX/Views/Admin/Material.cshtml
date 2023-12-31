@@ -556,6 +556,10 @@
 
                                 self.dataAdd.fileMetalnessMap = "";
                                 self.dataAdd.imageMetalnessMap = "";
+                                var inputs = document.querySelectorAll("#modalAdd input[type='file']");
+                                inputs.forEach(function (input) {
+                                    input.value = "";
+                                });
                             }
                             else {
                                 ShowAlert(res.message, "danger");
@@ -565,7 +569,7 @@
                         },
                         error: function (error) {
                             self.dataAdd.isLoad = false;
-                            ShowAlert(error, "danger");
+                            ShowAlert(error.responseJSON.message, "danger");
                         }
                     });
 
@@ -621,6 +625,10 @@
 
                                 self.dataUpdate.fileMetalnessMap = "";
                                 self.dataUpdate.imageMetalnessMap = "";
+                                var inputs = document.querySelectorAll("#modalUpdate input[type='file']");
+                                inputs.forEach(function (input) {
+                                    input.value = "";
+                                });
                             }
                             else {
                                 ShowAlert(res.message, "danger");
@@ -630,7 +638,7 @@
                         },
                         error: function (error) {
                             self.dataUpdate.isLoad = false;
-                            ShowAlert(error, "danger");
+                            ShowAlert(error.responseJSON.message, "danger");
                         }
                     });
 

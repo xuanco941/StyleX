@@ -280,6 +280,10 @@
                                 self.dataAdd.description = "";
                                 self.dataAdd.file = "";
                                 self.dataAdd.image = "";
+                                var inputs = document.querySelectorAll("#modalAdd input[type='file']");
+                                inputs.forEach(function (input) {
+                                    input.value = "";
+                                });
                             }
                             else {
                                 ShowAlert(res.message, "danger");
@@ -329,6 +333,10 @@
                                 self.dataUpdate.image = "";
                                 self.dataUpdate.messageFile = "";
                                 self.dataUpdate.messageName = "";
+                                var inputs = document.querySelectorAll("#modalUpdate input[type='file']");
+                                inputs.forEach(function (input) {
+                                    input.value = "";
+                                });
                             }
                             else {
                                 ShowAlert(res.message, "danger");

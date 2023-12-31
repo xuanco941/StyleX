@@ -40,8 +40,8 @@
             </li>
 
 
-            <li class="nav-item active">
-                <a class="nav-link" href="index.html">
+            <li class="nav-item">
+                <a class="nav-link" href="/admin">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Thống kê</span>
                 </a>
@@ -140,9 +140,6 @@
         </div>
 
     </div>
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
 
     <div id="alertBox" style="max-width: 400px; position:fixed; bottom: 15px; right: 20px; margin: 0px; opacity: 0.95; z-index: 555; padding: 15px 20px; font-size: 17px;">
     </div>
@@ -163,6 +160,8 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <!--vue2 production-->
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js">
+    </script>
 
     <script>
         //check image upload
@@ -187,6 +186,36 @@
                 alertBox.innerHTML = '';
             }, 3500);
         };
+
+        //set tất cả material về OPAQUE, double side = true
+        window.addEventListener('load', (e) => {
+            var allModels = Array.from(document.querySelectorAll('model-viewer'));
+
+            allModels.forEach((md) => {
+                md.addEventListener('load', (elm) => {
+                    for (var m of elm.target.model.materials) {
+                        m.setAlphaMode("OPAQUE");
+                    }
+                });
+
+            });
+
+        })
+        var menuItems = document.querySelectorAll("#accordionSidebar li.nav-item");
+        console.log(menuItems)
+
+        menuItems.forEach(function (item) {
+            var aItems = item.querySelectorAll('a');
+            aItems.forEach(e => {
+                if (e.href == window.location.href) {
+                    item.classList.add("active");
+                }
+                else {
+                    item.classList.remove("active");
+                }
+            })
+
+        });
 
     </script>
 

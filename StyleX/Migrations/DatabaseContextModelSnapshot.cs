@@ -133,12 +133,9 @@ namespace StyleX.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CategoryID");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("Category");
                 });
@@ -201,7 +198,7 @@ namespace StyleX.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalMap")
                         .IsRequired()
@@ -219,9 +216,6 @@ namespace StyleX.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MaterialID");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("Material");
                 });
@@ -297,7 +291,7 @@ namespace StyleX.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PosterUrl")
                         .IsRequired()
@@ -318,9 +312,6 @@ namespace StyleX.Migrations
                     b.HasKey("ProductID");
 
                     b.HasIndex("CategoryID");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("Product");
                 });

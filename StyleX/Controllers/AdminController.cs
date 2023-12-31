@@ -293,6 +293,10 @@ namespace StyleX.Controllers
         }
         public IActionResult UpdateAccount([FromBody] UpdateAccountModel md)
         {
+            if (md == null)
+            {
+                return new NotFoundObjectResult(new { status = -99, message = "Vui lòng nhập lại thông tin." });
+            }
             try
             {
                 var account = _dbContext.Accounts.Find(md.accountID);
@@ -592,6 +596,75 @@ namespace StyleX.Controllers
             }
 
         }
+        public IActionResult AddProduct([FromForm] AddProductModel model)
+        {
+            try
+            {
+                
+
+                if (model.file != null && model.fileModel != null)
+                {
+                    string folderName = Guid.NewGuid().ToString();
+                    string fileNameImagePreview = "preview" + Path.GetExtension(model.file.FileName);
+                    string fileNameModel = "model" + Path.GetExtension(model.fileModel.FileName);
+
+
+                    var filePath1 = Path.Combine(_environment.WebRootPath, Common.FolderProducts, folderName, fileNameImagePreview);
+                    var filePath2 = Path.Combine(_environment.WebRootPath, Common.FolderProducts, folderName, fileNameModel);
+
+
+                    //tạo folder
+                    if (!string.IsNullOrEmpty(filePath1))
+                    {
+                        string? directoryPath = Path.GetDirectoryName(filePath1);
+                        if (directoryPath != null && !Directory.Exists(directoryPath))
+                        {
+                            Directory.CreateDirectory(directoryPath);
+                        }
+                    }
+
+
+                    using (var stream = new FileStream(filePath1, FileMode.Create))
+                    {
+                        model.file.CopyTo(stream);
+                    }
+                    using (var stream = new FileStream(filePath2, FileMode.Create))
+                    {
+                        model.fileModel.CopyTo(stream);
+                    }
+
+
+                    string pathSave = $"/{Common.FolderProducts}/{folderName}/";
+
+                    _dbContext.Products.Add(new Product()
+                    {
+                        Name = model.name,
+                        Status = model.status,
+                        PosterUrl = pathSave + fileNameImagePreview,
+                        ModelUrl = pathSave + fileNameModel,
+                        Sale = model.sale,
+                        SaleEndAt = model.saleEndAt,
+                        Description = model.description,
+                        Price = model.price,
+                        CategoryID = model.categoryID
+                    });
+                    _dbContext.SaveChanges();
+                    return new OkObjectResult(new { status = 1, message = "Tải lên sản phẩm mới thành công." });
+
+                }
+                else
+                {
+                    return new OkObjectResult(new { status = -1, message = "File không khả dụng." });
+                }
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message });
+            }
+
+        }
+
 
         #endregion
     }
