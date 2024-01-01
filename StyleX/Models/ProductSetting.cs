@@ -13,8 +13,10 @@ namespace StyleX.Models
         public string ProductPartNameDefault { get; set; } = string.Empty;
         //tên hiển thị của bộ phận trên product
         public string ProductPartNameCustom { get; set; } = string.Empty;
-        public string Uuid { get; set; } = string.Empty;
-        public bool IsDefault { get; set; } = false; //mặc định sẽ đặt về màu vải trắng , false sẽ giữ màu từ model
+
+        //mặc định sẽ đặt về màu vải trắng , false sẽ giữ màu từ model 
+        //pbrMetallicRoughness.baseColorTexture.setTexture(null)
+        public bool IsDefault { get; set; } = false; 
         public int ProductID { get; set; }
         public Product Product { get; set; } = null!;
 

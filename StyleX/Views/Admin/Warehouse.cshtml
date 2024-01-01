@@ -1,5 +1,164 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    Layout = "_LayoutAdmin";
+}
+<div id="appAccount" >
+    <div class="row align-items-end">
+        <div class="col-md-3 mb-3">
+            <label>Sản phẩm:</label>
+            <select class="form-control" v-model="productID" v-on:change="GetAccounts()">
+                <option value="0">Tất cả</option>
+                <option v-for="item in tableProduct" v-bind:value="item.productID">{{item.name}}</option>
+            </select>
+        </div>
+        <div class="col-md-2 mb-3">
+            <button class="btn btn-success" style="width: 120px;" v-on:click="GetAccounts()">Tìm kiếm</button>
+        </div>
+    </div>
+    <div style="overflow-x: auto">
+        <table class="table table-bordered" style="vertical-align: middle; text-align:center;">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Hình ảnh</th>
+                    <th scope="col">Tên sản phẩm</th>
+                    <th scope="col">Kích cỡ</th>
+                    <th scope="col">Số lượng còn lại</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody style="vertical-align:middle;" class="text-dark">
+                <tr v-if="isLoad">
+                    <td style="font-size: 35px; text-align:center;" colspan="9"><i class="fa-solid fa-spinner fa-spin-pulse"></i></td>
+                </tr>
+                <tr v-if="isLoad == false" v-for="(item,index) in dataTable">
+                    <td>
+                        <a v-bind:href="item.product.posterUrl" alt="preview" target="_blank">
+                            <img v-bind:src="item.product.posterUrl" style="height: 90px" />
+                        </a>
+                    </td>
+                    <td>{{item.product.name}}</td>
+                    <td>{{item.size}}</td>
+                    <td>{{Number(item.amount).toLocaleString('en-US')}}</td>
+
+                    <td>
+                        Cập nhật
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-center mt-3" id="div-pagination">
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+@section Scripts {
+    <script>
+
+        var appAccount = new Vue({
+            el: "#appAccount",
+            data: {
+                resData: [],
+                dataTable: [],
+                isLoad: true,
+                productID: 0,
+                tableProduct: [],
+
+                totalPages: 1,
+                pageSize: 15
+
+            },
+            methods: {
+                init: async function () {
+
+                    await this.GetProduct();
+                    await this.GetAccounts();
+
+                    this.$forceUpdate();
+                },
+                GetProduct: async function () {
+                    var self = this;
+                    self.tableProduct = [];
+
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "/admin/GetListProducts",
+                        data: JSON.stringify({
+                        }),
+                        success: function (res) {
+                            if (res.status == 1) {
+                                self.tableProduct = res.data;
+                            }
+                            else {
+                                ShowAlert(res.message, "danger");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            ShowAlert(error.responseJSON.massage, "danger");
+                        }
+                    });
+
+                },
+
+                GetAccounts: async function () {
+                    var self = this;
+                    self.isLoad = true;
+                    self.dataTable = [];
+
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "/admin/GetWarehouses",
+                        data: JSON.stringify({
+                            ID: self.productID
+                        }),
+                        success: function (res) {
+                            self.isLoad = false;
+                            if (res.status == 1) {
+                                self.resData = res.data;
+                                self.dataTable = self.resData.slice(0, self.pageSize);
+                                self.totalPages = Math.ceil(self.resData.length / self.pageSize);
+                                document.getElementById("div-pagination").innerHTML = `<ul id="pagination" class="pagination-md"></ul>`;
+
+                                $('#pagination').twbsPagination({
+                                    totalPages: self.totalPages,
+                                    visiblePages: 6,
+                                    first: "Trang đầu",
+                                    last: "Trang cuối",
+                                    next: 'Trang tiếp',
+                                    prev: 'Trang trước',
+                                    onPageClick: function (event, page) {
+                                        var start = (page - 1) * self.pageSize;
+                                        var end = page * self.pageSize;
+                                        self.dataTable = self.resData.slice(start, end);
+                                    }
+                                });
+                            }
+                            else {
+                                ShowAlert(res.message, "danger");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            self.isLoad = false;
+                            ShowAlert(error.responseJSON.message, "danger");
+                        }
+                    });
+
+                },
+
+
+
+
+            },
+            mounted() {
+                this.init();
+            },
+        });
+    </script>
+
 }

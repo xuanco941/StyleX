@@ -202,16 +202,12 @@
 
         })
         var menuItems = document.querySelectorAll("#accordionSidebar li.nav-item");
-        console.log(menuItems)
 
         menuItems.forEach(function (item) {
             var aItems = item.querySelectorAll('a');
             aItems.forEach(e => {
                 if (e.href == window.location.href) {
                     item.classList.add("active");
-                }
-                else {
-                    item.classList.remove("active");
                 }
             })
 

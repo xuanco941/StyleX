@@ -19,13 +19,15 @@ namespace StyleX.Controllers
         }
         [AllowAnonymous]
         [HttpGet]
-        public IActionResult Login()
+        public async Task<IActionResult> Login()
         {
+            await HttpContext.SignOutAsync(Common.CookieAuthAdmin);
+
             ViewBag.Title = "StyleXCMS - Đăng nhập";
 
-            ClaimsPrincipal claimsPrincipal = HttpContext.User;
-            if (claimsPrincipal.Identity != null && claimsPrincipal.Identity.IsAuthenticated)
-                return RedirectToAction("Index", "Admin");
+            //ClaimsPrincipal claimsPrincipal = HttpContext.User;
+            //if (claimsPrincipal.Identity != null && claimsPrincipal.Identity.IsAuthenticated)
+            //    return RedirectToAction("Index", "Admin");
 
             return View();
 

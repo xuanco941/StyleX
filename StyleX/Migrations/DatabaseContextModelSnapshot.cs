@@ -338,10 +338,6 @@ namespace StyleX.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Uuid")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("ProductSettingID");
 
                     b.HasIndex("ProductID");

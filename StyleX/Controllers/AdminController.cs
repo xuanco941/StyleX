@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using StyleX.DTOs;
 using StyleX.Models;
 using StyleX.Utils;
@@ -25,10 +27,6 @@ namespace StyleX.Controllers
             return View();
         }
         public IActionResult Order()
-        {
-            return View();
-        }
-        public IActionResult Warehouse()
         {
             return View();
         }
@@ -539,7 +537,6 @@ namespace StyleX.Controllers
         }
 
         #endregion
-
         #region Product
         public IActionResult Product()
         {
@@ -551,7 +548,9 @@ namespace StyleX.Controllers
             {
                 var query1 = from p in _dbContext.Products
                              join c in _dbContext.Categories on p.CategoryID equals c.CategoryID
-                             join wh in _dbContext.Warehouses on p.ProductID equals wh.ProductID into leftJoinTableW 
+                             join ps in _dbContext.ProductSettings on p.ProductID equals ps.ProductID into leftJoinTablePS
+                             from ps2 in leftJoinTablePS.DefaultIfEmpty()
+                             join wh in _dbContext.Warehouses on p.ProductID equals wh.ProductID into leftJoinTableW
                              from w in leftJoinTableW.DefaultIfEmpty()
                              where (model.status == 0 || (model.status == 1 && p.Status == true) || (model.status == 2 && p.Status == false))
                            && (model.categoryID == 0 || (model.categoryID == c.CategoryID))
@@ -567,7 +566,9 @@ namespace StyleX.Controllers
                                  p.Status,
                                  Warehouse = w,
                                  CategoryID = c.CategoryID,
-                                 CategoryName = c.Name
+                                 CategoryName = c.Name,
+                                 p.ModelUrl,
+                                 ProductSetting = ps2
 
                              };
 
@@ -585,7 +586,10 @@ namespace StyleX.Controllers
                                  Status = g.First().Status,
                                  Warehouses = g.Select(x => x.Warehouse).ToList(),
                                  CategoryID = g.First().CategoryID,
-                                 CategoryName = g.First().CategoryName
+                                 CategoryName = g.First().CategoryName,
+                                 ModelUrl = g.First().ModelUrl,
+                                 ProductSettings = g.Select(x => x.ProductSetting).ToList(),
+
                              };
                 return new OkObjectResult(new { status = 1, message = "success", data = query2.ToList() });
 
@@ -600,7 +604,6 @@ namespace StyleX.Controllers
         {
             try
             {
-                
 
                 if (model.file != null && model.fileModel != null)
                 {
@@ -636,7 +639,7 @@ namespace StyleX.Controllers
 
                     string pathSave = $"/{Common.FolderProducts}/{folderName}/";
 
-                    _dbContext.Products.Add(new Product()
+                    var pro = new Product()
                     {
                         Name = model.name,
                         Status = model.status,
@@ -647,8 +650,25 @@ namespace StyleX.Controllers
                         Description = model.description,
                         Price = model.price,
                         CategoryID = model.categoryID
-                    });
+                    };
+                    _dbContext.Products.Add(pro);
                     _dbContext.SaveChanges();
+
+                    var list = new List<ProductSetting>();
+                    foreach (var n in model.productParts)
+                    {
+                        list.Add(new ProductSetting()
+                        {
+                            IsDefault = false,
+                            ProductID = pro.ProductID,
+                            ProductPartNameDefault = n,
+                            ProductPartNameCustom = "",
+                        });
+                    }
+                    _dbContext.ProductSettings.AddRange(list);
+
+                    _dbContext.SaveChanges();
+
                     return new OkObjectResult(new { status = 1, message = "Tải lên sản phẩm mới thành công." });
 
                 }
@@ -661,6 +681,171 @@ namespace StyleX.Controllers
             catch (Exception e)
             {
                 return new BadRequestObjectResult(new { status = -99, message = e.Message });
+            }
+
+        }
+        public IActionResult UpdateProduct([FromForm] UpdateProductModel md)
+        {
+            try
+            {
+                var mat = _dbContext.Products.Find(md.productID);
+                if (mat == null)
+                {
+                    return new OkObjectResult(new { status = -1, message = "Sản phẩm này này không khả dụng." });
+                }
+                mat.Name = md.name;
+                mat.Status = md.status;
+                mat.Sale = md.sale;
+                mat.CategoryID = md.categoryID;
+                mat.Price = md.price;
+                mat.Description = md.description;
+                mat.SaleEndAt = md.saleEndAt;
+
+                string[] cacPhan = mat.PosterUrl.Split('/');
+                string folderName = cacPhan[cacPhan.Length - 2];
+                string pathSave = $"/{Common.FolderProducts}/{folderName}/";
+
+                if (md.file != null && md.file.Length > 0)
+                {
+
+                    // Xóa file cũ
+                    var oldFilePath1 = Path.Combine(_environment.WebRootPath, mat.PosterUrl.TrimStart('/'));
+
+                    if (System.IO.File.Exists(oldFilePath1))
+                    {
+                        System.IO.File.Delete(oldFilePath1);
+
+                    }
+                    string fileName = "preview" + Path.GetExtension(md.file.FileName);
+                    var filePath = Path.Combine(_environment.WebRootPath, Common.FolderProducts, folderName, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        md.file.CopyTo(stream);
+                    }
+                    mat.PosterUrl = pathSave + fileName;
+                }
+                _dbContext.SaveChanges();
+                return new OkObjectResult(new { status = 1, message = "Cập nhật sản phẩm thành công." });
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message });
+            }
+
+        }
+        public IActionResult GetProductSettings([FromBody] IDModel model)
+        {
+            try
+            {
+                var query = _dbContext.ProductSettings.Find(model.ID);
+                if (query == null)
+                {
+                    return new BadRequestObjectResult(new { status = -99, message = "Không tìm thấy bộ phận này.", data = DBNull.Value });
+
+                }
+                var mats = new List<Material>();
+                var query2 = _dbContext.ProductSettingMaterials.Where(p => p.ProductSettingID == query.ProductSettingID).ToList();
+                foreach (var j in query2)
+                {
+                    var amt = _dbContext.Materials.FirstOrDefault(m => m.MaterialID == j.MaterialID);
+                    if (amt != null)
+                    {
+                        mats.Add(amt);
+                    }
+                }
+                var p = new ProductSettingsWithMaterial() { IsDefault = query.IsDefault, materials = mats, ProductPartNameCustom = query.ProductPartNameCustom, ProductPartNameDefault = query.ProductPartNameDefault, ProductSettingID = query.ProductSettingID };
+                return new OkObjectResult(new { status = 1, message = "success", data = p });
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message, data = DBNull.Value });
+            }
+
+        }
+        public IActionResult SettingProduct([FromForm] SettingProductModel md)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(md.productPartNameCustom))
+                {
+                    return new OkObjectResult(new { status = -1, message = "Bạn chưa nhập tên hiển thị cho bộ phận này." });
+                }
+                var ps = _dbContext.ProductSettings.Find(md.productSettingID);
+                if (ps == null)
+                {
+                    return new BadRequestObjectResult(new { status = -2, message = "Không khả dụng" });
+
+                }
+                ps.ProductPartNameCustom = md.productPartNameCustom;
+                ps.IsDefault = md.isDefault;
+
+                var oldMat = _dbContext.ProductSettingMaterials.Where(a => a.ProductSettingID == md.productSettingID).ToList();
+                if (oldMat!=null && oldMat.Count()>0)
+                {
+                    _dbContext.ProductSettingMaterials.RemoveRange(oldMat);
+                }
+                if(md.materials!=null && md.materials.Count > 0)
+                {
+                    var newL = new List<ProductSettingMaterial>();
+                    for (int i = 0; i < md.materials.Count; i++)
+                    {
+                        newL.Add(new ProductSettingMaterial() { ProductSettingID = md.productSettingID, MaterialID = md.materials[i] });
+                    }
+                    _dbContext.AddRange(newL);
+                }
+
+                _dbContext.SaveChanges();
+                return new OkObjectResult(new { status = 1, message = "Cập nhật bộ phận thiết kế thành công." });
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message });
+            }
+
+        }
+
+        #endregion
+
+        #region Warehouse
+        public IActionResult Warehouse()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult GetListProducts()
+        {
+            try
+            {
+                var data = from p in _dbContext.Products
+                           select new
+                           {
+                               productID = p.ProductID,
+                               name = p.Name
+                           };
+                return new OkObjectResult(new { status = 1, message = "success", data = data.ToList() });
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message, data = DBNull.Value });
+            }
+
+        }
+        public IActionResult GetWarehouses([FromBody] IDModel model)
+        {
+            try
+            {
+                var data = _dbContext.Warehouses.Include(e => e.Product).Where(e => model.ID == 0 || e.ProductID == model.ID).ToList();
+                return new OkObjectResult(new { status = 1, message = "success", data = data.ToList() });
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message, data = DBNull.Value });
             }
 
         }

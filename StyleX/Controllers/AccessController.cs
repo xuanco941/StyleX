@@ -19,8 +19,10 @@ namespace StyleX.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login(string? keyActive)
+        public async Task<IActionResult> Login(string? keyActive)
         {
+            await HttpContext.SignOutAsync(Common.CookieAuthUser);
+
             if (!string.IsNullOrEmpty(keyActive))
             {
                 Account? user = _dbContext.Accounts.FirstOrDefault(u => u.keyActive == keyActive && u.isActive == false && u.Role == Common.RoleUser);
@@ -37,7 +39,7 @@ namespace StyleX.Controllers
                     ViewBag.errorActive = "Link kích hoạt không khả dụng.";
                 }
             }
-            ClaimsPrincipal claimsPrincipal = HttpContext.User;
+            //ClaimsPrincipal claimsPrincipal = HttpContext.User;
             //if (claimsPrincipal.Identity != null && claimsPrincipal.Identity.IsAuthenticated && claimsPrincipal.Identity.AuthenticationType == Common.CookieAuthUser)
             //{
             //    return RedirectToAction("Index", "Home");
