@@ -29,63 +29,63 @@
     </div>
 
     <div style="overflow-x:auto;">
-            <table class="table table-bordered" style="vertical-align: middle; text-align:center">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Hình ảnh</th>
-                <th scope="col">Tên sản phẩm</th>
-                <th scope="col">Mô tả</th>
-                <th scope="col">Giá</th>
-                <th scope="col">Giảm giá(%)</th>
-                <th scope="col">Hạn giảm giá</th>
-                <th scope="col">Trạng thái</th>
-                <th scope="col">Kho</th>
-                <th scope="col">Thuộc danh mục</th>
-                <th scope="col">Thao tác</th>
-            </tr>
-        </thead>
-        <tbody style="vertical-align:middle; font-size: 18px;">
-            <tr v-if="isLoad">
-                <td style="font-size: 40px; text-align:center;" colspan="11"><i class="fa-solid fa-spinner fa-spin-pulse"></i></td>
-            </tr>
-            <tr v-if="isLoad == false" v-for="(item,index) in dataTable">
-                <td>{{index+1}}</td>
-                <td>
-                    <a v-bind:href="item.posterUrl" alt="preview" target="_blank">
-                        <img v-bind:src="item.posterUrl" style="height: 100px" />
-                    </a>
-                </td>
-                <td>{{item.name}}</td>
-                <td>{{item.description}}</td>
-                <td>{{Number(item.price).toLocaleString("vi-VN")}}</td>
-                <td>{{item.sale}}</td>
-                <td>{{formatDateDisplay(item.saleEndAt)}}</td>
-                <td>
-                    <span class="badge badge-info" v-if="item.status==false">Ngừng bán</span>
-                    <span class="badge badge-success" v-if="item.status==true">Đang bán</span>
-                </td>
-                <td>
-                    <div v-if="item.warehouses && item.warehouses[0]">
-                        <div v-for="itemW in item.warehouses">
-                            Size {{itemW.size}}: Còn {{itemW.amount}} sản phẩm
+        <table class="table table-bordered" style="vertical-align: middle; text-align:center">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Hình ảnh</th>
+                    <th scope="col">Tên sản phẩm</th>
+                    <th scope="col">Mô tả</th>
+                    <th scope="col">Giá</th>
+                    <th scope="col">Giảm giá(%)</th>
+                    <th scope="col">Hạn giảm giá</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col">Kho</th>
+                    <th scope="col">Thuộc danh mục</th>
+                    <th scope="col">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody style="vertical-align:middle; font-size: 18px;">
+                <tr v-if="isLoad">
+                    <td style="font-size: 40px; text-align:center;" colspan="11"><i class="fa-solid fa-spinner fa-spin-pulse"></i></td>
+                </tr>
+                <tr v-if="isLoad == false" v-for="(item,index) in dataTable">
+                    <td>{{index+1}}</td>
+                    <td>
+                        <a v-bind:href="item.posterUrl" alt="preview" target="_blank">
+                            <img v-bind:src="item.posterUrl" style="height: 100px" />
+                        </a>
+                    </td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.description}}</td>
+                    <td>{{Number(item.price).toLocaleString("vi-VN")}}</td>
+                    <td>{{item.sale}}</td>
+                    <td>{{formatDateDisplay(item.saleEndAt)}}</td>
+                    <td>
+                        <span class="badge badge-info" v-if="item.status==false">Ngừng bán</span>
+                        <span class="badge badge-success" v-if="item.status==true">Đang bán</span>
+                    </td>
+                    <td>
+                        <div v-if="item.warehouses && item.warehouses[0]">
+                            <div v-for="itemW in item.warehouses">
+                                Size {{itemW.size}}: Còn {{itemW.amount}} sản phẩm
+                            </div>
                         </div>
-                    </div>
-                    <div v-if="!item.warehouses || !item.warehouses[0]">
-                        Chưa có trong kho
-                    </div>
-                </td>
-                <td>{{item.categoryName}}</td>
-                <td>
-                    <button style="width:110px" class="btn btn-info mx-1 my-1" data-toggle="modal" data-target="#modalSetting" v-on:click="PopupSettingProduct(item.modelUrl,item.productSettings)">Thiết lập</button>
-                    <button style="width:110px" class="btn btn-warning mx-1 my-1" data-toggle="modal" data-target="#modalUpdate" v-on:click="PopupUpdateProduct(item)">Cập nhật</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                        <div v-if="!item.warehouses || !item.warehouses[0]">
+                            Chưa có trong kho
+                        </div>
+                    </td>
+                    <td>{{item.categoryName}}</td>
+                    <td>
+                        <button style="width:110px" class="btn btn-info mx-1 my-1" data-toggle="modal" data-target="#modalSetting" v-on:click="PopupSettingProduct(item.modelUrl,item.productSettings)">Thiết lập</button>
+                        <button style="width:110px" class="btn btn-warning mx-1 my-1" data-toggle="modal" data-target="#modalUpdate" v-on:click="PopupUpdateProduct(item)">Cập nhật</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-    <div class="d-flex justify-content-center mt-3" id="div-pagination">
-    </div>
+        <div class="d-flex justify-content-center mt-3" id="div-pagination">
+        </div>
     </div>
 
 
@@ -896,17 +896,6 @@
                     });
 
                 },
-
-
-
-
-
-
-
-
-
-
-
 
             },
             mounted() {

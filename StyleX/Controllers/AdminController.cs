@@ -6,6 +6,7 @@ using StyleX.DTOs;
 using StyleX.Models;
 using StyleX.Utils;
 using System.Diagnostics;
+using static StyleX.DTOs.WarehouseDTO;
 
 namespace StyleX.Controllers
 {
@@ -23,10 +24,6 @@ namespace StyleX.Controllers
         [HttpGet]
         [Route("/admin")]
         public IActionResult Index()
-        {
-            return View();
-        }
-        public IActionResult Order()
         {
             return View();
         }
@@ -101,7 +98,8 @@ namespace StyleX.Controllers
                         AoMap = pathSave + fileNameImageAoMap,
                         NormalMap = pathSave + fileNameImageNormalMap,
                         MetalnessMap = pathSave + fileNameImageMetalnessMap,
-                        RoughnessMap = pathSave + fileNameImageRoughnessMap
+                        RoughnessMap = pathSave + fileNameImageRoughnessMap,
+                        IsDecal = addMaterialModel.isDecal
                     });
                     _dbContext.SaveChanges();
                     return new OkObjectResult(new { status = 1, message = "Tải lên chất liệu mới thành công." });
@@ -131,6 +129,7 @@ namespace StyleX.Controllers
                 }
                 mat.Name = md.name;
                 mat.Status = md.status;
+                mat.IsDecal = md.isDecal;
 
                 string[] cacPhan = mat.Url.Split('/');
                 string folderName = cacPhan[cacPhan.Length - 2];
@@ -809,7 +808,6 @@ namespace StyleX.Controllers
         }
 
         #endregion
-
         #region Warehouse
         public IActionResult Warehouse()
         {
@@ -835,6 +833,7 @@ namespace StyleX.Controllers
             }
 
         }
+        [HttpPost]
         public IActionResult GetWarehouses([FromBody] IDModel model)
         {
             try
@@ -849,8 +848,82 @@ namespace StyleX.Controllers
             }
 
         }
+        [HttpPost]
+        public IActionResult AddWarehouse([FromBody] AddWarehouseModel model)
+        {
+            try
+            {
+                var whs = _dbContext.Warehouses.Where(e => e.ProductID == model.productID && e.Size == model.size).ToList();
+                if(whs != null && whs.Count >0)
+                {
+                    return new OkObjectResult(new { status = -1, message = "Sản phẩm với kích cỡ trên đã có trong kho." });
+                }
+                _dbContext.Warehouses.Add(new Models.Warehouse() { ProductID = model.productID, Amount = model.amount, Size = model.size });
+                _dbContext.SaveChanges();
+                return new OkObjectResult(new { status = 1, message = "Thêm thành công!" });
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message });
+            }
+        }
+        [HttpPost]
+        public IActionResult UpdateWarehouse([FromBody] UpdateWarehouseModel model)
+        {
+            try
+            {
+                var w = _dbContext.Warehouses.Find(model.warehouseID);
+                if (w == null)
+                {
+                    return new OkObjectResult(new { status = -1, message = "Không khả dụng." });
+                }
+                var whs = _dbContext.Warehouses.Where(e => e.Size == model.size && e.Size != model.size).ToList();
+                if (whs != null && whs.Count > 0)
+                {
+                    return new OkObjectResult(new { status = -2, message = "Sản phẩm với kích cỡ trên đã có trong kho." });
+                }
+                w.Amount = model.amount;
+                w.Size = model.size;
+                _dbContext.SaveChanges();
+                return new OkObjectResult(new { status = 1, message = "Cập nhật thành công!" });
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message });
+            }
+        }
+        public IActionResult DeleteWarehouse([FromBody] IDModel md)
+        {
+            try
+            {
+                var account = _dbContext.Warehouses.Find(md.ID);
+                if (account == null)
+                {
+                    return new OkObjectResult(new { status = -1, message = "Không tìm thấy sản phẩm này." });
+                }
+
+                _dbContext.Warehouses.Remove(account);
+
+                _dbContext.SaveChanges();
+                return new OkObjectResult(new { status = 1, message = "Xóa thành công." });
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message });
+            }
+
+        }
 
 
+        #endregion
+        #region Order
+        public IActionResult Order()
+        {
+            return View();
+        }
         #endregion
     }
 }

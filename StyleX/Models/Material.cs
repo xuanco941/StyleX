@@ -18,6 +18,7 @@ namespace StyleX.Models
         //public string Map { get; set; } = string.Empty; //màu sắc cơ bản của vật liệu mà không có thông tin về ánh sáng hoặc bóng.
         //public string DisplacementMap { get; set; } = string.Empty;//thông tin về chiều cao của bề mặt vật liệu
         public bool Status { get; set; } //=false thì vật liệu này ngừng hđ
+        public bool IsDecal { get; set; } = true; //=true thì có thể decal
 
 
     }

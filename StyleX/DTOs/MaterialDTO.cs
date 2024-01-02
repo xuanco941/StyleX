@@ -10,6 +10,8 @@
         public IFormFile metalnessMap { get; set; } = null!;
 
         public bool status { get; set; }
+        public bool isDecal { get; set; }
+
     }
     public class UpdateMaterialModel
     {
@@ -21,5 +23,7 @@
         public IFormFile roughnessMap { get; set; } = null!;
         public IFormFile metalnessMap { get; set; } = null!;
         public bool status { get; set; }
+        public bool isDecal { get; set; }
+
     }
 }

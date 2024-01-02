@@ -2,8 +2,8 @@
     ViewBag.pageName = "Tài khoản";
     Layout = "_Layout";
 
-    Account user = ViewBag.user as Account ?? new Account();
-    List<Order> orders = ViewBag.orders as List<Order> ?? new List<Order>();
+    StyleX.Models.Account user = ViewBag.user as StyleX.Models.Account ?? new StyleX.Models.Account();
+    List<StyleX.Models.Order> orders = ViewBag.orders as List<StyleX.Models.Order> ?? new List<StyleX.Models.Order>();
     int index = 1;
 }
 
@@ -93,7 +93,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (Order order in orders)
+                    @foreach (StyleX.Models.Order order in orders)
                     {
                         <tr>
                             <td>@index</td>

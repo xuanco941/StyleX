@@ -1,7 +1,7 @@
 ﻿@{
     Layout = "_LayoutAdmin";
 }
-<div id="appAccount" style="overflow-x: auto">
+<div id="appAccount">
     <div class="row align-items-end">
         <div class="col-md-3 mb-3">
             <label>Tên tài khoản:</label>
@@ -20,45 +20,47 @@
         </div>
     </div>
 
-    <table class="table table-bordered" style="vertical-align: middle; text-align:center;">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Tên đầy đủ</th>
-                <th scope="col">Email</th>
-                <th scope="col">Mật khẩu</th>
-                <th scope="col">Địa chỉ</th>
-                <th scope="col">Số điện thoại</th>
-                <th scope="col">Số lượt quay may mắn</th>
-                <th scope="col">Trạng thái</th>
-                <th scope="col">Thao tác</th>
+    <div style="overflow-x:  auto">
+        <table class="table table-bordered" style="vertical-align: middle; text-align:center;">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Tên đầy đủ</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Mật khẩu</th>
+                    <th scope="col">Địa chỉ</th>
+                    <th scope="col">Số điện thoại</th>
+                    <th scope="col">Số lượt quay may mắn</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col">Thao tác</th>
 
-            </tr>
-        </thead>
-        <tbody style="vertical-align:middle;" class="text-dark">
-            <tr v-if="isLoad">
-                <td style="font-size: 35px; text-align:center;" colspan="9"><i class="fa-solid fa-spinner fa-spin-pulse"></i></td>
-            </tr>
-            <tr v-if="isLoad == false" v-for="(item,index) in dataTable">
-                <td>{{index+1}}</td>
-                <td>{{item.fullName}}</td>
-                <td>{{item.email}}</td>
-                <td>{{'*'.repeat(item.password.length)}}</td>
-                <td>{{item.address}}</td>
-                <td>{{item.phoneNumber}}</td>
-                <td>{{item.numberPlayGame}}</td>
-                <td>
-                    <span class="badge badge-success" v-if="item.isActive==true">Đã kích hoạt</span>
-                    <span class="badge badge-warning" v-if="item.isActive==false">Chưa kích hoạt</span>
-                </td>
-                <td >
-                    <button class="btn btn-primary mx-2 my-1" data-toggle="modal" data-target="#modalUpdate" v-on:click="PopupUpdate(item)">Cập nhật</button>
-                    <button class="btn btn-danger mx-2 my-1" data-toggle="modal" data-target="#modalDelete" v-on:click="PopupDelete(item)">Xóa</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <div class="d-flex justify-content-center mt-3" id="div-pagination">
+                </tr>
+            </thead>
+            <tbody style="vertical-align:middle;" class="text-dark">
+                <tr v-if="isLoad">
+                    <td style="font-size: 35px; text-align:center;" colspan="9"><i class="fa-solid fa-spinner fa-spin-pulse"></i></td>
+                </tr>
+                <tr v-if="isLoad == false" v-for="(item,index) in dataTable">
+                    <td>{{index+1}}</td>
+                    <td>{{item.fullName}}</td>
+                    <td>{{item.email}}</td>
+                    <td>{{'*'.repeat(item.password.length)}}</td>
+                    <td>{{item.address}}</td>
+                    <td>{{item.phoneNumber}}</td>
+                    <td>{{item.numberPlayGame}}</td>
+                    <td>
+                        <span class="badge badge-success" v-if="item.isActive==true">Đã kích hoạt</span>
+                        <span class="badge badge-warning" v-if="item.isActive==false">Chưa kích hoạt</span>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary mx-2 my-1" data-toggle="modal" data-target="#modalUpdate" v-on:click="PopupUpdate(item)">Cập nhật</button>
+                        <button class="btn btn-danger mx-2 my-1" data-toggle="modal" data-target="#modalDelete" v-on:click="PopupDelete(item)">Xóa</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-center mt-3" id="div-pagination">
+        </div>
     </div>
 
 
@@ -135,7 +137,7 @@
 
 
 
-@section Scripts{
+@section Scripts {
     <script>
 
         var appAccount = new Vue({
@@ -144,7 +146,7 @@
                 resData: [],
                 dataTable: [],
                 isLoad: true,
-                isActive : 0,
+                isActive: 0,
                 accountName: "",
 
                 totalPages: 1,
@@ -245,7 +247,7 @@
                     else {
                         self.dataUpdate.messagePassword = "";
                     }
-                    if (!self.dataUpdate.numberPlayGame || isNaN(self.dataUpdate.numberPlayGame)){
+                    if (!self.dataUpdate.numberPlayGame || isNaN(self.dataUpdate.numberPlayGame)) {
                         self.dataUpdate.messageNumberPlayGame = "Vui lòng chỉ nhập số.";
                         return;
                     }
@@ -334,4 +336,4 @@
         });
     </script>
 
-    }
+}

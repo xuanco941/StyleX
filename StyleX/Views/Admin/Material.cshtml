@@ -13,6 +13,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Tên chất liệu</th>
                 <th scope="col">Trạng thái</th>
+                <th scope="col">In Decal</th>
                 <th scope="col">Hình ảnh</th>
                 <th scope="col">AO Map</th>
                 <th scope="col">Normal Map</th>
@@ -32,6 +33,10 @@
                 <td>
                     <span class="badge badge-success" v-if="item.status==true">Đang sử dụng</span>
                     <span class="badge badge-danger" v-if="item.status==false">Ngừng sử dụng</span>
+                </td>
+                <td>
+                    <span class="badge badge-success" v-if="item.isDecal==true">Có</span>
+                    <span class="badge badge-danger" v-if="item.isDecal==false">Không</span>
                 </td>
                 <td>
                     <a v-bind:href="item.url" alt="preview" target="_blank">
@@ -81,8 +86,15 @@
                             <div class="text-danger" style="font-size: 14px;">{{dataAdd.messageName}}</div>
                         </div>
                         <div class="form-group">
-                            <label for="inputState">Trạng thái</label>
-                            <select id="inputState" class="form-control" v-model="dataAdd.status">
+                            <label >In decal</label>
+                            <select class="form-control" v-model="dataAdd.isDecal">
+                                <option value="true">Có</option>
+                                <option value="false">Không</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label >Trạng thái</label>
+                            <select class="form-control" v-model="dataAdd.status">
                                 <option value="true">Đang sử dụng</option>
                                 <option value="false">Ngừng sử dụng</option>
                             </select>
@@ -154,6 +166,13 @@
                             <label for="ipu1">Tên loại vải</label>
                             <input type="text" class="form-control" id="ipu1" v-model="dataUpdate.name">
                             <div class="text-danger" style="font-size: 14px;">{{dataUpdate.messageName}}</div>
+                        </div>
+                        <div class="form-group">
+                            <label>In decal</label>
+                            <select class="form-control" v-model="dataUpdate.isDecal">
+                                <option value="true">Có</option>
+                                <option value="false">Không</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="inputStateu">Trạng thái</label>
@@ -233,6 +252,7 @@
                     name: "",
                     status: true,
                     messageName: "",
+                    isDecal: true,
 
                     file: "",
                     image: "",
@@ -260,6 +280,7 @@
                 dataUpdate: {
                     materialID: "",
                     name: "",
+                    isDecal: true,
                     status: true,
                     file: "",
                     image: "",
