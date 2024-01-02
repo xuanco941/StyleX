@@ -258,21 +258,25 @@
                                 self.resData = res.data;
                                 self.dataTable = self.resData.slice(0, self.pageSize);
                                 self.totalPages = Math.ceil(self.resData.length / self.pageSize);
-                                document.getElementById("div-pagination").innerHTML = `<ul id="pagination" class="pagination-md"></ul>`;
 
-                                $('#pagination').twbsPagination({
-                                    totalPages: self.totalPages,
-                                    visiblePages: 6,
-                                    first: "Trang đầu",
-                                    last: "Trang cuối",
-                                    next: 'Trang tiếp',
-                                    prev: 'Trang trước',
-                                    onPageClick: function (event, page) {
-                                        var start = (page - 1) * self.pageSize;
-                                        var end = page * self.pageSize;
-                                        self.dataTable = self.resData.slice(start, end);
-                                    }
-                                });
+                                if(self.resData.length>0){
+                                    document.getElementById("div-pagination").innerHTML = `<ul id="pagination" class="pagination-md"></ul>`;
+                                    $('#pagination').twbsPagination({
+                                        totalPages: self.totalPages,
+                                        visiblePages: 6,
+                                        first: "Trang đầu",
+                                        last: "Trang cuối",
+                                        next: 'Trang tiếp',
+                                        prev: 'Trang trước',
+                                        onPageClick: function (event, page) {
+                                            var start = (page - 1) * self.pageSize;
+                                            var end = page * self.pageSize;
+                                            self.dataTable = self.resData.slice(start, end);
+                                        }
+                                    });
+                                }
+
+
                             }
                             else {
                                 ShowAlert(res.message, "danger");

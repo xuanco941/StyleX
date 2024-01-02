@@ -12,7 +12,6 @@
 
         public const string FolderProducts = "products";
 
-
-
+        public const double TransportFee = 30000;
     }
 }

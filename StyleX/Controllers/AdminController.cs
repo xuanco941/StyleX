@@ -924,6 +924,80 @@ namespace StyleX.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult GetOrders([FromBody] SearhOrderModel model)
+        {
+            try
+            {
+                List<Order>? list = _dbContext.Orders.Include(e => e.Account).Where(u => u.OrderID.ToString().Contains(model.orderID) && u.Name.Contains(model.accountName)).ToList();
+                if (list == null)
+                {
+                    list = new List<Order>();
+                }
+                return new OkObjectResult(new { status = 1, message = "success.", data = list });
+
+            }
+            catch (Exception e)
+            {
+                return new OkObjectResult(new { status = -2, message = e.Message, data = "" });
+
+            }
+        }
+        [HttpPost]
+        public IActionResult GetOrderItems([FromBody] IDModel iDModel)
+        {
+            try
+            {
+                List<CartItem>? list = _dbContext.CartItems.Include(e => e.Product).Where(u => u.OrderID == iDModel.ID).ToList();
+                if (list == null)
+                {
+                    list = new List<CartItem>();
+                }
+                return new OkObjectResult(new { status = 1, message = "success.", data = list });
+
+            }
+            catch (Exception e)
+            {
+                return new OkObjectResult(new { status = -2, message = e.Message, data = "" });
+
+            }
+        }
+        [HttpPost]
+        public IActionResult UpdateOrder([FromBody] UpdateOrderModel md)
+        {
+            if (md == null)
+            {
+                return new NotFoundObjectResult(new { status = -99, message = "Vui lòng nhập đủ thông tin thiết yếu." });
+            }
+            try
+            {
+                var obj = _dbContext.Orders.Find(md.orderID);
+                if (obj == null)
+                {
+                    return new OkObjectResult(new { status = -1, message = "Không tìm thấy đơn hàng này." });
+                }
+
+                obj.Name = md.name;
+                obj.NetPrice = md.netPrice;
+                obj.PhoneNumber = md.phoneNumber;
+                obj.Address = md.address;
+                obj.Message = md.message;
+                obj.UpdateAt = DateTime.Now;
+                obj.Status = md.status;
+                obj.TransportFee = md.transportFee;
+
+
+                _dbContext.SaveChanges();
+                return new OkObjectResult(new { status = 1, message = "Cập nhật đơn hàng thành công." });
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message });
+            }
+
+        }
+
         #endregion
     }
 }

@@ -78,13 +78,14 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Mã đơn hàng</th>
+                        <th scope="col">Người nhận</th>
                         <th scope="col">Địa chỉ</th>
                         <th scope="col">Số điện thoại</th>
                         <th scope="col">Ghi chú</th>
                         <th scope="col">Phí vận chuyển</th>
                         <th scope="col">Tổng tiền</th>
                         <th scope="col">Khuyến mại</th>
-                        <th scope="col">Thành tiền</th>
+                        <th scope="col">Số tiền phải trả</th>
                         <th scope="col">Trạng thái</th>
                         <th scope="col">Ngày tạo</th>
                         <th scope="col">Cập nhật lúc</th>
@@ -98,6 +99,7 @@
                         <tr>
                             <td>@index</td>
                             <td>@order.OrderID</td>
+                            <td>@order.Name</td>
                             <td>@order.Address</td>
                             <td>@order.PhoneNumber</td>
                             <td>@order.Message</td>
