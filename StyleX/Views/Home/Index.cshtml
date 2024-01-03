@@ -1,6 +1,7 @@
 ﻿@{
     Layout = "_Layout";
     ViewBag.pageName = "Trang chủ";
+
 }
 <style>
     model-viewer {
@@ -9,262 +10,241 @@
 </style>
 
 
-<section id="home-section" class="hero">
-    <div class="home-slider owl-carousel">
+<div id="appNewProducts">
+    <section id="home-section" class="hero" v-if="newProducts.length>0">
+        <div class="home-slider owl-carousel">
 
-        <div class="slider-item" style="max-height: 700px;">
-            <div class="overlay"></div>
-            <div class="container mt-md-5 pt-md-5 h-100 px-2 px-md-0">
-                <div class="row align-items-center justify-content-center flex-nowrap h-100" style="gap: 50px;">
-                    <div class="text col-5">
-                        <span class="subheading">#SẢN PHẨM MỚI</span>
-                        <div class="horizontal">
-                            <h1 class="mb-4 mt-3">Áo dài phong cách</h1>
-                            <p class="mb-4">Áo dài Việt Nam có từ rất xa xưa, theo từng thời kì lịch sử mà chiếc áo dài có những hình dáng khác nhau và thay đổi theo từng phương. Miền Bắc ngày xưa có kiểu áo dài viền năm tà, miền Trung lại có một kiểu sợi dây cột ngang lưng, miền Nam cũng có áo dài cổ cao theo một cách đặc biệt.</p>
+            <div class="slider-item" style="max-height: 700px;" v-for="item in newProducts">
+                <div class="overlay"></div>
+                <div class="container mt-md-5 pt-md-5 h-100 px-2 px-md-0">
+                    <div class="row align-items-center justify-content-center flex-nowrap h-100" style="gap: 50px;">
+                        <div class="text col-5">
+                            <span class="subheading">#SẢN PHẨM MỚI</span>
+                            <div class="horizontal">
+                                <h2 class="mb-4 mt-3">{{item.name}}</h2>
+                                <p class="mb-4">{{item.description}}</p>
 
-                            <a href="/design" class="btn-custom pt-2 btn" style="border-radius: 5px;">Thiết Kế Mẫu Này <i style="margin-left: 6px;" class="fa-solid fa-wand-magic-sparkles fa-beat"></i></a>
+                                <a href="/design" class="btn-custom pt-2 btn" style="border-radius: 5px;">Thiết Kế Mẫu Này <i style="margin-left: 6px;" class="fa-solid fa-wand-magic-sparkles fa-beat"></i></a>
+                            </div>
                         </div>
+                        <model-viewer class="col-6 col-md-6 h-100" alt=""
+                                      v-bind:src="item.modelUrl" ar shadow-intensity="1" camera-controls disable-pan
+                                      disable-tap auto-rotate autoplay shadow-softness="0.1" min-camera-orbit="auto auto 100%"
+                                      max-camera-orbit="auto auto 100%">
+                        </model-viewer>
                     </div>
-                    <model-viewer class="col-6 col-md-6 h-100" alt=""
-                                  src="/model/1.glb" ar shadow-intensity="1" camera-controls disable-pan
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <section class="ftco-section ftco-deal bg-primary" v-if="saleProducts">
+        <div class="container">
+            <div class="row" style="height: 600px">
+                <div class="col-md-6">
+                    <model-viewer class="w-100 h-100" alt="model-sale"
+                                  v-bind:src="saleProducts.modelUrl" ar shadow-intensity="1" camera-controls disable-pan
                                   disable-tap auto-rotate autoplay shadow-softness="0.1" min-camera-orbit="auto auto 100%"
                                   max-camera-orbit="auto auto 100%">
                     </model-viewer>
                 </div>
-            </div>
-
-        </div>
-
-        <div class="slider-item" style="max-height: 700px;">
-            <div class="overlay"></div>
-            <div class="container mt-md-5 pt-md-5 h-100 px-2 px-md-0">
-                <div class="row align-items-center justify-content-center flex-nowrap h-100" style="gap: 50px;">
-                    <div class="text col-5">
-                        <span class="subheading">#SẢN PHẨM MỚI</span>
-                        <div class="horizontal">
-                            <h1 class="mb-4 mt-3">Shoes Collection 2019</h1>
-                            <p class="mb-4">A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country.</p>
-
-                            <a href="#" class="btn-custom pt-2 btn" style="border-radius: 5px;">Thiết Kế Mẫu Này <i style="margin-left: 6px;" class="fa-solid fa-wand-magic-sparkles fa-beat"></i></a>
+                <div class="col-md-6 d-flex align-items-center justify-content-center" >
+                    <div>
+                        <div class="heading-section heading-section-white">
+                            <span class="subheading" style="background-color:#000000; display: inline; padding: 5px 7px; letter-spacing: 4px;">#Ưu đãi lớn</span>
+                            <h2 class="mb-3">Giảm giá có hạn</h2>
                         </div>
-                    </div>
-                    <model-viewer class="col-6 col-md-6 h-100" alt=""
-                                  src="/model/2.glb" ar shadow-intensity="1" camera-controls disable-pan
-                                  disable-tap auto-rotate autoplay shadow-softness="0.1" min-camera-orbit="auto auto 100%"
-                                  max-camera-orbit="auto auto 100%">
-                    </model-viewer>
-                </div>
-            </div>
-
-
-        </div>
-
-    </div>
-</section>
-
-<section class="ftco-section ftco-deal bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <model-viewer class="w-100 h-100" alt="model-sale"
-                              src="/model/3.glb" ar shadow-intensity="1" camera-controls disable-pan
-                              disable-tap auto-rotate autoplay shadow-softness="0.1" min-camera-orbit="auto auto 100%"
-                              max-camera-orbit="auto auto 100%">
-                </model-viewer>
-            </div>
-            <div class="col-md-6">
-                <div class="heading-section heading-section-white">
-                    <span class="subheading" style="background-color:#000000; display: inline; padding: 5px 7px; letter-spacing: 4px;">#Ưu đãi lớn</span>
-                    <h2 class="mb-3">Giảm giá trong tuần</h2>
-                </div>
-                <div id="timer" class="d-flex mb-4">
-                    <div class="time" id="days"></div>
-                    <div class="time pl-4" id="hours"></div>
-                    <div class="time pl-4" id="minutes"></div>
-                    <div class="time pl-4" id="seconds"></div>
-                </div>
-                <div class="text-deal">
-                    <h2><a href="#">Nike Free RN 2019 iD</a></h2>
-                    <p class="price">
-                        <span class="mr-2 price-dc">$120.00</span><span class="price-sale">$80.00</span>
-                    </p>
-                    <ul class="thumb-deal d-flex mt-4">
-                        <li class="img" style="background-image: url(/model/1.webp);"></li>
-                        <li class="img" style="background-image: url(/model/2.webp);"></li>
-                        <li class="img" style="background-image: url(/model/3.webp);"></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="ftco-section testimony-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-5">
-                <div class="services-flow">
-                    <div class="services-2 p-4 d-flex ftco-animate align-items-center">
-                        <div class="icon d-flex justify-content-center align-items-center" style="min-width: 74px; max-width: 74px; height: 74px; border-radius: 100%; background-color: #1e7baf ">
-                            <i class="fa-solid fa-shirt fa-bounce mt-1" style="font-size: 30px; color:#f7f7f7"></i>
+                        <div id="timer" class="d-flex mb-4">
+                            <div class="time" id="days"></div>
+                            <div class="time pl-4" id="hours"></div>
+                            <div class="time pl-4" id="minutes"></div>
+                            <div class="time pl-4" id="seconds"></div>
                         </div>
-                        <div class="text">
-                            <h3>Không giới hạn</h3>
-                            <p class="mb-0">Sản xuất số lượng bất kỳ, từ 01 sản phẩm trở lên.</p>
-                        </div>
-                    </div>
-                    <div class="services-2 p-4 d-flex ftco-animate align-items-center">
-                        <div class="icon d-flex justify-content-center align-items-center" style="min-width: 74px; max-width: 74px; height: 74px; border-radius: 100%; background-color: #86c9ef ">
-                            <i class="fa-solid fa-wand-magic-sparkles fa-bounce mt-1" style="font-size: 30px; color: #f7f7f7"></i>
-                        </div>
-                        <div class="text">
-                            <h3>Thỏa sức sáng tạo</h3>
-                            <p class="mb-0">Bạn đưa ra ý tưởng, chúng tôi giúp bạn hoàn thành nó.</p>
-                        </div>
-                    </div>
-                    <div class="services-2 p-4 d-flex ftco-animate align-items-center">
-                        <div class="icon d-flex justify-content-center align-items-center" style="min-width: 74px; max-width: 74px; height: 74px; border-radius: 100%; background-color: #f7f7f7 ">
-                            <i class="fa-solid fa-cube fa-bounce mt-1" style="font-size: 30px; color: #86c9ef"></i>
-                        </div>
-                        <div class="text">
-                            <h3>3D & AR</h3>
-                            <p class="mb-0">Nâng tầm thiết kế, góc nhìn trực quan trên mô hình 3D.</p>
-                        </div>
-                    </div>
-                    <div class="services-2 p-4 d-flex ftco-animate align-items-center">
-                        <div class="icon d-flex justify-content-center align-items-center" style="min-width: 74px; max-width: 74px; height: 74px; border-radius: 100%; background-color: #f7f7f7 ">
-                            <i class="fa-solid fa-headset fa-bounce mt-1" style="font-size: 30px; color: #1e7baf"></i>
-                        </div>
-                        <div class="text">
-                            <h3>Hỗ trợ 24/7</h3>
-                            <p class="mb-0 text-white">
-                                Chăm sóc khách hàng 24/7 sẵn sàng giúp đỡ và giải đáp mọi thắc mắc của bạn.
+                        <div class="text-deal">
+                            <h2><a href="/product">{{saleProducts.name}} (-{{saleProducts.sale}}%)</a></h2>
+                            <p class="price">
+                                <span class="mr-2 price-dc">{{Number(saleProducts.price).toLocaleString("vi-VN")}}&#8363;</span><span class="price-sale">{{Number(saleProducts.price - (saleProducts.price*saleProducts.sale/100)).toLocaleString("vi-VN")}}&#8363;</span>
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-7">
-                <div class="heading-section ftco-animate mb-5">
-                    <h2 class="mb-4">Dịch vụ của chúng tôi</h2>
-                    <p>
-                        Chúng tôi mang đến giải pháp toàn diện cho các mẫu may mặc như áo khoác, áo dài, hoodie,... áp dụng sức mạnh của công nghệ tiên tiến vào sản xuất để đưa ra giải pháp sản xuất hiệu quả và tối ưu về thiết kế, đáp ứng từng nhu cầu khác biệt.
-                    </p>
+        </div>
+    </section>
+
+    <section class="ftco-section testimony-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5">
+                    <div class="services-flow">
+                        <div class="services-2 p-4 d-flex ftco-animate align-items-center">
+                            <div class="icon d-flex justify-content-center align-items-center" style="min-width: 74px; max-width: 74px; height: 74px; border-radius: 100%; background-color: #1e7baf ">
+                                <i class="fa-solid fa-shirt fa-bounce mt-1" style="font-size: 30px; color:#f7f7f7"></i>
+                            </div>
+                            <div class="text">
+                                <h3>Không giới hạn</h3>
+                                <p class="mb-0">Sản xuất số lượng bất kỳ, từ 01 sản phẩm trở lên.</p>
+                            </div>
+                        </div>
+                        <div class="services-2 p-4 d-flex ftco-animate align-items-center">
+                            <div class="icon d-flex justify-content-center align-items-center" style="min-width: 74px; max-width: 74px; height: 74px; border-radius: 100%; background-color: #86c9ef ">
+                                <i class="fa-solid fa-wand-magic-sparkles fa-bounce mt-1" style="font-size: 30px; color: #f7f7f7"></i>
+                            </div>
+                            <div class="text">
+                                <h3>Thỏa sức sáng tạo</h3>
+                                <p class="mb-0">Bạn đưa ra ý tưởng, chúng tôi giúp bạn hoàn thành nó.</p>
+                            </div>
+                        </div>
+                        <div class="services-2 p-4 d-flex ftco-animate align-items-center">
+                            <div class="icon d-flex justify-content-center align-items-center" style="min-width: 74px; max-width: 74px; height: 74px; border-radius: 100%; background-color: #f7f7f7 ">
+                                <i class="fa-solid fa-cube fa-bounce mt-1" style="font-size: 30px; color: #86c9ef"></i>
+                            </div>
+                            <div class="text">
+                                <h3>3D & AR</h3>
+                                <p class="mb-0">Nâng tầm thiết kế, góc nhìn trực quan trên mô hình 3D.</p>
+                            </div>
+                        </div>
+                        <div class="services-2 p-4 d-flex ftco-animate align-items-center">
+                            <div class="icon d-flex justify-content-center align-items-center" style="min-width: 74px; max-width: 74px; height: 74px; border-radius: 100%; background-color: #f7f7f7 ">
+                                <i class="fa-solid fa-headset fa-bounce mt-1" style="font-size: 30px; color: #1e7baf"></i>
+                            </div>
+                            <div class="text">
+                                <h3>Hỗ trợ 24/7</h3>
+                                <p class="mb-0 text-white">
+                                    Chăm sóc khách hàng 24/7 sẵn sàng giúp đỡ và giải đáp mọi thắc mắc của bạn.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="carousel-testimony owl-carousel">
-                    <div class="item">
-                        <div class="testimony-wrap">
-                            <div class="mb-4">
-                                <img style=" width: initial;height: 200px;" src="/images/ar.jpg" />
-                            </div>
-                            <div class="text">
-                                <p class="mb-1" style="font-size: 15px;">
-                                    Thiết kế sản phẩm trên mô hình 3D ngay trên <br /> website, chế độ AR chân thực,
-                                </p>
+                <div class="col-lg-7">
+                    <div class="heading-section ftco-animate mb-5">
+                        <h2 class="mb-4">Dịch vụ của chúng tôi</h2>
+                        <p>
+                            Chúng tôi mang đến giải pháp toàn diện cho các mẫu may mặc như áo khoác, áo dài, hoodie,... áp dụng sức mạnh của công nghệ tiên tiến vào sản xuất để đưa ra giải pháp sản xuất hiệu quả và tối ưu về thiết kế, đáp ứng từng nhu cầu khác biệt.
+                        </p>
+                    </div>
+                    <div class="carousel-testimony owl-carousel">
+                        <div class="item">
+                            <div class="testimony-wrap">
+                                <div class="mb-4">
+                                    <img style=" width: initial;height: 200px;" src="/images/ar.jpg" />
+                                </div>
+                                <div class="text">
+                                    <p class="mb-1" style="font-size: 15px;">
+                                        Thiết kế sản phẩm trên mô hình 3D ngay trên <br /> website, xem sản phẩm của bạn trong chế độ AR chân thực,
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="item">
-                        <div class="testimony-wrap">
-                            <div class="mb-4">
-                                <img style=" width: initial;height: 200px;" src="/images/may.jpg" />
-                            </div>
-                            <div class="text">
-                                <p class="mb-1" style="font-size: 15px;">
-                                    Với sản phẩm, chúng tôi luôn tỉ mỉ hoàn thiện, <br /> sự hài lòng của khách hàng là mục tiêu của chúng tôi.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="testimony-wrap">
-                            <div class="mb-4">
-                               <img style=" width: initial;height: 200px;" src="/images/may-in.jpg"/>
-                            </div>
-                            <div class="text">
-                                <p class="mb-1" style="font-size: 15px;">
-                                    Có đầy đủ trang thiết bị in màu hiện đại như: in phun, <br /> in UV, in truyền nhiệt, in laser, in kỹ thuật số truyền nhiệt,
-                                    in 3D...
-                                </p>
+                        <div class="item">
+                            <div class="testimony-wrap">
+                                <div class="mb-4">
+                                    <img style=" width: initial;height: 200px;" src="/images/may.jpg" />
+                                </div>
+                                <div class="text">
+                                    <p class="mb-1" style="font-size: 15px;">
+                                        Với sản phẩm, chúng tôi luôn tỉ mỉ hoàn thiện, <br /> sự hài lòng của khách hàng là mục tiêu của chúng tôi.
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="item">
-                        <div class="testimony-wrap">
-                            <div class="mb-4">
-                                <img style=" width: initial;height: 200px;" src="/images/chat-lieu.jpg" />
+                        <div class="item">
+                            <div class="testimony-wrap">
+                                <div class="mb-4">
+                                    <img style=" width: initial;height: 200px;" src="/images/may-in.jpg" />
+                                </div>
+                                <div class="text">
+                                    <p class="mb-1" style="font-size: 15px;">
+                                        Có đầy đủ trang thiết bị in màu hiện đại như: in phun, <br /> in UV, in truyền nhiệt, in laser, in kỹ thuật số truyền nhiệt,
+                                        in 3D...
+                                    </p>
+                                </div>
                             </div>
-                            <div class="text">
-                                <p class="mb-1" style="font-size: 15px;">
-                                    Đa dạng chất liệu như: vải cotton, len, jean, vải <br /> thô, nỉ,... 
-                                </p>
+                        </div>
+                        <div class="item">
+                            <div class="testimony-wrap">
+                                <div class="mb-4">
+                                    <img style=" width: initial;height: 200px;" src="/images/chat-lieu.jpg" />
+                                </div>
+                                <div class="text">
+                                    <p class="mb-1" style="font-size: 15px;">
+                                        Đa dạng chất liệu như: vải cotton, len, jean, vải <br /> thô, nỉ,...
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
 
-<section class="ftco-section bg-light">
-    <div class="container">
-        <div class="row justify-content-center mb-3 pb-3">
-            <div class="col-md-12 heading-section text-center ftco-animate">
-                <h2 class="mb-2">Sản phẩm nổi bật</h2>
-                <p>Đa dạng mẫu mã với chất liệu, màu sắc khác nhau. Thả ga lựa chọn chất riêng cho mình</p>
+    <section class="ftco-section bg-light" v-if="highlightProducts">
+        <div class="container">
+            <div class="row justify-content-center mb-3 pb-3">
+                <div class="col-md-12 heading-section text-center ftco-animate">
+                    <h2 class="mb-2">Sản phẩm nổi bật</h2>
+                    <p>Đa dạng mẫu mã với chất liệu, màu sắc khác nhau. Thả ga lựa chọn chất riêng cho mình</p>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
-                <div class="product d-flex flex-column">
-                    <a href="#" class="img-prod">
-                        <img class="img-fluid" src="/model/1.webp"
-                             alt="Colorlib Template">
-                        <div class="overlay"></div>
-                    </a>
-                    <div class="text py-3 pb-4 px-3">
-                        <div class="d-flex">
-                            <div class="cat">
-                                <span>Lifestyle</span>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex" v-for="item in highlightProducts">
+                    <div class="product d-flex flex-column">
+                        <a href="#" class="img-prod">
+                            <img class="img-fluid" v-bind:src="item.posterUrl"
+                                 alt="Colorlib Template">
+                            <div class="overlay"></div>
+                        </a>
+                        <div class="text py-3 pb-4 px-3">
+                            <div class="d-flex">
+                                <div class="cat">
+                                    <span>Lifestyle</span>
+                                </div>
+                                <div class="rating">
+                                    <p class="text-right mb-0">
+                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                    </p>
+                                </div>
                             </div>
-                            <div class="rating">
-                                <p class="text-right mb-0">
-                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                </p>
+                            <h3><a href="/product">{{item.name}}</a></h3>
+                            <div class="pricing">
+                                <p class="price"><span>{{item.price}}&#8363;</span></p>
                             </div>
-                        </div>
-                        <h3><a href="#">Nike Free RN 2019 iD</a></h3>
-                        <div class="pricing">
-                            <p class="price"><span>$120.00</span></p>
-                        </div>
-                        <div class="bottom-area d-flex px-2">
-                            <a href="#" class="add-to-cart text-center py-2 mr-1" style="height: fit-content;font-size:11px;">
-                                <span>
-                                    Thiết kế <i class="fa-solid fa-wand-magic-sparkles"></i>
-                                </span>
-                            </a>
-                            <a href="#" class="buy-now text-center py-2" style="height: fit-content;font-size:11px;">
-                                <span>
-                                    Thêm vào giỏ <i class="fa-solid fa-cart-plus"></i>
-                                </span>
-                            </a>
+                            <div class="bottom-area d-flex px-2">
+                                <a href="/design" class="add-to-cart text-center py-2 mr-1" style="height: fit-content;font-size:11px;">
+                                    <span>
+                                        Thiết kế <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                    </span>
+                                </a>
+                                <a href="#" class="buy-now text-center py-2" style="height: fit-content;font-size:11px;">
+                                    <span>
+                                        Thêm vào giỏ <i class="fa-solid fa-cart-plus"></i>
+                                    </span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+
             </div>
-
-
         </div>
-    </div>
-</section>
+    </section>
+</div>
+
+
+
 
 
 <section class="ftco-section ftco-no-pt ftco-no-pb my-2">
@@ -304,7 +284,7 @@
                     <div class="media-body">
                         <h3 class="heading">3.Đặt hàng</h3>
                         <p>
-                            Vận chuyển nhanh chóng và an toàn mọi tỉnh thành với chi phí cố định chỉ với 30,000&#8363;.
+                            Vận chuyển nhanh chóng và an toàn mọi tỉnh thành với chi phí cố định chỉ với @Html.Raw(Common.TransportFee.ToString("#0.000"))&#8363;.
                         </p>
                     </div>
                 </div>
@@ -316,71 +296,17 @@
 
 <section class="ftco-section ftco-choose ftco-no-pb ftco-no-pt">
     <div class="container">
-        <div class="row no-gutters">
-            <div class="col-lg-4">
+        <div class="row no-gutters" id="appCategory">
+            <div class="col-lg-4" v-for="item in dataTable">
                 <div class="choose-wrap divider-one img p-5 d-flex align-items-end"
-                     style="background-image: url(/images/choose-1.jpg);">
+                     v-bind:style="{ 'background-image': 'url(' + item.image + ')' }">
 
                     <div class="text text-center text-white px-2">
-                        <span class="subheading">Men's Shoes</span>
-                        <h2>Men's Collection</h2>
-                        <p>
-                            Separated they live in Bookmarksgrove right at the coast of the Semantics, a large
-                            language ocean.
+                        <span class="subheading">#{{item.name}}</span>
+                        <p style="background-color: rgba(0,0,0,0.2)" class="text-white">
+                            {{item.description}}
                         </p>
-                        <p><a href="#" class="btn btn-black px-3 py-2">Shop now</a></p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-8">
-                <div class="row no-gutters choose-wrap divider-two align-items-stretch">
-                    <div class="col-md-12">
-                        <div class="choose-wrap full-wrap img align-self-stretch d-flex align-item-center justify-content-end"
-                             style="background-image: url(/images/choose-2.jpg);">
-                            <div class="col-md-7 d-flex align-items-center">
-                                <div class="text text-white px-5">
-                                    <span class="subheading">Women's Shoes</span>
-                                    <h2>Women's Collection</h2>
-                                    <p>
-                                        Separated they live in Bookmarksgrove right at the coast of the Semantics, a
-                                        large language ocean.
-                                    </p>
-                                    <p><a href="#" class="btn btn-black px-3 py-2">Shop now</a></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="row no-gutters">
-                            <div class="col-md-6">
-                                <div class="choose-wrap wrap img align-self-stretch d-flex align-items-center"
-                                     style="background-image: url(/images/choose-3.jpg);">
-                                    <div class="text text-center text-white px-5">
-                                        <span class="subheading">Summer Sale</span>
-                                        <h2>Extra 50% Off</h2>
-                                        <p>
-                                            Separated they live in Bookmarksgrove right at the coast of the
-                                            Semantics, a large language ocean.
-                                        </p>
-                                        <p><a href="#" class="btn btn-black px-3 py-2">Shop now</a></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="choose-wrap wrap img align-self-stretch d-flex align-items-center"
-                                     style="background-image: url(/images/category-1.jpg);">
-                                    <div class="text text-center text-white px-5">
-                                        <span class="subheading">Shoes</span>
-                                        <h2>Best Sellers</h2>
-                                        <p>
-                                            Separated they live in Bookmarksgrove right at the coast of the
-                                            Semantics, a large language ocean.
-                                        </p>
-                                        <p><a href="#" class="btn btn-black px-3 py-2">Shop now</a></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <p><a href="/product" class="btn btn-black px-3 py-2">Khám phá ngay</a></p>
                     </div>
                 </div>
             </div>
@@ -392,7 +318,108 @@
 
 
 
+
+
+
 @section Scripts {
+    <script>
+        var appCategory = new Vue({
+            el: "#appCategory",
+            data: {
+                dataTable: [],
+
+            },
+            methods: {
+                init: async function () {
+
+                    await this.GetCategory();
+
+                    this.$forceUpdate();
+                },
+                GetCategory: async function () {
+                    var self = this;
+                    self.dataTable = [];
+
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "/Home/GetCategories",
+                        data: JSON.stringify({
+                        }),
+                        success: function (res) {
+                            if (res.status == 1) {
+                                self.dataTable = res.data;
+                                console.log(self.dataTable)
+                            }
+                            else {
+                                ShowAlert(res.message, "danger");
+                            }
+                        },
+                        error: function (error) {
+                            ShowAlert(error.responseJSON.message, "danger");
+                        }
+                    });
+
+                },
+
+
+
+            },
+            mounted() {
+                this.init();
+            },
+        });
+        var appNewProducts = new Vue({
+            el: "#appNewProducts",
+            data: {
+                newProducts: [],
+                saleProducts: {},
+                highlightProducts: []
+            },
+            methods: {
+                init: async function () {
+
+                    await this.GetProductHomes();
+
+                    this.$forceUpdate();
+                },
+                GetProductHomes: async function () {
+                    var self = this;
+                    self.newProducts = [];
+                    self.saleProducts = {};
+                    self.highlightProducts = [];
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "/Home/GetProductHomes",
+                        data: JSON.stringify({
+                        }),
+                        success: function (res) {
+                            if (res.status == 1) {
+                                console.log(res.data)
+                                self.newProducts = res.data.newProducts;
+                                self.saleProducts = res.data.saleProducts;
+                                self.highlightProducts = res.data.highlightProducts;
+
+                            }
+                            else {
+                                ShowAlert(res.message, "danger");
+                            }
+                        },
+                        error: function (error) {
+                            ShowAlert(error.responseJSON.message, "danger");
+                        }
+                    });
+
+                },
+
+            },
+            mounted() {
+                this.init();
+            },
+        });
+
+    </script>
 
 }
 

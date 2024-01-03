@@ -16,6 +16,7 @@ namespace StyleX.Models
         public double Sale { get; set; } // % giảm giá
         public DateTime? SaleEndAt { get; set; }
         public bool Status { get; set; } = true; //true = đang bán
+        public DateTime CreateAt { get; set; } = DateTime.Now;
 
         public int CategoryID { get; set; }
         public Category Category { get; set; } = null!;

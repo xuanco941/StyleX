@@ -103,10 +103,10 @@
                             <td>@order.Address</td>
                             <td>@order.PhoneNumber</td>
                             <td>@order.Message</td>
-                            <td>@order.TransportFee.ToString("#,##0") &#8363;</td>
-                            <td>@order.BasePrice.ToString("#,##0") &#8363;</td>
-                            <td>@order.PercentSale.ToString("#,##0") %</td>
-                            <td>@order.NetPrice.ToString("#,##0") &#8363;</td>
+                            <td>@order.TransportFee.ToString("#.##0") &#8363;</td>
+                            <td>@order.BasePrice.ToString("#.##0") &#8363;</td>
+                            <td>@order.PercentSale.ToString("#.##0") %</td>
+                            <td>@order.NetPrice.ToString("#.##0") &#8363;</td>
                             @{
                                 if (order.Status==0)
                                 {
@@ -173,11 +173,11 @@
                                 <td><img v-bind:src="item.posterUrl" style="width: 100px;" /></td>
                                 <td>{{item.product.name}}</td>
                                 <td>{{item.product.description}}</td>
-                                <td>{{Number(item.amount).toLocaleString('en-US')}}</td>
+                                <td>{{Number(item.amount).toLocaleString('vi-VN')}}</td>
                                 <td>{{item.size}}</td>
-                                <td>{{Number(item.product.price).toLocaleString('en-US')}}</td>
-                                <td>{{Number(item.product.sale).toLocaleString('en-US')}}%</td>
-                                <td>{{Number((item.product.price*item.amount) - (item.product.price/100*item.product.sale) * item.amount).toLocaleString('en-US')}}</td>
+                                <td>{{Number(item.product.price).toLocaleString('vi-VN')}}</td>
+                                <td>{{Number(item.product.sale).toLocaleString('vi-VN')}}%</td>
+                                <td>{{Number((item.product.price*item.amount) - (item.product.price/100*item.product.sale) * item.amount).toLocaleString('vi-VN')}}</td>
                                 <td><button class="btn btn-success">Xem 3D</button></td>
                             </tr>
                         </tbody>

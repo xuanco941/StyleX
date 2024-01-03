@@ -28,7 +28,7 @@ namespace StyleX.Controllers
             DateTime currentDate = DateTime.Now;
 
             // Lấy ngày đầu tiên của tháng
-            DateTime firstDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1, 0,0,0);
+            DateTime firstDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1, 0, 0, 0);
             var endDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
             var orders = _dbContext.Orders.Where(e => e.CreateAt >= firstDayOfMonth && e.CreateAt < endDayOfMonth).ToList();
             var orders2 = _dbContext.Orders.Where(e => e.CreateAt >= firstDayOfMonth.AddMonths(-1) && e.CreateAt < endDayOfMonth.AddMonths(-1)).ToList();
@@ -43,7 +43,7 @@ namespace StyleX.Controllers
             ViewBag.count = 0;
             ViewBag.money = 0;
 
-            if (orders != null && orders.Count > 0)
+            if (orders != null)
             {
                 var orderSuccess = orders.Where(e => e.Status == 2).ToList();
                 if (orderSuccess != null && orderSuccess.Count > 0)
@@ -81,7 +81,7 @@ namespace StyleX.Controllers
 
             }
 
-            if (orders2 != null && orders2.Count > 0)
+            if (orders2 != null)
             {
                 List<string> dateList3 = new List<string>();
                 List<int> valueList3 = new List<int>();
@@ -106,6 +106,7 @@ namespace StyleX.Controllers
                 ViewBag.value4 = "[" + string.Join(", ", valueList4) + "]";
 
             }
+
             return View();
         }
 
@@ -729,7 +730,8 @@ namespace StyleX.Controllers
                         SaleEndAt = model.saleEndAt,
                         Description = model.description,
                         Price = model.price,
-                        CategoryID = model.categoryID
+                        CategoryID = model.categoryID,
+                        CreateAt = DateTime.Now
                     };
                     _dbContext.Products.Add(pro);
                     _dbContext.SaveChanges();
@@ -863,11 +865,11 @@ namespace StyleX.Controllers
                 ps.IsDefault = md.isDefault;
 
                 var oldMat = _dbContext.ProductSettingMaterials.Where(a => a.ProductSettingID == md.productSettingID).ToList();
-                if (oldMat!=null && oldMat.Count()>0)
+                if (oldMat != null && oldMat.Count() > 0)
                 {
                     _dbContext.ProductSettingMaterials.RemoveRange(oldMat);
                 }
-                if(md.materials!=null && md.materials.Count > 0)
+                if (md.materials != null && md.materials.Count > 0)
                 {
                     var newL = new List<ProductSettingMaterial>();
                     for (int i = 0; i < md.materials.Count; i++)
@@ -935,7 +937,7 @@ namespace StyleX.Controllers
             try
             {
                 var whs = _dbContext.Warehouses.Where(e => e.ProductID == model.productID && e.Size == model.size).ToList();
-                if(whs != null && whs.Count >0)
+                if (whs != null && whs.Count > 0)
                 {
                     return new OkObjectResult(new { status = -1, message = "Sản phẩm với kích cỡ trên đã có trong kho." });
                 }

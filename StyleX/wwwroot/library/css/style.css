@@ -558,7 +558,7 @@ h1, h2, h3, h4, h5,
 
     .owl-carousel.home-slider {
         position: relative;
-        height: 750px;
+        height: 600px;
         z-index: 0;
         background: #86c9ef;
     }
@@ -1987,7 +1987,10 @@ textarea.form-control {
 }
 
 .ftco-section {
-    padding: 7em 0;
+    padding-top: 6rem;
+    padding-bottom: 4rem;
+    padding-left: 0px;
+    padding-right: 0px;
     position: relative;
 }
 
