@@ -164,6 +164,12 @@
     </script>
 
     <script>
+
+        Vue.config.ignoredElements = [
+            'model-viewer'
+            // other ignored elements if any
+        ];
+
         //check image upload
         function isFileImage(file) {
             return file && file['type'].split('/')[0] === 'image';

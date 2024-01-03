@@ -21,7 +21,7 @@
                         <div class="text col-5">
                             <span class="subheading">#SẢN PHẨM MỚI</span>
                             <div class="horizontal">
-                                <h2 class="mb-4 mt-3">{{item.name}}</h2>
+                                <h2 class="mb-4 mt-3" style="font-weight: 700">{{item.name}}</h2>
                                 <p class="mb-4">{{item.description}}</p>
 
                                 <a href="/design" class="btn-custom pt-2 btn" style="border-radius: 5px;">Thiết Kế Mẫu Này <i style="margin-left: 6px;" class="fa-solid fa-wand-magic-sparkles fa-beat"></i></a>
@@ -54,8 +54,8 @@
                 <div class="col-md-6 d-flex align-items-center justify-content-center" >
                     <div>
                         <div class="heading-section heading-section-white">
-                            <span class="subheading" style="background-color:#000000; display: inline; padding: 5px 7px; letter-spacing: 4px;">#Ưu đãi lớn</span>
-                            <h2 class="mb-3">Giảm giá có hạn</h2>
+                            <span class="subheading" style="background-color:#000000; display: inline; padding: 5px 7px; letter-spacing: 4px;">#Ưu đãi lớn </span>
+                            <h2 class="mb-3">Giảm giá {{saleProducts.sale}}%</h2>
                         </div>
                         <div id="timer" class="d-flex mb-4">
                             <div class="time" id="days"></div>
@@ -64,10 +64,13 @@
                             <div class="time pl-4" id="seconds"></div>
                         </div>
                         <div class="text-deal">
-                            <h2><a href="/product">{{saleProducts.name}} (-{{saleProducts.sale}}%)</a></h2>
+                            <h2><a href="/product">{{saleProducts.name}}</a></h2>
                             <p class="price">
-                                <span class="mr-2 price-dc">{{Number(saleProducts.price).toLocaleString("vi-VN")}}&#8363;</span><span class="price-sale">{{Number(saleProducts.price - (saleProducts.price*saleProducts.sale/100)).toLocaleString("vi-VN")}}&#8363;</span>
+                                <span class="mr-2 price-dc">{{Number(saleProducts.price).toLocaleString("en-US")}}&#8363;</span><span class="price-sale">{{Number(saleProducts.price - (saleProducts.price*saleProducts.sale/100)).toLocaleString("en-US")}}&#8363;</span>
                             </p>
+                        </div>
+                        <div class="text">
+                            <a href="/design" class="btn-custom pt-2 btn" style="border-radius: 5px;">Thiết Kế Mẫu Này <i style="margin-left: 6px;" class="fa-solid fa-wand-magic-sparkles fa-beat"></i></a>
                         </div>
                     </div>
                 </div>
@@ -197,7 +200,7 @@
             <div class="row">
                 <div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex" v-for="item in highlightProducts">
                     <div class="product d-flex flex-column">
-                        <a href="#" class="img-prod">
+                        <a href="/product" class="img-prod d-flex justify-content-center">
                             <img class="img-fluid" v-bind:src="item.posterUrl"
                                  alt="Colorlib Template">
                             <div class="overlay"></div>
@@ -205,21 +208,12 @@
                         <div class="text py-3 pb-4 px-3">
                             <div class="d-flex">
                                 <div class="cat">
-                                    <span>Lifestyle</span>
-                                </div>
-                                <div class="rating">
-                                    <p class="text-right mb-0">
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                    </p>
+                                    <span>{{item.category.name}}</span>
                                 </div>
                             </div>
                             <h3><a href="/product">{{item.name}}</a></h3>
                             <div class="pricing">
-                                <p class="price"><span>{{item.price}}&#8363;</span></p>
+                                <p class="price"><span>{{Number(item.price).toLocaleString("en-US")}}&#8363;</span></p>
                             </div>
                             <div class="bottom-area d-flex px-2">
                                 <a href="/design" class="add-to-cart text-center py-2 mr-1" style="height: fit-content;font-size:11px;">
@@ -284,7 +278,7 @@
                     <div class="media-body">
                         <h3 class="heading">3.Đặt hàng</h3>
                         <p>
-                            Vận chuyển nhanh chóng và an toàn mọi tỉnh thành với chi phí cố định chỉ với @Html.Raw(Common.TransportFee.ToString("#0.000"))&#8363;.
+                            Vận chuyển nhanh chóng và an toàn mọi tỉnh thành với chi phí cố định chỉ với @Html.Raw(Common.TransportFee.ToString("#,##0"))&#8363;.
                         </p>
                     </div>
                 </div>
@@ -298,16 +292,17 @@
     <div class="container">
         <div class="row no-gutters" id="appCategory">
             <div class="col-lg-4" v-for="item in dataTable">
-                <div class="choose-wrap divider-one img p-5 d-flex align-items-end"
+                <div class="choose-wrap divider-one img p-5 d-flex align-content-between text-center d-flex flex-column"
                      v-bind:style="{ 'background-image': 'url(' + item.image + ')' }">
 
-                    <div class="text text-center text-white px-2">
-                        <span class="subheading">#{{item.name}}</span>
+                    <div class="text text-center text-white px-2 h-100">
+                        <span class="subheading mb-3">#{{item.name}}</span>
                         <p style="background-color: rgba(0,0,0,0.2)" class="text-white">
                             {{item.description}}
                         </p>
-                        <p><a href="/product" class="btn btn-black px-3 py-2">Khám phá ngay</a></p>
                     </div>
+                    <p><a href="/product" class="btn btn-black px-3 py-2">Khám phá ngay</a></p>
+
                 </div>
             </div>
         </div>
@@ -401,6 +396,10 @@
                                 self.saleProducts = res.data.saleProducts;
                                 self.highlightProducts = res.data.highlightProducts;
 
+                                if(self.saleProducts){
+                                    setInterval(function () { self.MakerTime(self.saleProducts.saleEndAt) }, 1000);
+                                }
+
                             }
                             else {
                                 ShowAlert(res.message, "danger");
@@ -412,6 +411,32 @@
                     });
 
                 },
+                MakerTime: function (date) {
+
+                    var endTime = new Date(date);
+                    endTime = (Date.parse(endTime) / 1000);
+
+                    var now = new Date();
+                    now = (Date.parse(now) / 1000);
+
+                    var timeLeft = endTime - now;
+
+                    var days = Math.floor(timeLeft / 86400);
+                    var hours = Math.floor((timeLeft - (days * 86400)) / 3600);
+                    var minutes = Math.floor((timeLeft - (days * 86400) - (hours * 3600)) / 60);
+                    var seconds = Math.floor((timeLeft - (days * 86400) - (hours * 3600) - (minutes * 60)));
+
+                    if (hours < "10") { hours = "0" + hours; }
+                    if (minutes < "10") { minutes = "0" + minutes; }
+                    if (seconds < "10") { seconds = "0" + seconds; }
+
+                    $("#days").html(days + "<span>Ngày</span>");
+                    $("#hours").html(hours + "<span>Giờ</span>");
+                    $("#minutes").html(minutes + "<span>Phút</span>");
+                    $("#seconds").html(seconds + "<span>Giây</span>");
+
+                },
+
 
             },
             mounted() {

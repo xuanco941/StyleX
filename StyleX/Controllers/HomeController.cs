@@ -26,13 +26,13 @@ namespace StyleX.Controllers
 
             try
             {
-                listProducts = _dbContext.Products.ToList();
+                listProducts = _dbContext.Products.Include(e => e.Category).Where(e => e.Status==true).ToList();
                 if (listProducts != null)
                 {
                     DateTime now = DateTime.Now;
                     newProducts = listProducts.OrderByDescending(e => e.CreateAt).Take(2).ToList();
                     saleProducts = listProducts
-                        .Where(product => product.Sale > 0) // Lọc các sản phẩm có giảm giá
+                        .Where(product => product.Sale > 0 && product.SaleEndAt>now) // Lọc các sản phẩm có giảm giá
                         .OrderByDescending(product => product.Sale) // Sắp xếp giảm dần theo tỷ lệ giảm giá
                         .FirstOrDefault(); 
                     highlightProducts = listProducts.OrderByDescending(e => e.Price).Take(6).ToList();
