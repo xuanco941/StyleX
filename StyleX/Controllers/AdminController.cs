@@ -25,6 +25,87 @@ namespace StyleX.Controllers
         [Route("/admin")]
         public IActionResult Index()
         {
+            DateTime currentDate = DateTime.Now;
+
+            // Lấy ngày đầu tiên của tháng
+            DateTime firstDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1, 0,0,0);
+            var endDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+            var orders = _dbContext.Orders.Where(e => e.CreateAt >= firstDayOfMonth && e.CreateAt < endDayOfMonth).ToList();
+            var orders2 = _dbContext.Orders.Where(e => e.CreateAt >= firstDayOfMonth.AddMonths(-1) && e.CreateAt < endDayOfMonth.AddMonths(-1)).ToList();
+
+
+            ViewBag.date1 = "[]";
+            ViewBag.value1 = "[]";
+            ViewBag.value2 = "[]";
+            ViewBag.date3 = "[]";
+            ViewBag.value3 = "[]";
+            ViewBag.value4 = "[]";
+            ViewBag.count = 0;
+            ViewBag.money = 0;
+
+            if (orders != null && orders.Count > 0)
+            {
+                var orderSuccess = orders.Where(e => e.Status == 2).ToList();
+                if (orderSuccess != null && orderSuccess.Count > 0)
+                {
+                    ViewBag.count = orderSuccess.Count;
+                    ViewBag.money = orderSuccess.Sum(e => e.NetPrice).ToString("#,##0");
+                }
+                else
+                {
+                    ViewBag.count = 0;
+                    ViewBag.money = 0;
+                }
+
+                List<string> dateList = new List<string>();
+                List<int> valueList = new List<int>();
+                List<int> valueList2 = new List<int>();
+
+                valueList2.Add(orders.Count(e => e.Status == 0));
+                valueList2.Add(orders.Count(e => e.Status == 1));
+                valueList2.Add(orders.Count(e => e.Status == 2));
+                valueList2.Add(orders.Count(e => e.Status == 3));
+
+
+                for (DateTime i = firstDayOfMonth; i <= endDayOfMonth; i = i.AddDays(1))
+                {
+                    var value = orders.Count(e => e.CreateAt >= i && e.CreateAt <= i.AddDays(1));
+
+                    dateList.Add(i.ToString("dd/MM"));
+                    valueList.Add(value);
+                }
+
+                ViewBag.date1 = "[" + string.Join(", ", dateList.Select(d => '"' + d + '"')) + "]";
+                ViewBag.value1 = "[" + string.Join(", ", valueList) + "]";
+                ViewBag.value2 = "[" + string.Join(", ", valueList2) + "]";
+
+            }
+
+            if (orders2 != null && orders2.Count > 0)
+            {
+                List<string> dateList3 = new List<string>();
+                List<int> valueList3 = new List<int>();
+                List<int> valueList4 = new List<int>();
+
+                valueList4.Add(orders2.Count(e => e.Status == 0));
+                valueList4.Add(orders2.Count(e => e.Status == 1));
+                valueList4.Add(orders2.Count(e => e.Status == 2));
+                valueList4.Add(orders2.Count(e => e.Status == 3));
+
+
+                for (DateTime i = firstDayOfMonth.AddMonths(-1); i <= endDayOfMonth.AddMonths(-1); i = i.AddDays(1))
+                {
+                    var value = orders2.Count(e => e.CreateAt >= i && e.CreateAt <= i.AddDays(1));
+
+                    dateList3.Add(i.ToString("dd/MM"));
+                    valueList3.Add(value);
+                }
+
+                ViewBag.date3 = "[" + string.Join(", ", dateList3.Select(d => '"' + d + '"')) + "]";
+                ViewBag.value3 = "[" + string.Join(", ", valueList3) + "]";
+                ViewBag.value4 = "[" + string.Join(", ", valueList4) + "]";
+
+            }
             return View();
         }
 

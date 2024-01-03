@@ -18,4 +18,5 @@
         public string message { get; set; } = null!;
         public int status { get; set; }  //0.đang xử lý, 1.đang giao hàng, 2.giao hàng thành công, 3.hủy. nếu nhận được yêu cầu sửa thì quay lại 0
     }
+
 }
