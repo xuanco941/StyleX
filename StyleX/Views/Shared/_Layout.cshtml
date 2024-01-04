@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title> StyleX </title>
+    <link rel="icon" href="/logo/stylex-high-resolution-logo.ico" type="image/png">
+
 
     <link rel="stylesheet" href="/library/css/animate.css">
     <link rel="stylesheet" href="/library/css/owl.carousel.min.css">
@@ -37,14 +39,14 @@
                     <li class="nav-item"><a href="/design" class="nav-link color-hover-nav">Thiết kế</a></li>
                     <li class="nav-item dropdown">
                         <a href="#" id="dropdown04" class="nav-link color-hover-nav dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tài khoản</a>
-                        <div id="appCheckLogin" class="dropdown-menu shadow rounded" aria-labelledby="dropdown04" style="position: absolute; top:80%">
+                        <div class="dropdown-menu shadow rounded" aria-labelledby="dropdown04" style="position: absolute; top:80%">
                             <a class="dropdown-item" href="/account">Thông tin tài khoản</a>
                             <a v-if="!isSignin" class="dropdown-item" href="/access/login">Đăng nhập</a>
                             <a v-if="isSignin" class="dropdown-item" href="/access/logout">Đăng xuất</a>
                         </div>
                     </li>
                     <li class="nav-item"><a href="/promotion" class="nav-link color-hover-nav">Quay thưởng</a></li>
-                    <li class="nav-item cta cta-colored"><a href="/cart" class="nav-link color-hover-nav"><i class="fa-solid fa-cart-shopping"></i>[0]</a></li>
+                    <li class="nav-item cta cta-colored"><a href="/cart" class="nav-link color-hover-nav"><i class="fa-solid fa-cart-shopping"></i>[{{countCartItem}}]</a></li>
                 </ul>
             </div>
         </div>
@@ -240,19 +242,20 @@
     <script>
 
         var appCheckLogin = new Vue({
-            el: "#appCheckLogin",
+            el: "#nav-layout-link",
             data: {
-                isSignin: false
+                isSignin: false,
+                countCartItem: 0
             },
             methods: {
                 init: async function () {
 
-                    await this.checkSignin();
+                    await this.CheckLogin();
 
                     this.$forceUpdate();
 
                 },
-                checkSignin: async function () {
+                CheckLogin: async function () {
                     var self = this;
 
                     $.ajax({
@@ -265,13 +268,16 @@
                             console.log(data)
                             if (data.status == 1) {
                                 self.isSignin = true;
+                                self.countCartItem = data.data;
                             }
                             else {
                                 self.isSignin = false;
+                                self.countCartItem = 0;
                             }
                         },
                         error: function (xhr, status, error) {
                             self.isSignin = false;
+                            self.countCartItem = 0;
                         }
                     });
 

@@ -150,18 +150,24 @@ namespace StyleX.Controllers
         {
             try
             {
-                if (HttpContext.User.Identity!=null && HttpContext.User.Identity.IsAuthenticated)
+                if (HttpContext.User.Identity != null && HttpContext.User.Identity.IsAuthenticated)
                 {
-                    return new OkObjectResult(new { status = 1, message = "success" });
+                    var accountID = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    if (string.IsNullOrEmpty(accountID))
+                    {
+                        return new OkObjectResult(new { status = -1, message = "", data = 0 });
+                    }
+                    var countCart = _dbContext.CartItems.Where(e => e.AccountID == Convert.ToInt32(accountID)).Count();
+                    return new OkObjectResult(new { status = 1, message = "success", data = countCart });
                 }
                 else
                 {
-                    return new OkObjectResult(new { status = -1, message = "" });
+                    return new OkObjectResult(new { status = -1, message = "", data = 0 });
                 }
             }
             catch (Exception e)
             {
-                return new OkObjectResult(new { status = -2, message = e.Message });
+                return new OkObjectResult(new { status = -2, message = e.Message, data = 0 });
 
             }
         }
