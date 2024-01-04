@@ -20,7 +20,7 @@ namespace StyleX.Controllers
         {
             return View();
         }
-        public IActionResult GetProducts([FromBody] SearchProductModel model)
+        public IActionResult GetProducts([FromBody] IDModel model)
         {
             try
             {
@@ -30,8 +30,7 @@ namespace StyleX.Controllers
                 from ps2 in leftJoinTablePS.DefaultIfEmpty()
                              join wh in _dbContext.Warehouses on p.ProductID equals wh.ProductID into leftJoinTableW
                              from w in leftJoinTableW.DefaultIfEmpty()
-                             where (model.status == 0 || (model.status == 1 && p.Status == true) || (model.status == 2 && p.Status == false))
-                           && (model.categoryID == 0 || (model.categoryID == c.CategoryID))
+                             where (model.ID == 0 || c.CategoryID == model.ID) && p.Status == true
                              select new
                              {
                                  p.ProductID,

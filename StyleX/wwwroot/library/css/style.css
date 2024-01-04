@@ -3257,22 +3257,6 @@ textarea.form-control {
     border: none;
 }
 
-.panel-heading a:after {
-    font-family: "ionicons";
-    content: "\f3d0";
-    position: absolute;
-    right: 20px;
-    font-size: 11px;
-    font-weight: 400;
-    top: 50%;
-    line-height: 1;
-    margin-top: -8px;
-}
-
-.panel-heading a.collapsed:after {
-    content: "\f102";
-}
-
 .panel-heading a.collapsed {
     color: #333333;
 }

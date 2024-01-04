@@ -343,7 +343,12 @@
                         }),
                         success: function (res) {
                             if (res.status == 1) {
-                                self.dataTable = res.data;
+                                if(res.data.length>3){
+                                    self.dataTable = res.data.slice(0, 3);
+                                }
+                                else{
+                                    self.dataTable = res.data;
+                                }
                                 console.log(self.dataTable)
                             }
                             else {
