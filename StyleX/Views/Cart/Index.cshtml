@@ -3,8 +3,7 @@
     Layout = "_Layout";
 }
 
-
-<section class="ftco-section ftco-cart">
+<section class="ftco-section ftco-cart" id="appCart">
     <div class="container">
         <div class="row">
             <div class="col-12 ftco-animate">
@@ -14,39 +13,51 @@
                             <tr class="text-center">
                                 <th>Chọn</th>
                                 <th>Hình ảnh</th>
-                                <th>Mô tả</th>
-                                <th>Giá</th>
+                                <th>Sản phẩm</th>
                                 <th>Số lượng</th>
-                                <th>Tổng tiền</th>
+                                <th>Size</th>
+                                <th>Giá (&#8363;)</th>
+                                <th>Giảm giá</th>
+                                <th>Thành tiền (&#8363;)</th>
                                 <th>Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="text-center">
-                                <td class="quantity" style="width: 10%;">
-                                    <input class="form-check-input mt-0 position-sticky" style="width: 30px; height: 30px;" type="checkbox" value="">
+                            <tr v-if="isLoad">
+                                <td style="font-size: 40px; text-align:center;" colspan="8"><i class="fa-solid fa-spinner fa-spin-pulse"></i></td>
+                            </tr>
+                            <tr class="text-center" v-for="item in dataTable">
+                                <td class="quantity" style="width: 7%;">
+                                    <input class="form-check-input mt-0 position-sticky" style="width: 30px; height: 30px;" type="checkbox" v-bind:id="'cart'+item.cartItemID" v-bind:value="item.cartItemID" v-model="cartSelected">
                                 </td>
 
-                                <td class="image-prod" style="width: 20%">
-                                    <div class="img" style="background-image:url(/images/product-3.jpg);"></div>
+                                <td class="image-prod" style="width: 18%">
+                                    <div class="img" v-bind:style="{ 'background-image': 'url(' + item.posterUrl + ')' }"></div>
                                 </td>
 
-                                <td class="product-name" style="width: 25%">
-                                    <h3>Nike Free RN 2019 iD</h3>
-                                    <p>Far far away, behind the word mountains, far from the countries</p>
+                                <td class="product-name" style="width: 18%">
+                                    <h3>{{item.product.name}}</h3>
+                                    <p>{{item.product.description}}</p>
                                 </td>
-
-                                <td class="price" style="width: 10%">$4.90</td>
-
                                 <td class="quantity" style="width: 10%">
                                     <div class="input-group mb-3">
-                                        <input type="text" name="quantity"
-                                               class="quantity form-control input-number" value="1" min="1" max="100">
+                                        <input type="number" name="quantity"
+                                               class="quantity form-control input-number" v-bind:value="item.amount" min="1">
                                     </div>
                                 </td>
+                                <td>
+                                    <select class="form-select form-select-lg" aria-label="Default select example">
+                                        <option selected>Chọn size</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+                                </td>
+                                <td class="price">{{Number(item.product.price).toLocaleString("en-US")}}</td>
+                                <td class="sale">{{Number(item.product.sale).toLocaleString("en-US")}}%</td>
 
-                                <td class="total" style="width: 15%">$4.90</td>
-                                <td style="width: 20%">
+                                <td class="total">{{Number(item.product.price * item.amount - (item.product.price * item.amount * item.product.sale / 100)).toLocaleString("en-US")}}</td>
+                                <td>
                                     <a href="#"><i class="fa-solid fa-trash" style="color: #d71818; font-size: 27px;"></i></a>
                                 </td>
 
@@ -90,3 +101,58 @@
     </div>
 </section>
 
+@section Scripts {
+    <script>
+        var appCart = new Vue({
+            el: "#appCart",
+            data: {
+                dataTable: [],
+                isLoad: true,
+                cartSelected: []
+
+            },
+            methods: {
+                init: async function () {
+
+                    await this.GetCarts();
+
+                    this.$forceUpdate();
+                },
+                GetCarts: async function () {
+                    var self = this;
+                    self.isLoad = true;
+                    self.dataTable = [];
+
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "/Cart/GetCarts",
+                        data: JSON.stringify({
+                        }),
+                        success: function (res) {
+                            self.isLoad = false;
+                            if (res.status == 1) {
+                                self.dataTable = res.data;
+                                console.log(self.dataTable)
+                            }
+                            else {
+                                ShowAlert(res.message, "danger");
+                            }
+                        },
+                        error: function (error) {
+                            self.isLoad = false;
+                            ShowAlert(error.responseJSON.message, "danger");
+                        }
+                    });
+
+                },
+
+            },
+            mounted() {
+                this.init();
+            },
+        });
+
+    </script>
+
+}

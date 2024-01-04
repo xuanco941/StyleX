@@ -26,8 +26,6 @@ namespace StyleX.Controllers
             {
                 var query1 = from p in _dbContext.Products
                              join c in _dbContext.Categories on p.CategoryID equals c.CategoryID
-                             join ps in _dbContext.ProductSettings on p.ProductID equals ps.ProductID into leftJoinTablePS
-                from ps2 in leftJoinTablePS.DefaultIfEmpty()
                              join wh in _dbContext.Warehouses on p.ProductID equals wh.ProductID into leftJoinTableW
                              from w in leftJoinTableW.DefaultIfEmpty()
                              where (model.ID == 0 || c.CategoryID == model.ID) && p.Status == true
@@ -44,8 +42,7 @@ namespace StyleX.Controllers
                                  Warehouse = w,
                                  CategoryID = c.CategoryID,
                                  CategoryName = c.Name,
-                                 p.ModelUrl,
-                                 ProductSetting = ps2
+                                 p.ModelUrl
 
                              };
 
@@ -64,8 +61,7 @@ namespace StyleX.Controllers
                                  Warehouses = g.Select(x => x.Warehouse).ToList(),
                                  CategoryID = g.First().CategoryID,
                                  CategoryName = g.First().CategoryName,
-                                 ModelUrl = g.First().ModelUrl,
-                                 ProductSettings = g.Select(x => x.ProductSetting).ToList(),
+                                 ModelUrl = g.First().ModelUrl
 
                              };
                 return new OkObjectResult(new { status = 1, message = "success", data = query2.ToList() });

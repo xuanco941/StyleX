@@ -11,6 +11,8 @@
         public const string FolderImageCategories = "categories";
 
         public const string FolderProducts = "products";
+        public const string FolderCarts = "carts";
+
 
         public const double TransportFee = 30000;
     }

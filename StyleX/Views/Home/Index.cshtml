@@ -30,7 +30,7 @@
                         <model-viewer class="col-6 col-md-6 h-100" alt=""
                                       v-bind:src="item.modelUrl" ar shadow-intensity="1" camera-controls disable-pan
                                       disable-tap auto-rotate autoplay shadow-softness="0.1" min-camera-orbit="auto auto 100%"
-                                      max-camera-orbit="auto auto 100%">
+                                      max-camera-orbit="auto auto 150%">
                         </model-viewer>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                     <model-viewer class="w-100 h-100" alt="model-sale"
                                   v-bind:src="saleProducts.modelUrl" ar shadow-intensity="1" camera-controls disable-pan
                                   disable-tap auto-rotate autoplay shadow-softness="0.1" min-camera-orbit="auto auto 100%"
-                                  max-camera-orbit="auto auto 100%">
+                                  max-camera-orbit="auto auto 150%">
                     </model-viewer>
                 </div>
                 <div class="col-md-6 d-flex align-items-center justify-content-center" >
@@ -221,7 +221,7 @@
                                         Thiết kế <i class="fa-solid fa-wand-magic-sparkles"></i>
                                     </span>
                                 </a>
-                                <a href="#" class="buy-now text-center py-2" style="height: fit-content;font-size:11px;">
+                                <a href="javascript:;" class="buy-now text-center py-2" style="height: fit-content;font-size:11px;" v-bind:onClick="'AddToCart('+item.productID+')'">
                                     <span>
                                         Thêm vào giỏ <i class="fa-solid fa-cart-plus"></i>
                                     </span>
@@ -453,6 +453,7 @@
                     $("#seconds").html(seconds + "<span>Giây</span>");
 
                 },
+
 
 
             },

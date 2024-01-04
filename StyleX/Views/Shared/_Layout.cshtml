@@ -172,7 +172,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <!--vue2 production-->
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
-    
+
 
     <script>
         Vue.config.ignoredElements = [
@@ -190,9 +190,9 @@
         function ShowAlert(html, type) {
             var alertBox = document.querySelector('#alertBox');
             var alert = `<div class="alert alert-${type} alert-dismissible" role="alert">
-                                                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                                                                ${html}
-                                                                                            </div>`;
+                                                                                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                                                                        ${html}
+                                                                                                    </div>`;
 
             if (timeoutAlertID) {
                 alertBox.innerHTML = '';
@@ -233,14 +233,41 @@
                 });
 
             });
-        })
-
+        });
 
 
     </script>
 
 
     <script>
+
+        //add product to cart
+        async function AddToCart(productID) {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "/Cart/AddToCart",
+                data: JSON.stringify({
+                    ID: productID
+                }),
+                success: function (res) {
+                    if (res.status == 1) {
+                        appCheckLogin.CheckLogin();
+                        ShowAlert(res.message, "success");
+                    }
+                    else if (res.status == 2) {
+                        ShowAlert(res.message, "info");
+                    }
+                    else {
+                        ShowAlert(res.message, "danger");
+                    }
+                },
+                error: function (error) {
+                    ShowAlert(error.responseJSON.message, "danger");
+                }
+            });
+
+        };
 
         var appCheckLogin = new Vue({
             el: "#nav-layout-link",
