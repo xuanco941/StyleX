@@ -1,22 +1,25 @@
 @{
-	ViewBag.pageName = "Sản phẩm";
 	Layout = "_Layout";
+	StyleX.Models.Product product = @ViewBag.product as StyleX.Models.Product ?? new StyleX.Models.Product();
+
 }
 <section class="ftco-section mt-3">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-6 mb-5 ftco-animate">
 				<model-viewer class="w-100 h-100" alt="model-product-detail"
-							  src="/model/1.glb" ar shadow-intensity="1" camera-controls disable-pan
+							  src="@product.ModelUrl" ar shadow-intensity="1" camera-controls disable-pan
 							  disable-tap auto-rotate autoplay shadow-softness="0.1" min-camera-orbit="auto auto 100%"
 							  max-camera-orbit="auto auto 100%">
 				</model-viewer>
 			</div>
 			<div class="col-lg-6 product-details pl-md-5 ftco-animate">
-				<h3>Nike Free RN 2019 iD</h3>
+				<h3>@product.Name</h3>
 				<div class="rating d-flex">
 					<p class="text-left">
-						<a href="/product" class="mr-2 text-primary">Mẫu sẵn khác</a>
+					@if(product.Sale>0 && product.SaleEndAt > DateTime.Now){
+							<span class="mr-2 text-primary">Giảm giá <span style="font-size:17px;">@product.Sale%</span></span>
+						}
 					</p>
 				</div>
 				<p class="price"><span>$120.00</span></p>

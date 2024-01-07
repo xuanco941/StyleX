@@ -15,6 +15,7 @@ namespace StyleX.Controllers
         }
         public IActionResult Index()
         {
+            ViewBag.pageName = "Trang chủ";
             return View();
         }
         public IActionResult GetProductHomes()

@@ -5,19 +5,27 @@ using StyleX.Models;
 
 namespace StyleX.Controllers
 {
-	public class ProductController : Controller
-	{
+    public class ProductController : Controller
+    {
         private readonly DatabaseContext _dbContext;
         public ProductController(DatabaseContext dbContext)
         {
             _dbContext = dbContext;
         }
         public IActionResult Index()
-		{
-			return View();
-		}
-        public IActionResult Detail()
         {
+            ViewBag.pageName = "Sản phẩm";
+            return View();
+        }
+        [HttpGet("product/detail/{productID}")]
+        public IActionResult Detail(int productID)
+        {
+            ViewBag.pageName = "Sản phẩm";
+
+            Product? product = _dbContext.Products.Find(productID);
+            ViewBag.product = product;
+
+
             return View();
         }
         public IActionResult GetProducts([FromBody] IDModel model)

@@ -20,6 +20,8 @@ namespace StyleX.Controllers
         }
         public IActionResult Index()
         {
+            ViewBag.pageName = "Quay thưởng";
+
             return View();
         }
 

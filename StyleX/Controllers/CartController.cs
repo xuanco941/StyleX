@@ -17,6 +17,8 @@ namespace StyleX.Controllers
         }
         public IActionResult Index()
         {
+            ViewBag.pageName = "Giỏ hàng";
+
             return View();
         }
         [HttpPost]
@@ -42,9 +44,11 @@ namespace StyleX.Controllers
                 {
                    ProductID = model.ID,
                    AccountID = Convert.ToInt32(accountID),
-                   Amount = 0,
+                   Amount = 1,
                    Size = "",
                    PosterUrl= product.PosterUrl,
+                   Price = product.Price,
+                   Sale = product.Sale,
                    Status = 0,
                    OrderID = null
                 });
@@ -124,8 +128,15 @@ namespace StyleX.Controllers
                                  Warehouses = g.Select(x => x.Warehouse).ToList(),
                                  Product = g.First().Product
                              };
-
-                return new OkObjectResult(new { status = 1, message = "success", data = query2.ToList() });
+				foreach (var item in query2)
+				{
+					if (item.Product != null && item.Product.SaleEndAt != null && item.Product.SaleEndAt < DateTime.Now)
+					{
+						// Đã hết hạn giảm giá
+						item.Product.Sale = 0; 
+					}
+				}
+				return new OkObjectResult(new { status = 1, message = "success", data = query2.ToList() });
 
             }
             catch (Exception e)

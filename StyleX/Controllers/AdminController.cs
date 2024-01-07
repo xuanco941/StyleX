@@ -639,6 +639,8 @@ namespace StyleX.Controllers
                              {
                                  p.ProductID,
                                  p.PosterUrl,
+                                 p.PosterDesignUrl1,
+                                 p.PosterDesignUrl2,
                                  p.Name,
                                  p.Description,
                                  p.Price,
@@ -659,7 +661,9 @@ namespace StyleX.Controllers
                              {
                                  ProductID = g.Key,
                                  PosterUrl = g.First().PosterUrl,
-                                 Name = g.First().Name,
+								 PosterDesignUrl1 = g.First().PosterDesignUrl1,
+								 PosterDesignUrl2 = g.First().PosterDesignUrl2,
+								 Name = g.First().Name,
                                  Description = g.First().Description,
                                  Price = g.First().Price,
                                  Sale = g.First().Sale,
@@ -685,20 +689,37 @@ namespace StyleX.Controllers
         {
             try
             {
+				string folderName = Guid.NewGuid().ToString();
 
-                if (model.file != null && model.fileModel != null)
+                string i1 = "";
+                string filePath3 = "";
+
+                if (model.img1 != null)
                 {
-                    string folderName = Guid.NewGuid().ToString();
+				 i1 = "img1" + Path.GetExtension(model.img1.FileName);
+					filePath3 = Path.Combine(_environment.WebRootPath, Common.FolderProducts, folderName, i1);
+
+				}
+				string i2 = "";
+                string filePath4 = "";
+				if (model.img2 != null)
+				{
+                    i2 = "img2" + Path.GetExtension(model.img2.FileName);
+					filePath4 = Path.Combine(_environment.WebRootPath, Common.FolderProducts, folderName, i2);
+				}
+
+				if (model.file != null && model.fileModel != null)
+                {
                     string fileNameImagePreview = "preview" + Path.GetExtension(model.file.FileName);
-                    string fileNameModel = "model" + Path.GetExtension(model.fileModel.FileName);
+					string fileNameModel = "model" + Path.GetExtension(model.fileModel.FileName);
 
 
                     var filePath1 = Path.Combine(_environment.WebRootPath, Common.FolderProducts, folderName, fileNameImagePreview);
                     var filePath2 = Path.Combine(_environment.WebRootPath, Common.FolderProducts, folderName, fileNameModel);
 
 
-                    //tạo folder
-                    if (!string.IsNullOrEmpty(filePath1))
+					//tạo folder
+					if (!string.IsNullOrEmpty(filePath1))
                     {
                         string? directoryPath = Path.GetDirectoryName(filePath1);
                         if (directoryPath != null && !Directory.Exists(directoryPath))
@@ -716,17 +737,37 @@ namespace StyleX.Controllers
                     {
                         model.fileModel.CopyTo(stream);
                     }
+                    if (model.img1 != null)
+                    {
+                        using (var stream = new FileStream(filePath3, FileMode.Create))
+                        {
+                            model.img1.CopyTo(stream);
+                        }
+                    }
+                    if (model.img2 != null)
+                    {
+                        using (var stream = new FileStream(filePath4, FileMode.Create))
+                        {
+                            model.img2.CopyTo(stream);
+                        }
+                    }
 
 
                     string pathSave = $"/{Common.FolderProducts}/{folderName}/";
 
-                    var pro = new Product()
+                    string fileImg1 = string.IsNullOrEmpty(i1) == true ? "" : pathSave + i1;
+					string fileImg2 = string.IsNullOrEmpty(i2) == true ? "" : pathSave + i2;
+
+
+					var pro = new Product()
                     {
                         Name = model.name,
                         Status = model.status,
                         PosterUrl = pathSave + fileNameImagePreview,
                         ModelUrl = pathSave + fileNameModel,
-                        Sale = model.sale,
+                        PosterDesignUrl1 = fileImg1,
+						PosterDesignUrl2 = fileImg2,
+						Sale = model.sale,
                         SaleEndAt = model.saleEndAt,
                         Description = model.description,
                         Price = model.price,
@@ -807,7 +848,49 @@ namespace StyleX.Controllers
                     }
                     mat.PosterUrl = pathSave + fileName;
                 }
-                _dbContext.SaveChanges();
+				if (md.img1 != null && md.img1.Length > 0)
+				{
+
+					// Xóa file cũ
+					var oldFilePath1 = Path.Combine(_environment.WebRootPath, mat.PosterDesignUrl1.TrimStart('/'));
+
+					if (System.IO.File.Exists(oldFilePath1))
+					{
+						System.IO.File.Delete(oldFilePath1);
+
+					}
+					string fileName = "img1" + Path.GetExtension(md.img1.FileName);
+					var filePath = Path.Combine(_environment.WebRootPath, Common.FolderProducts, folderName, fileName);
+
+					using (var stream = new FileStream(filePath, FileMode.Create))
+					{
+						md.img1.CopyTo(stream);
+					}
+					mat.PosterDesignUrl1 = pathSave + fileName;
+				}
+				if (md.img2 != null && md.img2.Length > 0)
+				{
+
+					// Xóa file cũ
+					var oldFilePath1 = Path.Combine(_environment.WebRootPath, mat.PosterDesignUrl2.TrimStart('/'));
+
+					if (System.IO.File.Exists(oldFilePath1))
+					{
+						System.IO.File.Delete(oldFilePath1);
+
+					}
+					string fileName = "img2" + Path.GetExtension(md.img2.FileName);
+					var filePath = Path.Combine(_environment.WebRootPath, Common.FolderProducts, folderName, fileName);
+
+					using (var stream = new FileStream(filePath, FileMode.Create))
+					{
+						md.img2.CopyTo(stream);
+					}
+					mat.PosterDesignUrl2 = pathSave + fileName;
+				}
+
+
+				_dbContext.SaveChanges();
                 return new OkObjectResult(new { status = 1, message = "Cập nhật sản phẩm thành công." });
 
             }

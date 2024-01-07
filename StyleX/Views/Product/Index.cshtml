@@ -1,5 +1,4 @@
 ﻿@{
-    ViewBag.pageName = "Sản phẩm";
     Layout = "_Layout";
 }
 
@@ -24,7 +23,7 @@
                     <div class="time pl-4" id="seconds"></div>
                 </div>
                 <div class="text-deal">
-                    <h2><a href="/product/detail">{{saleProducts.name}}</a></h2>
+                    <h2><a v-bind:href="'/product/detail/'+saleProducts.productID">{{saleProducts.name}}</a></h2>
                     <p class="price">
                         <span class="mr-2 price-dc">{{Number(saleProducts.price).toLocaleString("en-US")}}&#8363;</span><span class="price-sale">{{Number(saleProducts.price - (saleProducts.price*saleProducts.sale/100)).toLocaleString("en-US")}}&#8363;</span>
                     </p>
@@ -80,7 +79,7 @@
                     </div>
                     <div v-if="!isLoad" class="col-sm-12 col-md-12 col-lg-4 d-flex shadow rounded mt-2" v-for="item in dataTable">
                         <div class="product d-flex flex-column">
-                            <a href="/product/detail" class="img-prod d-flex justify-content-center">
+                            <a v-bind:href="'/product/detail/'+item.productID" class="img-prod d-flex justify-content-center">
                                 <img class="img-fluid" v-bind:src="item.posterUrl"
                                      alt="Colorlib Template">
                                 <div class="overlay"></div>

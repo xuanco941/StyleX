@@ -1,5 +1,4 @@
 ﻿@{
-    ViewBag.pageName = "Tài khoản";
     Layout = "_Layout";
 
     StyleX.Models.Account user = ViewBag.user as StyleX.Models.Account ?? new StyleX.Models.Account();
@@ -73,10 +72,9 @@
             </div>
         </div>
         <div style="overflow-x: auto" class="shadow rounded">
-            <table class="table table-dark mt-3 table-striped" style="vertical-align: middle">
+            <table class="table table-light mt-3 table-striped" style="vertical-align: middle">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col">#</th>
                         <th scope="col">Mã đơn hàng</th>
                         <th scope="col">Người nhận</th>
                         <th scope="col">Địa chỉ</th>
@@ -97,7 +95,6 @@
                     @foreach (StyleX.Models.Order order in orders)
                     {
                         <tr>
-                            <td>@index</td>
                             <td>@order.OrderID</td>
                             <td>@order.Name</td>
                             <td>@order.Address</td>
@@ -175,9 +172,9 @@
                                 <td>{{item.product.description}}</td>
                                 <td>{{Number(item.amount).toLocaleString('en-US')}}</td>
                                 <td>{{item.size}}</td>
-                                <td>{{Number(item.product.price).toLocaleString('en-US')}}</td>
-                                <td>{{Number(item.product.sale).toLocaleString('en-US')}}%</td>
-                                <td>{{Number((item.product.price*item.amount) - (item.product.price/100*item.product.sale) * item.amount).toLocaleString('en-US')}}</td>
+                                <td>{{Number(item.price).toLocaleString('en-US')}}</td>
+                                <td>{{Number(item.sale).toLocaleString('en-US')}}%</td>
+                                <td>{{Number((item.price*item.amount) - (item.price/100*item.sale) * item.amount).toLocaleString('en-US')}}</td>
                                 <td><button class="btn btn-success">Xem 3D</button></td>
                             </tr>
                         </tbody>

@@ -21,6 +21,8 @@ namespace StyleX.Controllers
         }
         public IActionResult Index()
 		{
+            ViewBag.pageName = "Tài khoản";
+
             try
             {
                 string userEmail = HttpContext.User.FindFirstValue(ClaimTypes.Email);

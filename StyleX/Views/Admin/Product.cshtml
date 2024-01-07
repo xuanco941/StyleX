@@ -1,7 +1,7 @@
 ﻿@{
     Layout = "_LayoutAdmin";
 }
-<div id="appProduct" >
+<div id="appProduct">
     <div class="row">
         <div class="row align-items-end col-9">
             <div class="col-md-3 mb-3">
@@ -55,6 +55,14 @@
                         <a v-bind:href="item.posterUrl" alt="preview" target="_blank">
                             <img v-bind:src="item.posterUrl" style="height: 100px" />
                         </a>
+                        <div class="d-flex justify-content-between my-1 mx-1">
+                            <a class="mx-1 my-1" v-if="item.posterDesignUrl1" v-bind:href="item.posterDesignUrl1" alt="img1" target="_blank">
+                                <img v-bind:src="item.posterDesignUrl1" style="height: 50px" />
+                            </a>
+                            <a class="mx-1 my-1" v-if="item.posterDesignUrl2" v-bind:href="item.posterDesignUrl2" alt="img2" target="_blank">
+                                <img v-bind:src="item.posterDesignUrl2" style="height: 50px" />
+                            </a>
+                        </div>
                     </td>
                     <td>{{item.name}}</td>
                     <td>{{item.description}}</td>
@@ -116,6 +124,8 @@
                                     <select class="form-control" v-model="dataAdd.categoryID">
                                         <option v-for="item in tableCategory" v-bind:value="item.categoryID">{{item.name}}</option>
                                     </select>
+                                    <div class="text-danger" style="font-size: 14px;">{{dataAdd.messageCategory}}</div>
+
                                 </div>
                                 <div class="form-group">
                                     <label>Chọn file mô hình (glb, gltf)</label>
@@ -123,10 +133,20 @@
                                     <div class="text-danger" style="font-size: 14px;">{{dataAdd.messageModel}}</div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Chọn ảnh xem trước</label>
+                                    <label>Chọn ảnh xem trước 1</label>
                                     <input type="file" class="form-control" v-on:change="ChangeImage" id="input-image">
                                     <div class="text-danger" style="font-size: 14px;">{{dataAdd.messageFile}}</div>
                                     <img v-if="dataAdd.image" style="width: 80px;" v-bind:src="dataAdd.image" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Chọn ảnh xem trước 2</label>
+                                    <input type="file" class="form-control" v-on:change="ChangeImage2" id="input-image2">
+                                    <img v-if="dataAdd.image2" style="width: 80px;" v-bind:src="dataAdd.image2" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Chọn ảnh xem trước 3</label>
+                                    <input type="file" class="form-control" v-on:change="ChangeImage3" id="input-image3">
+                                    <img v-if="dataAdd.image3" style="width: 80px;" v-bind:src="dataAdd.image3" />
                                 </div>
                                 <div class="form-group">
                                     <label>Tên sản phẩm</label>
@@ -198,12 +218,23 @@
                                     <select class="form-control" v-model="dataUpdate.categoryID">
                                         <option v-for="item in tableCategory" v-bind:value="item.categoryID">{{item.name}}</option>
                                     </select>
+                                    <div class="text-danger" style="font-size: 14px;">{{dataUpdate.messageCategory}}</div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Chọn ảnh xem trước</label>
+                                    <label>Chọn ảnh xem trước 1</label>
                                     <input type="file" class="form-control" v-on:change="ChangeImageU" id="input-image-u">
                                     <div class="text-danger" style="font-size: 14px;">{{dataUpdate.messageFile}}</div>
                                     <img v-if="dataUpdate.image" style="width: 80px;" v-bind:src="dataUpdate.image" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Chọn ảnh xem trước 2</label>
+                                    <input type="file" class="form-control" v-on:change="ChangeImageU2" id="input-image-u2">
+                                    <img v-if="dataUpdate.image2" style="width: 80px;" v-bind:src="dataUpdate.image2" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Chọn ảnh xem trước 3</label>
+                                    <input type="file" class="form-control" v-on:change="ChangeImageU3" id="input-image-u3">
+                                    <img v-if="dataUpdate.image3" style="width: 80px;" v-bind:src="dataUpdate.image3" />
                                 </div>
                                 <div class="form-group">
                                     <label>Tên sản phẩm</label>
@@ -353,6 +384,11 @@
                     image: "",
                     messageFile: "",
 
+                    file2: "",
+                    image2: "",
+                    file3: "",
+                    image3: "",
+
                     description: "",
 
                     price: "",
@@ -377,6 +413,10 @@
                     file: "",
                     image: "",
                     messageFile: "",
+                    file2: "",
+                    image2: "",
+                    file2: "",
+                    image2: "",
 
                     description: "",
 
@@ -486,6 +526,35 @@
                     }
 
                 },
+                ChangeImage2: function (e) {
+                    var self = this;
+                    var file = e.target.files[0];
+                    if (isFileImage(file)) {
+                        self.dataAdd.image2 = URL.createObjectURL(file);
+                        self.dataAdd.file2 = file;
+                    }
+                    else {
+                        self.dataAdd.image2 = "";
+                        self.dataAdd.file2 = "";
+                        document.getElementById('input-image2').value = "";
+                    }
+
+                },
+                ChangeImage3: function (e) {
+                    var self = this;
+                    var file = e.target.files[0];
+                    if (isFileImage(file)) {
+                        self.dataAdd.image3 = URL.createObjectURL(file);
+                        self.dataAdd.file3 = file;
+                    }
+                    else {
+                        self.dataAdd.image3 = "";
+                        self.dataAdd.file3 = "";
+                        document.getElementById('input-image3').value = "";
+                    }
+
+                },
+
                 ChangeModel: function (e) {
                     var self = this;
                     var file = e.target.files[0];
@@ -589,6 +658,9 @@
                     var formData = new FormData();
                     formData.append('name', self.dataAdd.name);
                     formData.append('file', self.dataAdd.file);
+                    formData.append('img1', self.dataAdd.file2);
+                    formData.append('img2', self.dataAdd.file3);
+
                     formData.append('status', self.dataAdd.status);
                     formData.append('categoryID', self.dataAdd.categoryID);
                     formData.append('fileModel', self.dataAdd.fileModel);
@@ -616,7 +688,13 @@
                                 self.dataAdd.name = "";
                                 self.dataAdd.status = true;
                                 self.dataAdd.file = null;
+                                self.dataAdd.file2 = null;
+                                self.dataAdd.file3 = null;
+
                                 self.dataAdd.image = "";
+                                self.dataAdd.image2 = "";
+                                self.dataAdd.image3 = "";
+
                                 self.dataAdd.fileModel = null;
                                 self.dataAdd.description = "";
                                 self.dataAdd.price = "";
@@ -625,6 +703,9 @@
                                 self.dataAdd.saleEndAt = new Date();
                                 document.getElementById('input-model').value = "";
                                 document.getElementById('input-image').value = "";
+                                document.getElementById('input-image2').value = "";
+                                document.getElementById('input-image3').value = "";
+
                                 document.getElementById('model-add').src = "";
                                 document.getElementById('model-add').style.display = "none";
 
@@ -639,7 +720,7 @@
                         error: function (error) {
                             console.log(error)
                             self.dataAdd.isLoad = false;
-                            ShowAlert(error.responseJSON.message, "danger");
+                            ShowAlert(error.responseJSON.mesage, "danger");
                         }
                     });
 
@@ -675,6 +756,9 @@
                     document.getElementById('model-update').src = product.modelUrl;
                     self.dataUpdate.name = product.name;
                     self.dataUpdate.image = product.posterUrl;
+                    self.dataUpdate.image2 = product.posterDesignUrl1;
+                    self.dataUpdate.image3 = product.posterDesignUrl2;
+
                     self.dataUpdate.description = product.description;
                     self.dataUpdate.price = product.price;
                     self.dataUpdate.sale = product.sale;
@@ -700,6 +784,35 @@
                     }
 
                 },
+                ChangeImageU2: function (e) {
+                    var self = this;
+                    var file = e.target.files[0];
+                    if (isFileImage(file)) {
+                        self.dataUpdate.image2 = URL.createObjectURL(file);
+                        self.dataUpdate.file2 = file;
+                    }
+                    else {
+                        self.dataUpdate.image2 = "";
+                        self.dataUpdate.file2 = "";
+                        document.getElementById('input-image-u2').value = "";
+                    }
+
+                },
+                ChangeImageU3: function (e) {
+                    var self = this;
+                    var file = e.target.files[0];
+                    if (isFileImage(file)) {
+                        self.dataUpdate.image3 = URL.createObjectURL(file);
+                        self.dataUpdate.file3 = file;
+                    }
+                    else {
+                        self.dataUpdate.image3 = "";
+                        self.dataUpdate.file3 = "";
+                        document.getElementById('input-image-u3').value = "";
+                    }
+
+                },
+
                 UpdateProduct: async function () {
                     var self = this;
                     console.log(self.dataAdd);
@@ -733,6 +846,9 @@
                     var formData = new FormData();
                     formData.append('name', self.dataUpdate.name);
                     formData.append('file', self.dataUpdate.file);
+                                        formData.append('img1', self.dataUpdate.file2);
+                    formData.append('img2', self.dataUpdate.file3);
+
                     formData.append('status', self.dataUpdate.status);
                     formData.append('categoryID', self.dataUpdate.categoryID);
                     formData.append('description', self.dataUpdate.description);
@@ -759,12 +875,19 @@
                                 self.dataUpdate.status = true;
                                 self.dataUpdate.file = null;
                                 self.dataUpdate.image = "";
+                                self.dataUpdate.file2 = null;
+                                self.dataUpdate.image2 = "";
+                                self.dataUpdate.file3 = null;
+                                self.dataUpdate.image3 = "";
                                 self.dataUpdate.description = "";
                                 self.dataUpdate.price = "";
                                 self.dataUpdate.sale = "";
                                 self.dataUpdate.productID = "";
                                 self.dataUpdate.saleEndAt = new Date();
                                 document.getElementById('input-image-u').value = "";
+                                                                document.getElementById('input-image-u2').value = "";
+                                document.getElementById('input-image-u3').value = "";
+
 
                                 $('#modalUpdate').modal('hide');
                             }

@@ -147,12 +147,20 @@ namespace StyleX.Controllers
                                 return new OkObjectResult(new { status = -6, message = "Tạo đơn thất bại, số dư sản phẩm trong kho không đủ." });
                             }
 
-                            tongTien += (iCart.Product.Price * item.amount) - (iCart.Product.Price * item.amount * iCart.Product.Sale / 100);
+                            double saleC = 0;
+                            if(iCart.Product.SaleEndAt> DateTime.Now)
+                            {
+                                saleC = iCart.Product.Sale;
+							}
+							tongTien += (iCart.Product.Price * item.amount) - (iCart.Product.Price * item.amount *  saleC/ 100);
 
-                            iCart.Size = item.size;
+
+							iCart.Size = item.size;
                             iCart.Amount = item.amount;
                             iCart.Status = 1;
                             iCart.OrderID = order.OrderID;
+                            iCart.Sale = saleC;
+                            iCart.Price = iCart.Product.Price;
 
                             w.Amount = w.Amount - item.amount;
 
@@ -176,7 +184,7 @@ namespace StyleX.Controllers
                     _dbContext.SaveChanges();
 
                     transaction.Commit();
-                    return new OkObjectResult(new { status = 1, message = "Đặt hàng thành công, mọi chi tiết xin liên hệ số điện thoại cskh." });
+                    return new OkObjectResult(new { status = 1, message = "Đặt hàng thành công!" });
 
                 }
                 catch (Exception e)

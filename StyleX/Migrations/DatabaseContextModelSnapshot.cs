@@ -97,8 +97,14 @@ namespace StyleX.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
                     b.Property<int>("ProductID")
                         .HasColumnType("int");
+
+                    b.Property<double>("Sale")
+                        .HasColumnType("float");
 
                     b.Property<string>("Size")
                         .HasColumnType("nvarchar(max)");
@@ -299,6 +305,14 @@ namespace StyleX.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PosterDesignUrl1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PosterDesignUrl2")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
