@@ -3504,3 +3504,29 @@ textarea.form-control {
 .color-hover-nav:hover {
     color: #137db9 !important;
 }
+
+.container-x {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+
+@media (min-width: 992px) {
+    .container-x {
+        max-width: 960px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container-x {
+        max-width: 1140px;
+    }
+}
+@media (min-width: 1400px) {
+    .container-x {
+        max-width: 1320px;
+    }
+}

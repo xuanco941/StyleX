@@ -36,12 +36,12 @@ namespace StyleX.Controllers
                 }
                 else
                 {
-                    return new OkObjectResult(new { status = -1, message = "Tài khoản của bạn không tồn tại.", number=0 });
+                    return new OkObjectResult(new { status = -1, message = "Tài khoản của bạn không tồn tại.", number = 0 });
                 }
             }
             catch
             {
-                return new OkObjectResult(new { status = -2, message = "Có lỗi xảy ra, vui lòng thử lại sau.",number=0 });
+                return new OkObjectResult(new { status = -2, message = "Có lỗi xảy ra, vui lòng thử lại sau.", number = 0 });
             }
         }
 
@@ -98,7 +98,7 @@ namespace StyleX.Controllers
                         }
                         _dbContext.SaveChanges();
 
-                        return new OkObjectResult(new { status = 1, message = "success", result1, result2, result3, numberSale = count * 10, numberPlayGame=user.NumberPlayGame }); ;
+                        return new OkObjectResult(new { status = 1, message = "success", result1, result2, result3, numberSale = count * 10, numberPlayGame = user.NumberPlayGame }); ;
 
                     }
                     else
@@ -114,6 +114,20 @@ namespace StyleX.Controllers
             catch
             {
                 return new OkObjectResult(new { status = -3, message = "Có lỗi xảy ra, vui lòng thử lại sau." });
+            }
+        }
+        [HttpPost]
+        public IActionResult GetPromotionAccount()
+        {
+            try
+            {
+                string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                List<Promotion> promotion = _dbContext.Promotions.Where(p => p.Status == false && p.ExpiredAt > DateTime.Now && p.AccountID == Convert.ToInt32(id)).ToList();
+                return new OkObjectResult(new { status = 1, message = "success", data = promotion });
+            }
+            catch
+            {
+                return new OkObjectResult(new { status = -2, message = "Có lỗi xảy ra, vui lòng thử lại sau.", number = 0 });
             }
         }
     }

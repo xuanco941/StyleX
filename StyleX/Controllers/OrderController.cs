@@ -38,6 +38,156 @@ namespace StyleX.Controllers
 
             }
         }
+        public IActionResult CreateOrder([FromBody] AddOrderModel model)
+        {
+            using (var transaction = _dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    string accountID = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+                    var account = _dbContext.Accounts.Find(Convert.ToInt32(accountID));
+
+                    if (model == null)
+                    {
+                        transaction.Rollback();
+
+                        return new OkObjectResult(new { status = -2, message = "Vui lòng nhập đẩy đủ các trường thiết yếu." });
+                    }
+
+                    if (account == null)
+                    {
+                        transaction.Rollback();
+
+                        return new OkObjectResult(new { status = -1, message = "Tài khoản không khả dụng." });
+                    }
+
+                    if (string.IsNullOrEmpty(model.name) || string.IsNullOrEmpty(model.address) || string.IsNullOrEmpty(model.phoneNumber))
+
+                    {
+                        transaction.Rollback();
+
+                        return new OkObjectResult(new { status = -2, message = "Vui lòng nhập đẩy đủ các trường thiết yếu." });
+                    }
+                    if (model.itemOrders == null || model.itemOrders.Count < 1)
+                    {
+                        transaction.Rollback();
+                        return new OkObjectResult(new { status = -3, message = "Chưa có sản phẩm." });
+                    }
+                    else
+                    {
+                        int check = model.itemOrders.Where(e => e.amount < 1 || string.IsNullOrEmpty(e.size) == true).Count();
+
+                        if (check > 0)
+                        {
+                            transaction.Rollback();
+                            return new OkObjectResult(new { status = -4, message = "Tạo đơn thất bại, số lượng hoặc kích cỡ không phù hợp." });
+                        }
+                    }
+                    double percentSale = 0;
+                    double tongTien = 0;
+
+                    if (model.promotionID != null && model.promotionID >0 )
+                    {
+                        var promotion = _dbContext.Promotions.Find(model.promotionID);
+                        if (promotion != null && promotion.Status == false && promotion.ExpiredAt > DateTime.Now)
+                        {
+                            percentSale = promotion.Number;
+                        }
+                        else
+                        {
+                            transaction.Rollback();
+                            return new OkObjectResult(new { status = -8, message = "Phiếu giảm giá không khả dụng." });
+                        }
+                    }
+
+                    var order = new Order()
+                    {
+                        Status = 0,
+                        AccountID = account.AccountID,
+                        Address = model.address,
+                        PhoneNumber = model.phoneNumber,
+                        Name = model.name,
+                        TransportFee = Common.TransportFee,
+                        CreateAt = DateTime.Now,
+                        UpdateAt = DateTime.Now,
+                        Message = model.message ?? "",
+                        PercentSale = percentSale,
+                        BasePrice = tongTien,
+                        NetPrice = tongTien - (tongTien * percentSale / 100) - Common.TransportFee
+                    };
+                    _dbContext.Orders.Add(order);
+                    _dbContext.SaveChanges();
+
+
+
+                    if (model.promotionID.HasValue)
+                    {
+                        var promotion = _dbContext.Promotions.Find(model.promotionID);
+                        if (promotion != null)
+                        {
+                            promotion.OrderID = order.OrderID;
+                            promotion.Status = true; // đánh dấu promotion đã được dùng
+                        }
+
+                    }
+
+
+                    foreach (var item in model.itemOrders)
+                    {
+                        var iCart = _dbContext.CartItems.Include(e => e.Product).FirstOrDefault(e => e.CartItemID == item.cartItemID);
+                        var w = _dbContext.Warehouses.Find(item.warehouseID);
+
+                        if (iCart != null && w != null)
+                        {
+
+                            if (w.Amount < item.amount)
+                            {
+                                transaction.Rollback();
+                                return new OkObjectResult(new { status = -6, message = "Tạo đơn thất bại, số dư sản phẩm trong kho không đủ." });
+                            }
+
+                            tongTien += (iCart.Product.Price * item.amount) - (iCart.Product.Price * item.amount * iCart.Product.Sale / 100);
+
+                            iCart.Size = item.size;
+                            iCart.Amount = item.amount;
+                            iCart.Status = 1;
+                            iCart.OrderID = order.OrderID;
+
+                            w.Amount = w.Amount - item.amount;
+
+                        }
+                        else
+                        {
+                            transaction.Rollback();
+                            return new OkObjectResult(new { status = -6, message = "Tạo đơn thất bại." });
+
+                        }
+                    }
+
+                    order.BasePrice = tongTien;
+                    order.NetPrice = tongTien - (tongTien * percentSale / 100) - Common.TransportFee;
+
+
+
+
+
+
+                    _dbContext.SaveChanges();
+
+                    transaction.Commit();
+                    return new OkObjectResult(new { status = 1, message = "Đặt hàng thành công, mọi chi tiết xin liên hệ số điện thoại cskh." });
+
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    return new BadRequestObjectResult(new { status = -99, message = e.Message });
+                }
+
+            }
+
+
+        }
     }
 }
