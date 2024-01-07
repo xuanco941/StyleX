@@ -349,12 +349,12 @@
                                 self.promotionID = 0;
                                 self.GetPromotionAccount();
 
-
                                 ShowAlert(res.message, "success");
                             }
                             else {
                                 ShowAlert(res.message, "danger");
                             }
+                            appCheckLogin.CheckLogin();
 
                         },
                         error: function (error) {

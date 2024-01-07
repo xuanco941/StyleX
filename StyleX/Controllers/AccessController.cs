@@ -157,7 +157,8 @@ namespace StyleX.Controllers
                     {
                         return new OkObjectResult(new { status = -1, message = "", data = 0 });
                     }
-                    var countCart = _dbContext.CartItems.Where(e => e.AccountID == Convert.ToInt32(accountID)).Count();
+                    //đếm số item trong cart
+                    var countCart = _dbContext.CartItems.Where(e => e.AccountID == Convert.ToInt32(accountID) && e.Status==0).Count();
                     return new OkObjectResult(new { status = 1, message = "success", data = countCart });
                 }
                 else

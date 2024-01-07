@@ -140,11 +140,15 @@ namespace StyleX.Controllers
 
                         if (iCart != null && w != null)
                         {
-
+                            if (iCart.Product.Status == false)
+                            {
+                                transaction.Rollback();
+                                return new OkObjectResult(new { status = -6, message = $"Tạo đơn thất bại, {iCart.Product.Name} đang ngừng bán." });
+                            }
                             if (w.Amount < item.amount)
                             {
                                 transaction.Rollback();
-                                return new OkObjectResult(new { status = -6, message = "Tạo đơn thất bại, số dư sản phẩm trong kho không đủ." });
+                                return new OkObjectResult(new { status = -7, message = $"Tạo đơn thất bại, số dư sản phẩm {iCart.Product.Name} trong kho không đủ, tối đa {w.Amount}" });
                             }
 
                             double saleC = 0;

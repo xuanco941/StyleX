@@ -28,9 +28,9 @@
                         <span class="mr-2 price-dc">{{Number(saleProducts.price).toLocaleString("en-US")}}&#8363;</span><span class="price-sale">{{Number(saleProducts.price - (saleProducts.price*saleProducts.sale/100)).toLocaleString("en-US")}}&#8363;</span>
                     </p>
                     <ul class="thumb-deal d-flex mt-4">
-                        <li class="img" v-bind:style="{ 'background-image': 'url(' + saleProducts.posterUrl + ')' }"></li>
-                        <li class="img" v-bind:style="{ 'background-image': 'url(' + saleProducts.posterUrl + ')' }"></li>
-                        <li class="img" v-bind:style="{ 'background-image': 'url(' + saleProducts.posterUrl + ')' }"></li>
+                        <li v-if="saleProducts.posterUrl" class="img" v-bind:style="{ 'background-image': 'url(' + saleProducts.posterUrl + ')' }"></li>
+                        <li v-if="saleProducts.posterDesignUrl1" class="img" v-bind:style="{ 'background-image': 'url(' + saleProducts.posterDesignUrl1 + ')' }"></li>
+                        <li v-if="saleProducts.posterDesignUrl2" class="img" v-bind:style="{ 'background-image': 'url(' + saleProducts.posterDesignUrl2 + ')' }"></li>
                     </ul>
                 </div>
             </div>

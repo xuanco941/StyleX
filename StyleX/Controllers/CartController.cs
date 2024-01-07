@@ -22,16 +22,16 @@ namespace StyleX.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult AddToCart([FromBody] IDModel model)
+        public IActionResult AddToCart([FromBody] AddToCartModel model)
         {
             try
             {
                 string accountID = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                var product = _dbContext.Products.Find(model.ID);
+                var product = _dbContext.Products.Find(model.productID);
                 if(string.IsNullOrEmpty(accountID) || product == null)
                 {
-                    return new OkObjectResult(new { status = -1, message = "Không khả dụng." });
+                    return new OkObjectResult(new { status = -1, message = "Sản phẩm không khả dụng." });
                 }
 
                 //int checkCart = _dbContext.CartItems.Where(e => e.ProductID == model.ID && e.AccountID == Convert.ToInt32(accountID)).Count();
@@ -40,12 +40,21 @@ namespace StyleX.Controllers
                 //    return new OkObjectResult(new { status = 2, message = "Sản phẩm đã có trong giỏ hàng." });
                 //}
 
+                if (string.IsNullOrEmpty(model.size))
+                {
+                    model.size = "";
+                }
+                if(model.amount.HasValue == false || model.amount < 1)
+                {
+                    model.amount = 1;
+                }
+
                 _dbContext.CartItems.Add(new CartItem()
                 {
-                   ProductID = model.ID,
+                   ProductID = model.productID,
                    AccountID = Convert.ToInt32(accountID),
-                   Amount = 1,
-                   Size = "",
+                   Amount = (int)model.amount,
+                   Size = model.size,
                    PosterUrl= product.PosterUrl,
                    Price = product.Price,
                    Sale = product.Sale,

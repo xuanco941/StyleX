@@ -208,16 +208,7 @@
     </script>
 
     <script>
-        var navLinks = Array.from(document.querySelector('#nav-layout-link').children);
-        navLinks.forEach(e => {
-            if ("@Html.Raw(ViewBag.pageName)" == e.children[0].textContent) {
-                e.classList.add('active');
-            }
-            else {
-                e.classList.remove('active');
-            }
 
-        })
 
 
 
@@ -233,6 +224,18 @@
                 });
 
             });
+
+
+            var navLinks = Array.from(document.querySelector('#nav-layout-link').children);
+            navLinks.forEach(e => {
+                if ('@Html.Raw(ViewBag.pageName)' == e.children[0].textContent) {
+                    e.classList.add('active');
+                }
+                else {
+                    e.classList.remove('active');
+                }
+
+            })
         });
 
 
@@ -242,13 +245,17 @@
     <script>
 
         //add product to cart
-        async function AddToCart(productID) {
+        async function AddToCart(productID, amount, size) {
+            if (!amount) amount = 1;
+            if (!size) size = "";
             $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
                 url: "/Cart/AddToCart",
                 data: JSON.stringify({
-                    ID: productID
+                    productID: productID,
+                    amount: amount,
+                    size: size
                 }),
                 success: function (res) {
                     if (res.status == 1) {

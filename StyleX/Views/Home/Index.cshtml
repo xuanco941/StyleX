@@ -23,7 +23,9 @@
                                 <h2 class="mb-4 mt-3" style="font-weight: 700">{{item.name}}</h2>
                                 <p class="mb-4">{{item.description}}</p>
 
-                                <a href="/design" class="btn-custom pt-2 btn" style="border-radius: 5px;">Thiết Kế Mẫu Này <i style="margin-left: 6px;" class="fa-solid fa-wand-magic-sparkles fa-beat"></i></a>
+                                <a href="/design" class="btn-custom pt-2 btn d-block" style="border-radius: 5px;max-width: 230px">Thiết Kế Mẫu Này <i style="margin-left: 6px;" class="fa-solid fa-wand-magic-sparkles fa-beat"></i></a>
+                                <a v-bind:href="'/product/detail/'+item.productID" class="btn-custom pt-2 btn d-block mt-2" style="border-radius: 5px; max-width: 230px;background-color:#28a745;">Xem chi tiết </a>
+
                             </div>
                         </div>
                         <model-viewer class="col-6 col-md-6 h-100" alt=""

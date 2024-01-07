@@ -23,10 +23,14 @@ namespace StyleX.Controllers
             ViewBag.pageName = "Sản phẩm";
 
             Product? product = _dbContext.Products.Find(productID);
-            ViewBag.product = product;
+			List<Warehouse>? warehouses = _dbContext.Warehouses.Where(e => e.ProductID == productID).ToList();
+
+			ViewBag.product = product;
+			ViewBag.warehouses = warehouses;
 
 
-            return View();
+
+			return View();
         }
         public IActionResult GetProducts([FromBody] IDModel model)
         {
@@ -50,7 +54,9 @@ namespace StyleX.Controllers
                                  Warehouse = w,
                                  CategoryID = c.CategoryID,
                                  CategoryName = c.Name,
-                                 p.ModelUrl
+                                 p.ModelUrl,
+                                 p.PosterDesignUrl1,
+                                 p.PosterDesignUrl2
 
                              };
 
@@ -69,7 +75,10 @@ namespace StyleX.Controllers
                                  Warehouses = g.Select(x => x.Warehouse).ToList(),
                                  CategoryID = g.First().CategoryID,
                                  CategoryName = g.First().CategoryName,
-                                 ModelUrl = g.First().ModelUrl
+                                 ModelUrl = g.First().ModelUrl,
+                                 PosterDesignUrl1 = g.First().PosterDesignUrl1,
+                                 PosterDesignUrl2 = g.First().PosterDesignUrl2,
+
 
                              };
                 return new OkObjectResult(new { status = 1, message = "success", data = query2.ToList() });
