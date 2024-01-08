@@ -69,13 +69,44 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="sidebar-box-2">
+                        <h2 class="heading">Tìm kiếm</h2>
+                        <div class="colorlib-form-2">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Tên sản phẩm:</label>
+                                        <div class="form-field">
+                                            <input v-model="nameProduct" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Giảm giá:</label>
+                                        <div class="form-field">
+                                            <select class="form-control" v-model="sale">
+                                                <option value="0">Tất cả</option>
+                                                <option value="1">Có</option>
+                                                <option value="2">Không</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <button class="btn btn-success" v-on:click="SearchProduct()">Tìm kiếm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="col-md-8 col-lg-10">
                 <div class="row">
-                    <div v-if="isLoad" style="height: 300px;" class="d-flex justify-content-center">
-                        <i class="fa-solid fa-spinner fa-spin-pulse" style="font-size: 50px;"></i>
+                    <div v-if="isLoad" class="col-12 d-flex justify-content-center">
+                        <i class="fa-solid fa-spinner fa-spin-pulse" style="font-size: 50px; width:50px; height:50px"></i>
                     </div>
                     <div v-if="!isLoad" class="col-sm-12 col-md-12 col-lg-4 d-flex shadow rounded mt-2" v-for="item in dataTable">
                         <div class="product d-flex flex-column">
@@ -92,7 +123,7 @@
                                 </div>
                                 <h3><a href="#">{{item.name}}</a></h3>
                                 <div class="pricing">
-                                    <p class="price"><span>{{Number(item.price).toLocaleString("en-US")}}&#8363;</span></p>
+                                    <p class="price"><span>{{Number(item.price).toLocaleString("en-US")}}&#8363;</span> <span style="font-size:14px;" class="text-danger" v-if="item.sale>0 && new Date(item.saleEndAt) > new Date()">(-{{item.sale}}%)</span></p>
                                 </div>
                                 <button style="width:110px" class="btn btn-info mx-1 my-1">Xem chi tiết</button>
                                 <p class="bottom-area d-flex px-3">
@@ -131,7 +162,10 @@
                 resData: [],
                 dataTable: [],
                 totalPages: 1,
-                pageSize: 9
+                pageSize: 9,
+                nameProduct: "",
+                sale: 0,
+                categoryID: 0
 
 
 
@@ -178,13 +212,11 @@
                             e.style.color = "#000000";
                         }
                     });
-                    await this.SearchProduct(categoryID);
+                    this.categoryID = categoryID;
+                    await this.SearchProduct();
 
                 },
-                SearchProduct: async function (categoryID) {
-                    if (!categoryID) {
-                        categoryID = 0;
-                    }
+                SearchProduct: async function () {
                     var self = this;
                     self.isLoad = true;
                     self.dataTable = [];
@@ -194,7 +226,9 @@
                         contentType: "application/json; charset=utf-8",
                         url: "product/GetProducts",
                         data: JSON.stringify({
-                            ID: categoryID
+                            categoryID: self.categoryID,
+                            nameProduct: self.nameProduct,
+                            sale: self.sale
                         }),
                         success: function (res) {
                             self.isLoad = false;

@@ -851,14 +851,18 @@ namespace StyleX.Controllers
 				if (md.img1 != null && md.img1.Length > 0)
 				{
 
-					// Xóa file cũ
-					var oldFilePath1 = Path.Combine(_environment.WebRootPath, mat.PosterDesignUrl1.TrimStart('/'));
+                    // Xóa file cũ
+                    if (string.IsNullOrEmpty(mat.PosterDesignUrl1) == false)
+                    {
+                        var oldFilePath1 = Path.Combine(_environment.WebRootPath, mat.PosterDesignUrl1.TrimStart('/'));
 
-					if (System.IO.File.Exists(oldFilePath1))
-					{
-						System.IO.File.Delete(oldFilePath1);
+                        if (System.IO.File.Exists(oldFilePath1))
+                        {
+                            System.IO.File.Delete(oldFilePath1);
 
-					}
+                        }
+                    }
+
 					string fileName = "img1" + Path.GetExtension(md.img1.FileName);
 					var filePath = Path.Combine(_environment.WebRootPath, Common.FolderProducts, folderName, fileName);
 
@@ -872,13 +876,17 @@ namespace StyleX.Controllers
 				{
 
 					// Xóa file cũ
-					var oldFilePath1 = Path.Combine(_environment.WebRootPath, mat.PosterDesignUrl2.TrimStart('/'));
+                    if(string.IsNullOrEmpty(mat.PosterDesignUrl2) == false)
+                    {
+                        var oldFilePath1 = Path.Combine(_environment.WebRootPath, mat.PosterDesignUrl2.TrimStart('/'));
 
-					if (System.IO.File.Exists(oldFilePath1))
-					{
-						System.IO.File.Delete(oldFilePath1);
+                        if (System.IO.File.Exists(oldFilePath1))
+                        {
+                            System.IO.File.Delete(oldFilePath1);
 
-					}
+                        }
+                    }
+
 					string fileName = "img2" + Path.GetExtension(md.img2.FileName);
 					var filePath = Path.Combine(_environment.WebRootPath, Common.FolderProducts, folderName, fileName);
 

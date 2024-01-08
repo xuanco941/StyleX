@@ -7,6 +7,13 @@ namespace StyleX.DTOs
         public int categoryID { get; set; } = 0;
         public int status { get; set; } = 0;
     }
+    public class SearchProductModel2
+    {
+        public int categoryID { get; set; } = 0;
+        public int sale { get; set; } = 0;
+        public string nameProduct { get; set; } = string.Empty;
+
+    }
     public class ProductSettingsWithMaterial
     {
         public int ProductSettingID { get; set; }

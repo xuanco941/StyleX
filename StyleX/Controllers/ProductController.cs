@@ -23,16 +23,16 @@ namespace StyleX.Controllers
             ViewBag.pageName = "Sản phẩm";
 
             Product? product = _dbContext.Products.Find(productID);
-			List<Warehouse>? warehouses = _dbContext.Warehouses.Where(e => e.ProductID == productID).ToList();
+            List<Warehouse>? warehouses = _dbContext.Warehouses.Where(e => e.ProductID == productID).ToList();
 
-			ViewBag.product = product;
-			ViewBag.warehouses = warehouses;
+            ViewBag.product = product;
+            ViewBag.warehouses = warehouses;
 
 
 
-			return View();
+            return View();
         }
-        public IActionResult GetProducts([FromBody] IDModel model)
+        public IActionResult GetProducts([FromBody] SearchProductModel2 model)
         {
             try
             {
@@ -40,7 +40,9 @@ namespace StyleX.Controllers
                              join c in _dbContext.Categories on p.CategoryID equals c.CategoryID
                              join wh in _dbContext.Warehouses on p.ProductID equals wh.ProductID into leftJoinTableW
                              from w in leftJoinTableW.DefaultIfEmpty()
-                             where (model.ID == 0 || c.CategoryID == model.ID) && p.Status == true
+                             where (model.categoryID == 0 || c.CategoryID == model.categoryID) && p.Status == true
+                             && ((model.sale == 0) || (model.sale == 1 && p.Sale > 0 && p.SaleEndAt > DateTime.Now) || (model.sale == 2 && (p.Sale == 0 || p.SaleEndAt <= DateTime.Now)))
+                             && (string.IsNullOrEmpty(model.nameProduct) || p.Name.Contains(model.nameProduct))
                              select new
                              {
                                  p.ProductID,
