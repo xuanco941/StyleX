@@ -1,0 +1,209 @@
+
+Coin.png
+size: 4096,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Chimdien_Image/coin/tienxu_bay_01
+  rotate: false
+  xy: 2, 1280
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_02
+  rotate: false
+  xy: 2, 854
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_03
+  rotate: false
+  xy: 503, 1280
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_04
+  rotate: false
+  xy: 2, 428
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_05
+  rotate: false
+  xy: 503, 854
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_06
+  rotate: false
+  xy: 1004, 1280
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_07
+  rotate: false
+  xy: 2, 2
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_08
+  rotate: false
+  xy: 503, 428
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_09
+  rotate: false
+  xy: 1004, 854
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_10
+  rotate: false
+  xy: 1505, 1280
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_11
+  rotate: false
+  xy: 503, 2
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_12
+  rotate: false
+  xy: 1004, 428
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_13
+  rotate: false
+  xy: 1505, 854
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_14
+  rotate: false
+  xy: 2006, 1280
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_15
+  rotate: false
+  xy: 1004, 2
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_16
+  rotate: false
+  xy: 1505, 428
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_17
+  rotate: false
+  xy: 2006, 854
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_18
+  rotate: false
+  xy: 2507, 1280
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_19
+  rotate: false
+  xy: 1505, 2
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_20
+  rotate: false
+  xy: 2006, 428
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_21
+  rotate: false
+  xy: 2507, 854
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_22
+  rotate: false
+  xy: 3008, 1280
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_23
+  rotate: false
+  xy: 2006, 2
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_24
+  rotate: false
+  xy: 2507, 428
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_25
+  rotate: false
+  xy: 3008, 854
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_26
+  rotate: false
+  xy: 3509, 1280
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_27
+  rotate: false
+  xy: 2507, 2
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_28
+  rotate: false
+  xy: 3008, 428
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1
+Chimdien_Image/coin/tienxu_bay_29
+  rotate: false
+  xy: 3509, 854
+  size: 499, 424
+  orig: 499, 424
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,118 @@
+{
+"skeleton": { "hash": "EmbVyod+8Jq005cZJKb2qksbVLA", "spine": "3.3.07", "width": 1197.6, "height": 1017.6, "images": "" },
+"bones": [
+	{ "name": "root", "x": 206.92, "scaleX": 2, "scaleY": 2 },
+	{ "name": "bone", "parent": "root", "length": 161.04, "rotation": 0.32, "x": -6.25, "y": 1.08, "scaleX": 1.2, "scaleY": 1.2 }
+],
+"slots": [
+	{ "name": "Chimdien_Image/coin/tienxu_bay_01", "bone": "bone", "attachment": "Chimdien_Image/coin/tienxu_bay_01" }
+],
+"skins": {
+	"default": {
+		"Chimdien_Image/coin/tienxu_bay_01": {
+			"Chimdien_Image/coin/tienxu_bay_01": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_02": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_03": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_04": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_05": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_06": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_07": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_08": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_09": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_10": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_11": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_12": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_13": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_14": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_15": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_16": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_17": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_18": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_19": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_20": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_21": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_22": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_23": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_24": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_25": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_26": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_27": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_28": { "rotation": -0.32, "width": 499, "height": 424 },
+			"Chimdien_Image/coin/tienxu_bay_29": { "rotation": -0.32, "width": 499, "height": 424 }
+		}
+	}
+},
+"animations": {
+	"animation": {
+		"slots": {
+			"Chimdien_Image/coin/tienxu_bay_01": {
+				"attachment": [
+					{ "time": 0.1333, "name": "Chimdien_Image/coin/tienxu_bay_02" },
+					{ "time": 0.1666, "name": "Chimdien_Image/coin/tienxu_bay_03" },
+					{ "time": 0.2, "name": "Chimdien_Image/coin/tienxu_bay_04" },
+					{ "time": 0.2333, "name": "Chimdien_Image/coin/tienxu_bay_05" },
+					{ "time": 0.2666, "name": "Chimdien_Image/coin/tienxu_bay_06" },
+					{ "time": 0.3, "name": "Chimdien_Image/coin/tienxu_bay_07" },
+					{ "time": 0.3333, "name": "Chimdien_Image/coin/tienxu_bay_08" },
+					{ "time": 0.3666, "name": "Chimdien_Image/coin/tienxu_bay_09" },
+					{ "time": 0.4, "name": "Chimdien_Image/coin/tienxu_bay_10" },
+					{ "time": 0.4333, "name": "Chimdien_Image/coin/tienxu_bay_11" },
+					{ "time": 0.4666, "name": "Chimdien_Image/coin/tienxu_bay_12" },
+					{ "time": 0.5, "name": "Chimdien_Image/coin/tienxu_bay_13" },
+					{ "time": 0.5333, "name": "Chimdien_Image/coin/tienxu_bay_14" },
+					{ "time": 0.5666, "name": "Chimdien_Image/coin/tienxu_bay_15" },
+					{ "time": 0.6, "name": "Chimdien_Image/coin/tienxu_bay_16" },
+					{ "time": 0.6333, "name": "Chimdien_Image/coin/tienxu_bay_17" },
+					{ "time": 0.6666, "name": "Chimdien_Image/coin/tienxu_bay_18" },
+					{ "time": 0.7, "name": "Chimdien_Image/coin/tienxu_bay_19" },
+					{ "time": 0.7333, "name": "Chimdien_Image/coin/tienxu_bay_20" },
+					{ "time": 0.7666, "name": "Chimdien_Image/coin/tienxu_bay_21" },
+					{ "time": 0.8, "name": "Chimdien_Image/coin/tienxu_bay_22" },
+					{ "time": 0.8333, "name": "Chimdien_Image/coin/tienxu_bay_23" },
+					{ "time": 0.8666, "name": "Chimdien_Image/coin/tienxu_bay_24" },
+					{ "time": 0.9, "name": "Chimdien_Image/coin/tienxu_bay_25" },
+					{ "time": 0.9333, "name": "Chimdien_Image/coin/tienxu_bay_26" },
+					{ "time": 0.9666, "name": "Chimdien_Image/coin/tienxu_bay_27" },
+					{ "time": 1, "name": "Chimdien_Image/coin/tienxu_bay_28" },
+					{ "time": 1.0333, "name": "Chimdien_Image/coin/tienxu_bay_29" }
+				]
+			}
+		},
+		"bones": {
+			"root": {
+				"rotate": [
+					{ "time": 0, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				],
+				"scale": [
+					{ "time": 0, "x": 1, "y": 1 }
+				],
+				"shear": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			},
+			"bone": {
+				"rotate": [
+					{ "time": 0, "angle": 0, "curve": "stepped" },
+					{ "time": 0.1, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
+					{ "time": 0.1, "x": 0, "y": 0 }
+				],
+				"scale": [
+					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
+					{ "time": 0.0666, "x": 0, "y": 0 },
+					{ "time": 0.1, "x": 1, "y": 1 }
+				],
+				"shear": [
+					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
+					{ "time": 0.1, "x": 0, "y": 0 }
+				]
+			}
+		}
+	}
+}
+}
