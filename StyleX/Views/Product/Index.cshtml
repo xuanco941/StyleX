@@ -125,9 +125,9 @@
                                 <div class="pricing">
                                     <p class="price"><span>{{Number(item.price).toLocaleString("en-US")}}&#8363;</span> <span style="font-size:14px;" class="text-danger" v-if="item.sale>0 && new Date(item.saleEndAt) > new Date()">(-{{item.sale}}%)</span></p>
                                 </div>
-                                <button style="width:110px" class="btn btn-info mx-1 my-1">Xem chi tiết</button>
+                                <a v-bind:href="'/product/detail/'+item.productID" style="width:110px" class="btn btn-info mx-1 my-1">Xem chi tiết</a>
                                 <p class="bottom-area d-flex px-3">
-                                    <a href="/design" class="buy-now text-center py-2">
+                                    <a href="javascript:;" class="buy-now text-center py-2" v-bind:onClick="'DesignNow('+item.productID+')'">
                                         <span>
                                             Thiết kế  <i class="ion-ios-cart ml-1"></i>
                                         </span>
