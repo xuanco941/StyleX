@@ -55,7 +55,7 @@
 
                                 <td class="total">{{Number(item.product.price * item.amount - (item.product.price * item.amount * item.product.sale / 100)).toLocaleString("en-US")}}&#8363;</td>
                                 <td>
-                                    <a href="#" class="mx-2 my-2"><i style="font-size: 27px;" class="fa-solid fa-wand-magic-sparkles"></i></a>
+                                    <a v-bind:href="'/design?id='+item.cartItemID" target="_blank" class="mx-2 my-2"><i style="font-size: 27px;" class="fa-solid fa-wand-magic-sparkles"></i></a>
                                     <a data-toggle="modal" data-target="#modalDelete" v-on:click="PopupDeleteProduct(item.cartItemID)" href="javascript:" class="mx-2 my-2"><i class="fa-solid fa-trash" style="color: #d71818; font-size: 27px;"></i></a>
                                 </td>
 
@@ -68,7 +68,7 @@
         </div>
         <div class="row justify-content-end align-items-stretch">
             <div class="col col-xl-7 col-lg-6 col-md-6 mt-5 cart-wrap ftco-animate h-100">
-                <div class="cart-total mb-3">
+                <div class="cart-total mb-0 h-100">
                     <h3>Thông tin đặt hàng</h3>
                     <p class="d-flex align-items-center">
                         <span>Tên người nhận</span>
@@ -91,7 +91,7 @@
             </div>
 
             <div class="col col-xl-5 col-lg-6 col-md-6 mt-5 cart-wrap ftco-animate">
-                <div class="cart-total mb-3">
+                <div class="cart-total h-100">
                     <h3>Thông tin thanh toán</h3>
                     <p class="d-flex">
                         <span>Tổng tiền</span>

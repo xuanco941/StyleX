@@ -121,7 +121,7 @@
                                         <span>{{item.categoryName}}</span>
                                     </div>
                                 </div>
-                                <h3><a href="#">{{item.name}}</a></h3>
+                                <h3><a v-bind:href="'/product/detail/'+item.productID">{{item.name}}</a></h3>
                                 <div class="pricing">
                                     <p class="price"><span>{{Number(item.price).toLocaleString("en-US")}}&#8363;</span> <span style="font-size:14px;" class="text-danger" v-if="item.sale>0 && new Date(item.saleEndAt) > new Date()">(-{{item.sale}}%)</span></p>
                                 </div>

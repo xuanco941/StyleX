@@ -287,7 +287,9 @@
                 }),
                 success: function (res) {
                     if (res.status == 1) {
-                        window.location.href = window.location.origin + "/design?id="+res.data;
+                        appCheckLogin.CheckLogin();
+                        var newTab = window.open(window.location.origin + "/design?id=" + res.data, '_blank');
+                        newTab.focus();
                     }
                     else {
                         ShowAlert(res.message, "danger");

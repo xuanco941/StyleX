@@ -9,7 +9,7 @@
 
 
 <section class="ftco-section" style="background-image: url('/images/bg.jpg'); background-size:cover" id="appAccount">
-    <div class="container mt-5 mb-5">
+    <div class="container-x mt-5 mb-5">
         <div class="row no-gutters shadow rounded">
             <div class="col-md-5 col-lg-5"><img class="h-100 w-100" src="/images/avatar/@Html.Raw(user.Avatar)"></div>
             <div class="col-md-7 col-lg-7">
@@ -175,7 +175,7 @@
                                 <td>{{Number(item.price).toLocaleString('en-US')}}</td>
                                 <td>{{Number(item.sale).toLocaleString('en-US')}}%</td>
                                 <td>{{Number((item.price*item.amount) - (item.price/100*item.sale) * item.amount).toLocaleString('en-US')}}</td>
-                                <td><button class="btn btn-success">Xem 3D</button></td>
+                                <td><a class="btn btn-success" v-bind:href="'/design?id='+item.cartItemID" target="_blank" >Xem 3D</a></td>
                             </tr>
                         </tbody>
                     </table>
