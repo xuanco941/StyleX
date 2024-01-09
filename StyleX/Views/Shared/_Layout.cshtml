@@ -259,11 +259,35 @@
                 }),
                 success: function (res) {
                     if (res.status == 1) {
-                        appCheckLogin.CheckLogin();
                         ShowAlert(res.message, "success");
+                        appCheckLogin.CheckLogin();
                     }
                     else if (res.status == 2) {
                         ShowAlert(res.message, "info");
+                    }
+                    else {
+                        ShowAlert(res.message, "danger");
+                    }
+                },
+                error: function (error) {
+                    ShowAlert(error.responseJSON.message, "danger");
+                }
+            });
+
+        };
+        async function DesignNow(productID) {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "/Cart/AddToCart",
+                data: JSON.stringify({
+                    productID: productID,
+                    amount: 1,
+                    size: ""
+                }),
+                success: function (res) {
+                    if (res.status == 1) {
+                        window.location.href = window.location.origin + "/design?id="+res.data;
                     }
                     else {
                         ShowAlert(res.message, "danger");

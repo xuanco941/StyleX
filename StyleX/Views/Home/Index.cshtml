@@ -23,7 +23,7 @@
                                 <h2 class="mb-4 mt-3" style="font-weight: 700">{{item.name}}</h2>
                                 <p class="mb-4">{{item.description}}</p>
 
-                                <a href="/design" class="btn-custom pt-2 btn d-block" style="border-radius: 5px;max-width: 230px">Thiết Kế Mẫu Này <i style="margin-left: 6px;" class="fa-solid fa-wand-magic-sparkles fa-beat"></i></a>
+                                <a href="javascript:;" v-bind:onClick="'DesignNow('+item.productID+')'" class="btn-custom pt-2 btn d-block" style="border-radius: 5px;max-width: 230px">Thiết Kế Mẫu Này <i style="margin-left: 6px;" class="fa-solid fa-wand-magic-sparkles fa-beat"></i></a>
                                 <a v-bind:href="'/product/detail/'+item.productID" class="btn-custom pt-2 btn d-block mt-2" style="border-radius: 5px; max-width: 230px;background-color:#28a745;">Xem chi tiết </a>
 
                             </div>
@@ -65,13 +65,15 @@
                             <div class="time pl-4" id="seconds"></div>
                         </div>
                         <div class="text-deal">
-                            <h2><a href="/product">{{saleProducts.name}}</a></h2>
+                            <h2><a style="font-weight: 700; font-family:'Open Sans', Arial, sans-serif;" href="/product">{{saleProducts.name}}</a></h2>
                             <p class="price">
                                 <span class="mr-2 price-dc">{{Number(saleProducts.price).toLocaleString("en-US")}}&#8363;</span><span class="price-sale">{{Number(saleProducts.price - (saleProducts.price*saleProducts.sale/100)).toLocaleString("en-US")}}&#8363;</span>
                             </p>
                         </div>
                         <div class="text">
-                            <a href="/design" class="btn-custom pt-2 btn" style="border-radius: 5px;">Thiết Kế Mẫu Này <i style="margin-left: 6px;" class="fa-solid fa-wand-magic-sparkles fa-beat"></i></a>
+                            <a href="javascript:;" v-bind:onClick="'DesignNow('+saleProducts.productID+')'" class="btn-custom pt-2 btn" style="border-radius: 5px;">Thiết Kế Mẫu Này <i style="margin-left: 6px;" class="fa-solid fa-wand-magic-sparkles fa-beat"></i></a>
+                            <a v-bind:href="'/product/detail/'+saleProducts.productID" class="btn-custom pt-2 btn" style="border-radius: 5px;background-color:#28a745;">Xem chi tiết</a>
+
                         </div>
                     </div>
                 </div>
@@ -201,7 +203,7 @@
             <div class="row justify-content-center">
                 <div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex" v-for="item in highlightProducts">
                     <div class="product d-flex flex-column">
-                        <a href="/product" class="img-prod d-flex justify-content-center">
+                        <a v-bind:href="'/product/detail/'+item.productID" class="img-prod d-flex justify-content-center">
                             <img class="img-fluid" v-bind:src="item.posterUrl"
                                  alt="Colorlib Template">
                             <div class="overlay"></div>
@@ -212,12 +214,12 @@
                                     <span>{{item.category.name}}</span>
                                 </div>
                             </div>
-                            <h3><a href="/product">{{item.name}}</a></h3>
+                            <h3><a v-bind:href="'/product/detail/'+item.productID">{{item.name}}</a></h3>
                             <div class="pricing">
                                 <p class="price"><span>{{Number(item.price).toLocaleString("en-US")}}&#8363;</span></p>
                             </div>
                             <div class="bottom-area d-flex px-2">
-                                <a href="/design" class="add-to-cart text-center py-2 mr-1" style="height: fit-content;font-size:11px;">
+                                <a href="javascript:;" v-bind:onClick="'DesignNow('+item.productID+')'" class="add-to-cart text-center py-2 mr-1" style="height: fit-content;font-size:11px;">
                                     <span>
                                         Thiết kế <i class="fa-solid fa-wand-magic-sparkles"></i>
                                     </span>

@@ -1,13 +1,22 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using StyleX.Models;
 
 namespace StyleX.Controllers
 {
     public class DesignController : Controller
 	{
-		public IActionResult Index()
+        private readonly DatabaseContext _dbContext;
+        public DesignController(DatabaseContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+        public IActionResult Index(int? id)
 		{
-			return View();
+            if (id.HasValue == true)
+            {
+            }
+            return View();
 		}
 
     }

@@ -49,20 +49,22 @@ namespace StyleX.Controllers
                     model.amount = 1;
                 }
 
-                _dbContext.CartItems.Add(new CartItem()
+                var c = new CartItem()
                 {
-                   ProductID = model.productID,
-                   AccountID = Convert.ToInt32(accountID),
-                   Amount = (int)model.amount,
-                   Size = model.size,
-                   PosterUrl= product.PosterUrl,
-                   Price = product.Price,
-                   Sale = product.Sale,
-                   Status = 0,
-                   OrderID = null
-                });
+                    ProductID = model.productID,
+                    AccountID = Convert.ToInt32(accountID),
+                    Amount = (int)model.amount,
+                    Size = model.size,
+                    PosterUrl = product.PosterUrl,
+                    Price = product.Price,
+                    Sale = product.Sale,
+                    Status = 0,
+                    OrderID = null
+                };
+
+                _dbContext.CartItems.Add(c);
                 _dbContext.SaveChanges();
-                return new OkObjectResult(new { status = 1, message = "Đã thêm vào giỏ hàng." });
+                return new OkObjectResult(new { status = 1, message = "Đã thêm vào giỏ hàng.", data=c.CartItemID });
 
             }
             catch (Exception e)

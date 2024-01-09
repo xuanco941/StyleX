@@ -23,7 +23,7 @@
                     <div class="time pl-4" id="seconds"></div>
                 </div>
                 <div class="text-deal">
-                    <h2><a v-bind:href="'/product/detail/'+saleProducts.productID">{{saleProducts.name}}</a></h2>
+                    <h2><a style="font-weight: 700; font-family:'Open Sans', Arial, sans-serif;" v-bind:href="'/product/detail/'+saleProducts.productID">{{saleProducts.name}}</a></h2>
                     <p class="price">
                         <span class="mr-2 price-dc">{{Number(saleProducts.price).toLocaleString("en-US")}}&#8363;</span><span class="price-sale">{{Number(saleProducts.price - (saleProducts.price*saleProducts.sale/100)).toLocaleString("en-US")}}&#8363;</span>
                     </p>
