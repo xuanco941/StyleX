@@ -98,7 +98,7 @@ namespace StyleX.Controllers
             }
             catch
             {
-                return RedirectToAction("Index", "Home");
+                return new BadRequestObjectResult(new { status = 1, message = "success", data = DBNull.Value });
             }
         }
 

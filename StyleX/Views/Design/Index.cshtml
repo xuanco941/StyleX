@@ -9,14 +9,14 @@
 
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-        crossorigin="anonymous"></script>
+            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+            crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
 
@@ -27,139 +27,186 @@
     <div class="container-fluid">
         <div class="row gx-2">
             <div class="col-12 col-md-3 col-lg-3 col-xl-3 mb-3 mb-md-0" style="height: 100vh; cursor: default;">
-                <div id="appSelectModel" style="height: calc(50% - 16px); padding-bottom: 8px;">
-                    <h6 class="text-center my-2" style="color: #ccc; height: 30px;">MODEL</h6>
-                    <div class="row g-1 pb-1" style="font-size: 16px;overflow-y: auto;max-height: calc(100% - 30px);">
-                        <div class="col-3 col-md-4 product">
-                            <img class="mw-100 mh-100" src="/model/1.webp" alt="" srcset="">
+                <div id="appSelectModel" style="height: calc(65% - 32px); padding-bottom: 8px;">
+                    <div style="min-height:50%; max-height:50%; overflow-y: auto;overflow-x:hidden;" class="px-2">
+                        <h6 class="text-center mt-3 mb-0" style="color: #ccc; height: 30px;">MẪU TRONG GIỎ</h6>
+                        <div class="row g-1 pb-1" style="font-size: 16px;max-height: calc(100% - 30px);">
+                            <div v-if="isLoad1" class="d-flex justify-content-center align-items-center w-100"
+                                 style="height: 100px;">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                            <div class="col-3 col-md-4 product product-cart" style="position: relative" v-if="isLoad1==false && cartItems" v-for="item in cartItems" v-bind:value="item.cartItemID">
+                                <a v-bind:href="'/design?id='+item.cartItemID" style="text-decoration:none;">
+                                    <img class="mw-100 mh-100" v-bind:src="item.posterUrl" alt="" srcset="">
+                                    <div class="text-center text-white" style="font-size:12px;">{{item.product.name}}</div>
+                                </a>
+                            </div>
                         </div>
                     </div>
+                    <div class="border-top my-2"></div>
+
+                    <div style="min-height:50%; max-height:50%; overflow-y: auto; overflow-x:hidden;" class="px-2">
+                        <h6 class="text-center mt-3 mb-0" style="color: #ccc; height: 30px;">TẤT CẢ MẪU</h6>
+                        <div class="row g-1 pb-1" style="font-size: 16px;max-height: calc(100% - 30px);">
+                            <div v-if="isLoad2" class="d-flex justify-content-center align-items-center w-100"
+                                 style="height: 100px;">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                            <div class="col-3 col-md-4 product" style="position: relative" v-if="isLoad2==false && products" v-for="item in products">
+                                <img class="mw-100 mh-100" v-bind:src="item.posterUrl" alt="" srcset="">
+                                <button style="font-size:11px; padding: 0.2rem 0.4rem;" class="btn btn-primary btnDesignModel" v-on:click="AddCart(item.productID)">Thêm vào giỏ</button>
+                                <div class="text-center" style="font-size:12px;">{{item.name}}</div>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
                 <div class="border-top my-2"></div>
-                <div id="appBackground" style="height: calc(50% - 16px); padding-bottom: 8px;">
+                <div id="appBackground" style="height: calc(35% - 16px); padding-bottom: 8px;">
                     <div style="height: 70px;">
                         <h6 class="text-center my-2" style="color: #ccc;">BACKGROUND</h6>
                         <ul class="nav nav-pills mb-2 d-flex justify-content-between" id="pills-tab" role="tablist">
                             <li class="nav-item" style="width: 48%;" role="presentation">
                                 <button style="font-size: 11px; letter-spacing: 1px;"
-                                    class="w-100 nav-link active button-universe mt-1 mb-1" data-bs-toggle="pill"
-                                    data-bs-target="#pills-background-image" type="button" role="tab"
-                                    aria-controls="pills-background-image" aria-selected="false">Hình ảnh</button>
+                                        class="w-100 nav-link active button-universe mt-1 mb-1" data-bs-toggle="pill"
+                                        data-bs-target="#pills-background-image" type="button" role="tab"
+                                        aria-controls="pills-background-image" aria-selected="false">
+                                    Hình ảnh
+                                </button>
                             </li>
                             <li class="nav-item" style="width: 48%;" role="presentation">
                                 <button style="font-size: 11px; letter-spacing: 1px;"
-                                    class="w-100 nav-link button-universe mt-1 mb-1" data-bs-toggle="pill"
-                                    data-bs-target="#pills-background-color" type="button" role="tab"
-                                    aria-controls="pills-background-color" aria-selected="true">Đơn màu</button>
+                                        class="w-100 nav-link button-universe mt-1 mb-1" data-bs-toggle="pill"
+                                        data-bs-target="#pills-background-color" type="button" role="tab"
+                                        aria-controls="pills-background-color" aria-selected="true">
+                                    Đơn màu
+                                </button>
                             </li>
                         </ul>
                     </div>
                     <div class="tab-content" id="pills-tabContent"
-                        style="overflow-y: auto;max-height: calc(100% - 70px);">
+                         style="overflow-y: auto;max-height: calc(100% - 70px);">
                         <div class="tab-pane fade show active" id="pills-background-image" role="tabpanel">
                             <div class="form-check form-switch d-flex align-items-center justify-content-start p-0">
                                 <input class="form-check-input mt-0 mx-0" type="checkbox" v-model="typeImage"
-                                    id="stToanCanh" v-on:change="ChangeTypeImage()">
-                                <label class="form-check-label mx-1" for="stToanCanh" style="font-size: 10px;">Toàn
-                                    cảnh</label>
+                                       id="stToanCanh" v-on:change="ChangeTypeImage()">
+                                <label class="form-check-label mx-1" for="stToanCanh" style="font-size: 10px;">
+                                    Toàn
+                                    cảnh
+                                </label>
                             </div>
                             <div class="input-group input-group-sm mb-1">
                                 <input style="box-shadow: none;" type="text" class="form-control form-control-sm"
-                                    placeholder="Tìm kiếm hình ảnh" aria-describedby="button-search-image-bg"
-                                    v-model="querySearch" v-on:keyup.enter="SearchImages()">
+                                       placeholder="Tìm kiếm hình ảnh" aria-describedby="button-search-image-bg"
+                                       v-model="querySearch" v-on:keyup.enter="SearchImages()">
                                 <button class="btn btn-outline-primary" type="button" id="button-search-image-bg"
-                                    v-on:click="SearchImages()">
+                                        v-on:click="SearchImages()">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                 </button>
                             </div>
                             <div class="row mt-2 w-100 justify-content-center mx-0">
                                 <div v-if="loadingImage" class="d-flex justify-content-center align-items-center w-100"
-                                    style="height: 100px;">
+                                     style="height: 100px;">
                                     <div class="spinner-border" role="status">
                                         <span class="visually-hidden">Loading...</span>
                                     </div>
                                 </div>
                                 <img v-if="!loadingImage" style="max-width: 100%;" class="col-3 px-1 py-1 product"
-                                    v-for="(url,index) in listImages" v-bind:src="url" v-bind:alt="index"
-                                    v-on:click="ChangeImage(url)">
+                                     v-for="(url,index) in listImages" v-bind:src="url" v-bind:alt="index"
+                                     v-on:click="ChangeImage(url)">
                             </div>
                         </div>
                         <div class="tab-pane fade" id="pills-background-color" role="tabpanel">
                             <input style="height: 100px;" type="color" class="form-control form-control-color w-100"
-                                title="Chọn màu nền" v-on:input="ChangeBackground(0)" v-model="data.background">
+                                   title="Chọn màu nền" v-on:input="ChangeBackground(0)" v-model="data.background">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-md-5 col-lg-6 col-xl-6 p-3" style="height: 100vh;">
                 <model-viewer id="model-main" class="w-100 h-100" alt=""
-                    src="/model/1.glb" ar shadow-intensity="1" camera-controls disable-pan
-                    disable-tap autoplay shadow-softness="0.1" min-camera-orbit="auto auto 50%"
-                    max-camera-orbit="auto auto 300%">
+                               ar shadow-intensity="1" camera-controls disable-pan
+                              disable-tap autoplay shadow-softness="0.1" min-camera-orbit="auto auto 50%"
+                              max-camera-orbit="auto auto 300%">
                 </model-viewer>
             </div>
             <div class="col-12 col-md-4 col-lg-3 col-xl-3 mt-3 mt-md-0"
-                style="height: 100vh; max-height: 100vh; cursor: default; overflow-y: auto;">
+                 style="height: 100vh; max-height: 100vh; cursor: default; overflow-y: auto;">
                 <nav class="mb-2" style="height: 36px;">
                     <div class="nav nav-tabs justify-content-between h-100 flex-nowrap" id="nav-tab" role="tablist"
-                        style="font-size: 0.9rem; font-weight: 500;">
+                         style="font-size: 0.9rem; font-weight: 500;">
                         <button class="nav-link active" id="nav-design-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-design" type="button" role="tab" aria-controls="nav-design"
-                            aria-selected="true" style="width: 32.5%; color: #149CEA;">Thiết kế</button>
+                                data-bs-target="#nav-design" type="button" role="tab" aria-controls="nav-design"
+                                aria-selected="true" style="width: 32.5%; color: #149CEA;">
+                            Thiết kế
+                        </button>
                         <button class="nav-link" id="nav-share-tab" data-bs-toggle="tab" data-bs-target="#nav-share"
-                            type="button" role="tab" aria-controls="nav-share" aria-selected="false"
-                            style="width: 32.5%; color: #149CEA;">Chia
-                            sẻ</button>
+                                type="button" role="tab" aria-controls="nav-share" aria-selected="false"
+                                style="width: 32.5%; color: #149CEA;">
+                            Chia
+                            sẻ
+                        </button>
                         <button class="nav-link" id="nav-download-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-download" type="button" role="tab" aria-controls="nav-download"
-                            aria-selected="false" style="width: 32.5%; color: #149CEA;">Tải về</button>
+                                data-bs-target="#nav-download" type="button" role="tab" aria-controls="nav-download"
+                                aria-selected="false" style="width: 32.5%; color: #149CEA;">
+                            Tải về
+                        </button>
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent" style="max-height: calc(100% - 36px);">
                     <div class="tab-pane fade show active" id="nav-design" role="tabpanel"
-                        aria-labelledby="nav-design-tab">
+                         aria-labelledby="nav-design-tab">
 
                         <div class="flex-shrink-0 w-100">
                             <div id="app-select-position-model">
-                                <label for="selectPositionModel" class="form-label" style="font-size: 0.9rem;">Chọn
-                                    bộ phận thao tác:</label>
+                                <label for="selectPositionModel" class="form-label" style="font-size: 0.9rem;">
+                                    Chọn
+                                    bộ phận thao tác:
+                                </label>
                                 <select id="selectPositionModel" class="form-select" v-model="materialSelectedName"
-                                    v-on:change="Select()">
+                                        v-on:change="Select()">
                                     <option value="">Toàn bộ phận</option>
-                                    <option v-for="mat in listMaterials" v-bind:value="mat.name">{{mat.name}}
+                                    <option v-for="mat in listMaterials" v-bind:value="mat.name">
+                                        {{mat.name}}
                                     </option>
                                 </select>
-                                <div
-                                    class="form-check form-switch d-flex align-items-center justify-content-end p-0 mt-1">
+                                <div class="form-check form-switch d-flex align-items-center justify-content-end p-0 mt-1">
                                     <input class="form-check-input mt-0 mx-0" type="checkbox"
-                                        v-model="isNotHidePositionOther" id="hideOther" v-on:change="Select()">
-                                    <label class="form-check-label mx-1" for="hideOther" style="font-size: 13px;">Không
-                                        ẩn bộ phận khác</label>
+                                           v-model="isNotHidePositionOther" id="hideOther" v-on:change="Select()">
+                                    <label class="form-check-label mx-1" for="hideOther" style="font-size: 13px;">
+                                        Không
+                                        ẩn bộ phận khác
+                                    </label>
                                 </div>
                             </div>
                             <ul class="list-unstyled ps-0 mt-4">
                                 <li class="mb-3" id="appChangeColor">
                                     <button class="btn btn-toggle align-items-center rounded collapsed"
-                                        data-bs-toggle="collapse" data-bs-target="#color-collapse"
-                                        aria-expanded="false">
+                                            data-bs-toggle="collapse" data-bs-target="#color-collapse"
+                                            aria-expanded="false">
                                         Màu sắc
                                     </button>
                                     <div class="collapse mt-2" id="color-collapse"
-                                        style="padding-left: 1.5rem; max-height: 500px; overflow-y: auto; overflow-x: hidden;">
+                                         style="padding-left: 1.5rem; max-height: 500px; overflow-y: auto; overflow-x: hidden;">
                                         <div class="d-flex align-items-center">
                                             <input v-model="data.color" v-on:input="ChangeColor()" type="color"
-                                                class="form-control form-control-color product"
-                                                id="colorDesignInput" style="height:80px; width:120px;">
+                                                   class="form-control form-control-color product"
+                                                   id="colorDesignInput" style="height:80px; width:120px;">
                                             <label class="mx-2" style="font-size: 0.9rem;">Đơn màu</label>
                                         </div>
                                         <div class="border-top my-3"></div>
                                         <div>
                                             <div class="d-flex align-items-center">
                                                 <input hidden type="file" id="uploadImgColor" accept="image/*"
-                                                    v-on:change="GetUrlFileUpload">
+                                                       v-on:change="GetUrlFileUpload">
                                                 <label for="uploadImgColor" style="width:80px;" role="button">
                                                     <img v-bind:src="data.imageTexture" class="w-100 product"
-                                                        style="border-radius: 5px;">
+                                                         style="border-radius: 5px;">
                                                 </label>
                                                 <label class="mx-2" style="font-size: 0.9rem;">
                                                     Kết cấu màu từ ảnh
@@ -168,39 +215,39 @@
                                             <div class="row mt-2">
                                                 <div class="col-6">
                                                     <label for="rotationIp" class="form-label m-0"
-                                                        style="font-size: 14px;">Rotation</label>
+                                                           style="font-size: 14px;">Rotation</label>
                                                     <div class="position-relative d-flex flex-nowrap align-items-center"
-                                                        style="padding-right: 5px;">
+                                                         style="padding-right: 5px;">
                                                         <span class="position-absolute"
-                                                            style="font-size: 10px; bottom: -9px; left: 0px;">0</span>
+                                                              style="font-size: 10px; bottom: -9px; left: 0px;">0</span>
                                                         <input v-on:change="ChangeRotationTexture()"
-                                                            v-model="data.rotationTexture" type="range"
-                                                            class="form-range" min="0" max="3.14" step="0.01"
-                                                            id="rotationIp">
+                                                               v-model="data.rotationTexture" type="range"
+                                                               class="form-range" min="0" max="3.14" step="0.01"
+                                                               id="rotationIp">
                                                         <input class="from-control form-control-sm text-center" disabled
-                                                            readonly
-                                                            style="width: 27px; font-size: 10px; margin-left: 3px;color: #fff; padding: 1px;"
-                                                            type="text" v-bind:value="data.rotationTexture">
+                                                               readonly
+                                                               style="width: 27px; font-size: 10px; margin-left: 3px;color: #fff; padding: 1px;"
+                                                               type="text" v-bind:value="data.rotationTexture">
                                                         <span class="position-absolute"
-                                                            style="font-size: 10px; bottom: -9px; right: 33px;">3.14</span>
+                                                              style="font-size: 10px; bottom: -9px; right: 33px;">3.14</span>
                                                     </div>
                                                 </div>
                                                 <div class="col-6">
                                                     <label for="scaleIp" class="form-label m-0"
-                                                        style="font-size: 14px;">Scale</label>
+                                                           style="font-size: 14px;">Scale</label>
                                                     <div class="position-relative d-flex flex-nowrap align-items-center"
-                                                        style="padding-right: 5px;">
+                                                         style="padding-right: 5px;">
                                                         <span class="position-absolute"
-                                                            style="font-size: 12px; bottom: -9px; left: 0px;">0</span>
+                                                              style="font-size: 12px; bottom: -9px; left: 0px;">0</span>
                                                         <input v-on:change="ChangeScaleTexture()"
-                                                            v-model="data.scaleTexture" type="range" class="form-range"
-                                                            min="0" max="2" step="0.1" id="scaleIp">
+                                                               v-model="data.scaleTexture" type="range" class="form-range"
+                                                               min="0" max="2" step="0.1" id="scaleIp">
                                                         <input class="from-control form-control-sm text-center" disabled
-                                                            readonly
-                                                            style="width: 27px; font-size: 10px; margin-left: 3px;color: #fff; padding: 1px;"
-                                                            type="text" v-bind:value="data.scaleTexture">
+                                                               readonly
+                                                               style="width: 27px; font-size: 10px; margin-left: 3px;color: #fff; padding: 1px;"
+                                                               type="text" v-bind:value="data.scaleTexture">
                                                         <span class="position-absolute"
-                                                            style="font-size: 12px; bottom: -9px; right: 33px;">2</span>
+                                                              style="font-size: 12px; bottom: -9px; right: 33px;">2</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -208,27 +255,27 @@
                                             <div class="mt-4">
                                                 <div class="input-group input-group-sm mb-1">
                                                     <input style="box-shadow: none;" type="text"
-                                                        class="form-control form-control-sm"
-                                                        placeholder="Tìm kiếm hình ảnh"
-                                                        aria-describedby="button-search-image-bg" v-model="querySearch"
-                                                        v-on:keyup.enter="SearchImages()">
+                                                           class="form-control form-control-sm"
+                                                           placeholder="Tìm kiếm hình ảnh"
+                                                           aria-describedby="button-search-image-bg" v-model="querySearch"
+                                                           v-on:keyup.enter="SearchImages()">
                                                     <button class="btn btn-outline-primary" type="button"
-                                                        id="button-search-image-bg" v-on:click="SearchImages()">
+                                                            id="button-search-image-bg" v-on:click="SearchImages()">
                                                         <i class="fa-solid fa-magnifying-glass"></i>
                                                     </button>
                                                 </div>
                                                 <div class="row mt-2 w-100 justify-content-center mx-0">
                                                     <div v-if="loadingImage"
-                                                        class="d-flex justify-content-center align-items-center w-100"
-                                                        style="height: 100px;">
+                                                         class="d-flex justify-content-center align-items-center w-100"
+                                                         style="height: 100px;">
                                                         <div class="spinner-border" role="status">
                                                             <span class="visually-hidden">Loading...</span>
                                                         </div>
                                                     </div>
                                                     <img v-if="!loadingImage" style="max-width: 100%;"
-                                                        class="col-3 px-1 py-1 product"
-                                                        v-for="(url,index) in listImages" v-bind:src="url"
-                                                        v-bind:alt="index" v-on:click="ChangeTexture(url)">
+                                                         class="col-3 px-1 py-1 product"
+                                                         v-for="(url,index) in listImages" v-bind:src="url"
+                                                         v-bind:alt="index" v-on:click="ChangeTexture(url)">
                                                 </div>
                                             </div>
                                         </div>
@@ -236,12 +283,12 @@
                                 </li>
                                 <li class="mb-3" id="appChangeMetallicRoughness">
                                     <button class="btn btn-toggle align-items-center rounded collapsed"
-                                        data-bs-toggle="collapse" data-bs-target="#metallic-roughness-collapse"
-                                        aria-expanded="true">
+                                            data-bs-toggle="collapse" data-bs-target="#metallic-roughness-collapse"
+                                            aria-expanded="true">
                                         Chất liệu
                                     </button>
                                     <div class="collapse show" id="metallic-roughness-collapse"
-                                        style="margin-left: 1.5rem;">
+                                         style="margin-left: 1.5rem;">
 
                                         <div v-if="loading" class="spinner-border" role="status">
                                             <span class="visually-hidden">Loading...</span>
@@ -249,8 +296,8 @@
                                         <div v-if="!loading" class="radio-button-container">
                                             <div class="radio-button">
                                                 <input type="radio" class="radio-button__input"
-                                                    v-on:change="changeMetallicRoughness(null)" value=""
-                                                    id="radio-change-r-default" name="radio-change-metallic-roughness">
+                                                       v-on:change="changeMetallicRoughness(null)" value=""
+                                                       id="radio-change-r-default" name="radio-change-metallic-roughness">
                                                 <label class="radio-button__label" for="radio-change-r-default">
                                                     <span class="radio-button__custom"></span>
                                                     <span>
@@ -259,16 +306,16 @@
                                                 </label>
                                             </div>
                                             <div v-for="item in listMetallicRoughness"
-                                                class="radio-button d-flex align-items-center">
+                                                 class="radio-button d-flex align-items-center">
                                                 <input type="radio" class="radio-button__input"
-                                                    v-on:change="changeMetallicRoughness(item.url)"
-                                                    v-bind:id="item.name" name="radio-change-metallic-roughness">
+                                                       v-on:change="changeMetallicRoughness(item.url)"
+                                                       v-bind:id="item.name" name="radio-change-metallic-roughness">
                                                 <label class="radio-button__label" v-bind:for="item.name">
                                                     <span class="radio-button__custom" style="top: 9px;"></span>
                                                     <span class="d-flex align-items-center">
                                                         <span class="mx-1">{{item.name}}</span>
                                                         <img style="width: 30px; height: 30px;" v-bind:src="item.url"
-                                                            v-bind:alt="item.name">
+                                                             v-bind:alt="item.name">
                                                     </span>
                                                 </label>
                                             </div>
@@ -280,8 +327,8 @@
                                 </li>
                                 <li class="mb-3" id="appChangeDecal">
                                     <button class="btn btn-toggle align-items-center rounded collapsed"
-                                        data-bs-toggle="collapse" data-bs-target="#decal-collapse"
-                                        aria-expanded="false">
+                                            data-bs-toggle="collapse" data-bs-target="#decal-collapse"
+                                            aria-expanded="false">
                                         Dán decal
                                     </button>
                                     <div class="collapse" id="decal-collapse" style="margin-left: 1.5rem;">
@@ -291,17 +338,23 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="nav-share" role="tabpanel" aria-labelledby="nav-share-tab">...
+                    <div class="tab-pane fade" id="nav-share" role="tabpanel" aria-labelledby="nav-share-tab">
+                        ...
                     </div>
                     <div class="tab-pane fade" id="nav-download" role="tabpanel" aria-labelledby="nav-download-tab">
-                        ...</div>
+                        ...
+                    </div>
                 </div>
             </div>
         </div>
 
     </div>
+    <div id="alertBox" style="max-width: 400px; position:fixed; bottom: 15px; right: 20px; margin: 0px; opacity: 0.95; z-index: 555; padding: 15px 20px; font-size: 17px;">
+    </div>
 
     <!--vue2 development-->
+    <script src="/library/js/jquery.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <!--vue2 production-->
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
@@ -351,6 +404,162 @@
 
             return { r: linearized[0], g: linearized[1], b: linearized[2] };
         }
+        //check image upload
+        function isFileImage(file) {
+            return file && file['type'].split('/')[0] === 'image';
+        }
+        //alert
+        var timeoutAlertID;
+        function ShowAlert(html, type) {
+            var alertBox = document.querySelector('#alertBox');
+            var alert = `<div class="alert alert-${type} alert-dismissible" role="alert"><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>${html}</div>`;
+
+            if (timeoutAlertID) {
+                alertBox.innerHTML = '';
+                clearTimeout(timeoutAlertID);
+            }
+
+            alertBox.innerHTML = alert;
+            timeoutAlertID = setTimeout(function () {
+                alertBox.innerHTML = '';
+            }, 3500);
+        };
+
+
+
+        var appSelectModel = new Vue({
+            el: "#appSelectModel",
+            data: {
+
+                cartItems: [],
+                products: [],
+                isLoad1: true,
+                isLoad2: true,
+
+                productIDSelected: '@Html.Raw(ViewBag.id)'
+
+            },
+            methods: {
+                init: async function () {
+                    var self = this;
+
+                    await this.GetModels();
+                    if (self.productIDSelected) {
+                        window.addEventListener('load', () => {
+                            var cartIs = Array.from(document.querySelectorAll('.product-cart'));
+
+                            cartIs.forEach(e => {
+                                var value = e.getAttribute('value');
+                                if (self.productIDSelected == value) {
+                                    e.style.border = '1.5px solid #149CEA';
+                                }
+                            });
+                            document.getElementById("model-main").src = '@Html.Raw(ViewBag.src)';
+                        })
+
+                    }
+
+                    this.$forceUpdate();
+                },
+                GetListCartItems: async function () {
+                    var self = this;
+                    self.cartItems = [];
+                    self.products = [];
+                    self.isLoad1 = true;
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "/Design/GetCartItems",
+                        data: JSON.stringify({
+                        }),
+                        success: function (res) {
+                            self.isLoad1 = false;
+                            if (res.status == 1) {
+                                self.cartItems = res.data;
+                                
+                            }
+                            else {
+                                ShowAlert(res.message, "danger");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            self.isLoad1 = false;
+                        }
+                    });
+                },
+                GetListProducts: async function () {
+                    var self = this;
+                    self.products = [];
+                    self.isLoad2 = true;
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "/Design/GetProducts",
+                        data: JSON.stringify({
+                        }),
+                        success: function (res) {
+                            self.isLoad2 = false;
+                            if (res.status == 1) {
+                                self.products = res.data;
+                                // if (self.cartItems) {
+                                //     self.products = self.products.filter(function (e) {
+                                //         return !self.cartItems.some(function (cartItem) {
+                                //             return cartItem.productID == e.productID;
+                                //         });
+                                //     });
+                                // }
+                            }
+                            else {
+                                ShowAlert(res.message, "danger");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            ShowAlert(error, "danger");
+                            self.isLoad2 = false;
+                        }
+                    });
+                },
+
+                GetModels: async function () {
+                    var self = this;
+                    await self.GetListCartItems();
+                    await self.GetListProducts();
+                },
+                AddCart: async function (productID) {
+                    var self = this;
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "/Cart/AddToCart",
+                        data: JSON.stringify({
+                            productID: productID,
+                            amount: 1,
+                            size: ""
+                        }),
+                        success: function (res) {
+                            if (res.status == 1) {
+                                self.GetModels();
+                                ShowAlert(res.message, "success");
+                            }
+                            else {
+                                ShowAlert(res.message, "danger");
+                            }
+                        },
+                        error: function (status,xhr,error) {
+                            if (status.status == 401) {
+                                window.location.href = window.location.origin + "/access/login";
+                            }
+                            ShowAlert(error.responseJSON.message, "danger");
+                        }
+                    });
+
+                },
+
+            },
+            mounted() {
+                this.init();
+            },
+        });
 
         var appBackground = new Vue({
             el: "#appBackground",
@@ -819,7 +1028,7 @@
 
 
 
-     <script type="module">
+    <script type="module">
         async function exportGLB() {
             const modelViewer = document.getElementById("model-main");
             const glTF = await modelViewer.exportScene();
@@ -876,7 +1085,7 @@
         // );
         // }
         // Expr();
-       
+
     </script>
 
 </body>

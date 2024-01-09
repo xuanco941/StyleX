@@ -29,7 +29,7 @@ namespace StyleX.Controllers
                 string accountID = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
                 var product = _dbContext.Products.Find(model.productID);
-                if(string.IsNullOrEmpty(accountID) || product == null)
+                if(string.IsNullOrEmpty(accountID) || product == null || product.Status==false)
                 {
                     return new OkObjectResult(new { status = -1, message = "Sản phẩm không khả dụng." });
                 }

@@ -245,4 +245,17 @@ body{
   
   .fw-semibold { font-weight: 600; }
   .lh-tight { line-height: 1.25; }
-  
+
+.btnDesignModel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90px;
+    cursor: pointer;
+    display: none;
+    z-index: 1;
+}
+.product:hover .btnDesignModel{
+    display:block;
+}
