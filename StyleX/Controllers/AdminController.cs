@@ -785,7 +785,7 @@ namespace StyleX.Controllers
                             IsDefault = false,
                             ProductID = pro.ProductID,
                             ProductPartNameDefault = n,
-                            ProductPartNameCustom = "",
+                            ProductPartNameCustom = n,
                         });
                     }
                     _dbContext.ProductSettings.AddRange(list);

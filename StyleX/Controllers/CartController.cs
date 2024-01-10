@@ -29,7 +29,7 @@ namespace StyleX.Controllers
                 string accountID = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
                 var product = _dbContext.Products.Find(model.productID);
-                if(string.IsNullOrEmpty(accountID) || product == null || product.Status==false)
+                if (string.IsNullOrEmpty(accountID) || product == null || product.Status == false)
                 {
                     return new OkObjectResult(new { status = -1, message = "Sản phẩm không khả dụng." });
                 }
@@ -44,7 +44,7 @@ namespace StyleX.Controllers
                 {
                     model.size = "";
                 }
-                if(model.amount.HasValue == false || model.amount < 1)
+                if (model.amount.HasValue == false || model.amount < 1)
                 {
                     model.amount = 1;
                 }
@@ -64,7 +64,7 @@ namespace StyleX.Controllers
 
                 _dbContext.CartItems.Add(c);
                 _dbContext.SaveChanges();
-                return new OkObjectResult(new { status = 1, message = "Đã thêm vào giỏ hàng.", data=c.CartItemID });
+                return new OkObjectResult(new { status = 1, message = "Thêm vào giỏ hàng thành công!", data = c.CartItemID });
 
             }
             catch (Exception e)
@@ -80,7 +80,7 @@ namespace StyleX.Controllers
             {
                 string accountID = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                var cartItem = _dbContext.CartItems.FirstOrDefault(e => e.CartItemID==model.ID && e.AccountID == Convert.ToInt32(accountID));
+                var cartItem = _dbContext.CartItems.FirstOrDefault(e => e.CartItemID == model.ID && e.AccountID == Convert.ToInt32(accountID));
                 if (cartItem == null)
                 {
                     return new OkObjectResult(new { status = -1, message = "Không khả dụng." });
@@ -139,15 +139,15 @@ namespace StyleX.Controllers
                                  Warehouses = g.Select(x => x.Warehouse).ToList(),
                                  Product = g.First().Product
                              };
-				foreach (var item in query2)
-				{
-					if (item.Product != null && item.Product.SaleEndAt != null && item.Product.SaleEndAt < DateTime.Now)
-					{
-						// Đã hết hạn giảm giá
-						item.Product.Sale = 0; 
-					}
-				}
-				return new OkObjectResult(new { status = 1, message = "success", data = query2.ToList() });
+                foreach (var item in query2)
+                {
+                    if (item.Product != null && item.Product.SaleEndAt != null && item.Product.SaleEndAt < DateTime.Now)
+                    {
+                        // Đã hết hạn giảm giá
+                        item.Product.Sale = 0;
+                    }
+                }
+                return new OkObjectResult(new { status = 1, message = "success", data = query2.ToList() });
 
             }
             catch (Exception e)

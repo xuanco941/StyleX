@@ -26,7 +26,7 @@
 <body class="bg-color text-white">
     <div class="container-fluid">
         <div class="row gx-2">
-            <div class="col-12 col-md-3 col-lg-3 col-xl-3 mb-3 mb-md-0" style="height: 100vh; cursor: default;">
+            <div class="col-12 col-md-3 col-lg-3 col-xl-2 mb-3 mb-md-0" style="height: 100vh; cursor: default;">
                 <div id="appSelectModel" style="height: calc(65% - 32px); padding-bottom: 8px;">
                     <div style="min-height:50%; max-height:50%; overflow-y: auto;overflow-x:hidden;" class="px-2">
                         <h6 class="text-center mt-3 mb-0" style="color: #ccc; height: 30px;">MẪU TRONG GIỎ</h6>
@@ -67,7 +67,7 @@
 
                 </div>
                 <div class="border-top my-2"></div>
-                <div id="appBackground" style="height: calc(35% - 16px); padding-bottom: 8px;">
+                <div id="appBackground" style="height: calc(35%); padding-bottom: 8px;">
                     <div style="height: 70px;">
                         <h6 class="text-center my-2" style="color: #ccc;">BACKGROUND</h6>
                         <ul class="nav nav-pills mb-2 d-flex justify-content-between" id="pills-tab" role="tablist">
@@ -128,13 +128,19 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-5 col-lg-6 col-xl-6 p-3" style="height: 100vh;">
-                <div id="hide-model-main" style="display: none; justify-content: center; align-items: center; height:100%;">
+            <div class="col-12 col-md-5 col-lg-6 col-xl-7 p-1" style="height: 100vh;">
+                <div class="d-flex justify-content-end" style="height:40px;">
+                    <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 15px;">Lưu lại</button>
+                    <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 15px;">Chia sẻ</button>
+                    <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 15px;">Tải về</button>
+                    <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 15px;">Reset</button>
+                </div>
+                <div id="hide-model-main" style="display: none; justify-content: center; align-items: center; height: calc(100% - 40px);">
                     <h1>
                         Vui lòng chọn mẫu
                     </h1>
                 </div>
-                <model-viewer id="model-main" class="w-100 h-100" alt=""
+                <model-viewer id="model-main" class="w-100" alt="" style="height: calc(100% - 40px);"
                               ar shadow-intensity="1" camera-controls disable-pan
                               disable-tap autoplay shadow-softness="0.1" min-camera-orbit="auto auto 50%"
                               max-camera-orbit="auto auto 300%">
@@ -176,8 +182,8 @@
                                 <select id="selectPositionModel" class="form-select" v-model="materialSelectedName"
                                         v-on:change="Select()">
                                     <option value="">Toàn bộ phận</option>
-                                    <option v-for="mat in listMaterials" v-bind:value="mat.name">
-                                        {{mat.name}}
+                                    <option v-for="mat in listPartProduct" v-bind:value="mat.nameDefault">
+                                        {{mat.nameCustom}}
                                     </option>
                                 </select>
                                 <div class="form-check form-switch d-flex align-items-center justify-content-end p-0 mt-1">
@@ -218,9 +224,9 @@
                                                 </label>
                                             </div>
                                             <div class="row mt-2">
-                                                <div class="col-8">
+                                                <div class="col-12">
                                                     <label for="scaleIp" class="form-label m-0"
-                                                           style="font-size: 14px;">Scale</label>
+                                                           style="font-size: 14px;">Kích thước họa tiết</label>
                                                     <div class="position-relative d-flex flex-nowrap align-items-center"
                                                          style="padding-right: 5px;">
                                                         <span class="position-absolute"
@@ -228,12 +234,12 @@
                                                         <input v-on:change="ChangeScaleTexture()"
                                                                v-model="data.scaleTexture" type="range" class="form-range"
                                                                min="0" max="2" step="0.1" id="scaleIp">
+                                                        <span class="position-absolute"
+                                                              style="font-size: 12px; bottom: -9px; right: 40px;">2</span>
                                                         <input class="from-control form-control-sm text-center" disabled
                                                                readonly
-                                                               style="width: 27px; font-size: 10px; margin-left: 3px;color: #fff; padding: 1px;"
+                                                               style="width: 27px; font-size: 14px; margin-left: 9px;color: #fff; padding: 1px;"
                                                                type="text" v-bind:value="data.scaleTexture">
-                                                        <span class="position-absolute"
-                                                              style="font-size: 12px; bottom: -9px; right: 33px;">2</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -421,6 +427,7 @@
                 products: [],
                 isLoad1: true,
                 isLoad2: true,
+                listPartProduct: [],
 
                 productIDSelected: '@Html.Raw(ViewBag.id)'
 
@@ -440,6 +447,7 @@
                                 var value = e.getAttribute('value');
                                 if (self.productIDSelected == value) {
                                     e.style.border = '1.5px solid #149CEA';
+                                    e.style.backgroundColor = '#20a9f745';
                                 }
                             });
                         }
@@ -511,11 +519,13 @@
                         }
                     });
                 },
-
                 GetModels: async function () {
                     var self = this;
                     await self.GetListCartItems();
                     await self.GetListProducts();
+                    if(self.productIDSelected){
+                        await self.GetProductSetting();
+                    }
                 },
                 AddCart: async function (productID) {
                     var self = this;
@@ -546,6 +556,32 @@
                     });
 
                 },
+                GetProductSetting: async function () {
+                    var self = this;
+                    self.listPartProduct = [];
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "/Design/GetProductSetting",
+                        data: JSON.stringify({
+                            ID: self.productIDSelected
+                        }),
+                        success: function (res) {
+                            if (res.status == 1) {
+                                self.listPartProduct = res.data;
+                                console.log(self.listPartProduct)
+
+                            }
+                            else {
+                                ShowAlert(res.message, "danger");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            ShowAlert(status.status, "danger");
+                        }
+                    });
+                },
+
 
             },
             mounted() {
@@ -639,6 +675,7 @@
                 listMaterials: [],
                 materialSelectedName: "",
                 isNotHidePositionOther: false,
+                listPartProduct: [],
             },
             methods: {
                 init: async function () {
@@ -647,6 +684,7 @@
                     document.getElementById("model-main").addEventListener('load', (e) => {
                         self.model = e.target;
                         self.listMaterials = e.target.model.materials;
+                        self.listPartProduct = appSelectModel.listPartProduct;
                     });
 
                     this.$forceUpdate();

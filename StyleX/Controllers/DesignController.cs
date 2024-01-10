@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StyleX.DTOs;
 using StyleX.Models;
 using System.Security.Claims;
 
@@ -70,6 +71,53 @@ namespace StyleX.Controllers
             catch (Exception e)
             {
                 return new BadRequestObjectResult(new { status = -99, message = e.Message, data = products });
+            }
+        }
+        [HttpPost]
+        public IActionResult GetProductSetting([FromBody] IDModel model)
+        {
+            try
+            {
+                var cartItem = _dbContext.CartItems.FirstOrDefault(e => e.CartItemID == model.ID);
+
+                if (cartItem == null)
+                {
+                    return new NotFoundObjectResult(new { status = -98, message = "Mẫu thiết kế này không tồn tại", data = DBNull.Value });
+                }
+
+                var query1 = from ps in _dbContext.ProductSettings
+                             join psm in _dbContext.ProductSettingMaterials on ps.ProductSettingID equals psm.ProductSettingID into leftJoinT
+                             from psml in leftJoinT.DefaultIfEmpty()
+                             join m in _dbContext.Materials on psml.MaterialID equals m.MaterialID into leftJoinTable
+                             from mat in leftJoinTable.DefaultIfEmpty()
+                             where ps.ProductID == cartItem.ProductID
+                             select new
+                             {
+                                 ps.ProductSettingID,
+                                 ps.ProductPartNameDefault,
+                                 ps.ProductPartNameCustom,
+                                 ps.IsDefault,
+                                 material = mat
+                             };
+                var r = query1.ToList();
+
+                var query2 = from q in query1
+                             group q by q.ProductSettingID into g
+                             select new
+                             {
+                                 productSettingID = g.Key,
+                                 nameDefault = g.First().ProductPartNameDefault,
+                                 nameCustom = g.First().ProductPartNameCustom,
+                                 isDefault = g.First().IsDefault,
+                                 materials = g.Select(x => x.material).ToList()
+                             };
+
+                return new OkObjectResult(new { status = 1, message = "success", data = query2.ToList() });
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message, data = DBNull.Value });
             }
         }
 
