@@ -129,13 +129,18 @@
                 </div>
             </div>
             <div class="col-12 col-md-5 col-lg-6 col-xl-6 p-3" style="height: 100vh;">
+                <div id="hide-model-main" style="display: none; justify-content: center; align-items: center; height:100%;">
+                    <h1>
+                        Vui lòng chọn mẫu
+                    </h1>
+                </div>
                 <model-viewer id="model-main" class="w-100 h-100" alt=""
-                               ar shadow-intensity="1" camera-controls disable-pan
+                              ar shadow-intensity="1" camera-controls disable-pan
                               disable-tap autoplay shadow-softness="0.1" min-camera-orbit="auto auto 50%"
                               max-camera-orbit="auto auto 300%">
                 </model-viewer>
             </div>
-            <div class="col-12 col-md-4 col-lg-3 col-xl-3 mt-3 mt-md-0"
+            <div class="col-12 col-md-4 col-lg-3 col-xl-3 mt-3 mt-md-0 py-1"
                  style="height: 100vh; max-height: 100vh; cursor: default; overflow-y: auto;">
                 <nav class="mb-2" style="height: 36px;">
                     <div class="nav nav-tabs justify-content-between h-100 flex-nowrap" id="nav-tab" role="tablist"
@@ -213,26 +218,7 @@
                                                 </label>
                                             </div>
                                             <div class="row mt-2">
-                                                <div class="col-6">
-                                                    <label for="rotationIp" class="form-label m-0"
-                                                           style="font-size: 14px;">Rotation</label>
-                                                    <div class="position-relative d-flex flex-nowrap align-items-center"
-                                                         style="padding-right: 5px;">
-                                                        <span class="position-absolute"
-                                                              style="font-size: 10px; bottom: -9px; left: 0px;">0</span>
-                                                        <input v-on:change="ChangeRotationTexture()"
-                                                               v-model="data.rotationTexture" type="range"
-                                                               class="form-range" min="0" max="3.14" step="0.01"
-                                                               id="rotationIp">
-                                                        <input class="from-control form-control-sm text-center" disabled
-                                                               readonly
-                                                               style="width: 27px; font-size: 10px; margin-left: 3px;color: #fff; padding: 1px;"
-                                                               type="text" v-bind:value="data.rotationTexture">
-                                                        <span class="position-absolute"
-                                                              style="font-size: 10px; bottom: -9px; right: 33px;">3.14</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-6">
+                                                <div class="col-8">
                                                     <label for="scaleIp" class="form-label m-0"
                                                            style="font-size: 14px;">Scale</label>
                                                     <div class="position-relative d-flex flex-nowrap align-items-center"
@@ -444,8 +430,10 @@
                     var self = this;
 
                     await this.GetModels();
-                    if (self.productIDSelected) {
-                        window.addEventListener('load', () => {
+                    window.addEventListener('load', () => {
+                        if (self.productIDSelected) {
+                            document.getElementById("model-main").src = '@Html.Raw(ViewBag.src)';
+
                             var cartIs = Array.from(document.querySelectorAll('.product-cart'));
 
                             cartIs.forEach(e => {
@@ -454,10 +442,14 @@
                                     e.style.border = '1.5px solid #149CEA';
                                 }
                             });
-                            document.getElementById("model-main").src = '@Html.Raw(ViewBag.src)';
-                        })
+                        }
+                        else {
+                            document.getElementById("model-main").style.display = 'none';
+                            document.getElementById("hide-model-main").style.display = 'flex';
+                        }
 
-                    }
+                    });
+
 
                     this.$forceUpdate();
                 },
@@ -476,7 +468,7 @@
                             self.isLoad1 = false;
                             if (res.status == 1) {
                                 self.cartItems = res.data;
-                                
+
                             }
                             else {
                                 ShowAlert(res.message, "danger");
@@ -545,7 +537,7 @@
                                 ShowAlert(res.message, "danger");
                             }
                         },
-                        error: function (status,xhr,error) {
+                        error: function (status, xhr, error) {
                             if (status.status == 401) {
                                 window.location.href = window.location.origin + "/access/login";
                             }
@@ -716,7 +708,6 @@
                     });
                     this.data.imageTexture = "/images/none.svg";
                     this.data.color = '#010101';
-                    this.data.rotationTexture = 0;
                     this.data.scaleTexture = 1;
 
                     await this.SearchImages();
@@ -764,14 +755,6 @@
                         let url = URL.createObjectURL(file);
                         await self.ChangeTexture(url);
                     }
-                },
-                ChangeRotationTexture: function () {
-                    var rotation = this.data.rotationTexture;
-                    for (var m of appSelect.GetMaterialsSelected()) {
-                        m.pbrMetallicRoughness['baseColorTexture'].texture.sampler.setRotation(rotation);
-                    }
-                    this.$forceUpdate();
-
                 },
                 ChangeScaleTexture: function () {
                     var scale = { u: this.data.scaleTexture, v: this.data.scaleTexture };
