@@ -20,10 +20,12 @@ namespace StyleX.Models
         public DbSet<Warehouse> Warehouses { get; set; } = null!;
         public DbSet<ProductSettingMaterial> ProductSettingMaterials { get; set; } = null!;
         public DbSet<ProductSetting> ProductSettings { get; set; } = null!;
+        public DbSet<DecalInfo> DecalInfos { get; set; } = null!;
 
 
 
-		public DatabaseContext(DbContextOptions<DatabaseContext> options, IConfiguration configuration)
+
+        public DatabaseContext(DbContextOptions<DatabaseContext> options, IConfiguration configuration)
     : base(options)
         {
             _configuration = configuration;

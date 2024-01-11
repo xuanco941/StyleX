@@ -15,7 +15,6 @@ namespace StyleX.Models
         public double? TextureRotation { get; set; } 
         public double? TextureScale { get; set; }
         public string? ImageMaterial { get; set; } // image url
-        public string? ImageDecal { get; set; }
         public int CartItemID { get; set; }
         public CartItem CartItem { get; set; } = null!;
     }
