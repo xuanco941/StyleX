@@ -28,7 +28,7 @@
         <div class="row gx-2">
             <div class="col-12 col-md-3 col-lg-3 col-xl-2 mb-3 mb-md-0" style="height: 100vh; cursor: default;">
                 <div id="appSelectModel" style="height: calc(65% - 32px); padding-bottom: 8px;">
-                    <div style="min-height:50%; max-height:50%; overflow-y: auto;overflow-x:hidden;" class="px-2">
+                    <div style="min-height:50%; max-height:50%; overflow-y: auto;overflow-x:hidden;" class="px-2 py-1">
                         <h6 class="text-center mt-3 mb-0" style="color: #ccc; height: 30px;">MẪU TRONG GIỎ</h6>
                         <div class="row g-1 pb-1" style="font-size: 16px;max-height: calc(100% - 30px);">
                             <div v-if="isLoad1" class="d-flex justify-content-center align-items-center w-100"
@@ -40,14 +40,14 @@
                             <div class="col-3 col-md-4 product product-cart" style="position: relative" v-if="isLoad1==false && cartItems" v-for="item in cartItems" v-bind:value="item.cartItemID">
                                 <a v-bind:href="'/design?id='+item.cartItemID" style="text-decoration:none;">
                                     <img class="mw-100 mh-100" v-bind:src="item.posterUrl" alt="" srcset="">
-                                    <div class="text-center text-white" style="font-size:12px;">{{item.product.name}}</div>
-                                </a>
+@*                                     <div class="text-center text-white" style="font-size:12px;">{{item.product.name}}</div>
+ *@                                </a>
                             </div>
                         </div>
                     </div>
                     <div class="border-top my-2"></div>
 
-                    <div style="min-height:50%; max-height:50%; overflow-y: auto; overflow-x:hidden;" class="px-2">
+                    <div style="min-height:50%; max-height:50%; overflow-y: auto; overflow-x:hidden;" class="px-2 py-1">
                         <h6 class="text-center mt-3 mb-0" style="color: #ccc; height: 30px;">TẤT CẢ MẪU</h6>
                         <div class="row g-1 pb-1" style="font-size: 16px;max-height: calc(100% - 30px);">
                             <div v-if="isLoad2" class="d-flex justify-content-center align-items-center w-100"
@@ -56,11 +56,11 @@
                                     <span class="visually-hidden">Loading...</span>
                                 </div>
                             </div>
-                            <div class="col-3 col-md-4 product" style="position: relative" v-if="isLoad2==false && products" v-for="item in products">
-                                <img class="mw-100 mh-100" v-bind:src="item.posterUrl" alt="" srcset="">
-                                <button style="font-size:11px; padding: 0.2rem 0.4rem;" class="btn btn-primary btnDesignModel" v-on:click="AddCart(item.productID)">Thêm vào giỏ</button>
-                                <div class="text-center" style="font-size:12px;">{{item.name}}</div>
-                            </div>
+                            <div class="col-3 col-md-4 product d-flex justify-content-center align-item-center" style="position: relative" v-if="isLoad2==false && products" v-for="item in products">
+                                <img style="height: 90px;" v-bind:src="item.posterUrl" alt="" srcset="">
+                                <button style="font-size:10.5px; padding: 0.2rem 0.35rem;" class="btn btn-primary btnDesignModel" v-on:click="AddCart(item.productID)">Thêm vào giỏ</button>
+@*                                 <div class="text-center" style="font-size:12px;">{{item.name}}</div>
+ *@                            </div>
                         </div>
                     </div>
 

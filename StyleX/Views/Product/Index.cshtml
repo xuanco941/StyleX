@@ -110,8 +110,8 @@
                     </div>
                     <div v-if="!isLoad" class="col-sm-12 col-md-12 col-lg-4 d-flex shadow rounded mt-2" v-for="item in dataTable">
                         <div class="product d-flex flex-column">
-                            <a v-bind:href="'/product/detail/'+item.productID" class="img-prod d-flex justify-content-center">
-                                <img class="img-fluid" v-bind:src="item.posterUrl"
+                            <a v-bind:href="'/product/detail/'+item.productID" class="img-prod d-flex justify-content-center align-content-center">
+                                <img style="height: 290px" v-bind:src="item.posterUrl"
                                      alt="Colorlib Template">
                                 <div class="overlay"></div>
                             </a>
@@ -121,11 +121,13 @@
                                         <span>{{item.categoryName}}</span>
                                     </div>
                                 </div>
-                                <h3><a v-bind:href="'/product/detail/'+item.productID">{{item.name}}</a></h3>
+                                <h3 style="height: 42px;"><a v-bind:href="'/product/detail/'+item.productID">{{item.name}}</a></h3>
                                 <div class="pricing">
                                     <p class="price"><span>{{Number(item.price).toLocaleString("en-US")}}&#8363;</span> <span style="font-size:14px;" class="text-danger" v-if="item.sale>0 && new Date(item.saleEndAt) > new Date()">(-{{item.sale}}%)</span></p>
                                 </div>
-                                <a v-bind:href="'/product/detail/'+item.productID" style="width:110px" class="btn btn-info mx-1 my-1">Xem chi tiết</a>
+                                <div class="d-flex justify-content-left mt-2">
+                                    <a v-bind:href="'/product/detail/'+item.productID" style="width:110px" class="btn btn-info mx-1 my-1">Xem chi tiết</a>
+                                </div>
                                 <p class="bottom-area d-flex px-3">
                                     <a href="javascript:;" class="buy-now text-center py-2" v-bind:onClick="'DesignNow('+item.productID+')'">
                                         <span>

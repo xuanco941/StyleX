@@ -11,9 +11,9 @@
 
 <div id="appNewProducts">
     <section id="home-section" class="hero" v-if="newProducts.length>0">
-        <div class="home-slider owl-carousel">
+        <div class="home-slider owl-carousel" style=" height: 700px;min-height: 650px;">
 
-            <div class="slider-item" style="max-height: 700px;" v-for="item in newProducts">
+            <div class="slider-item"  v-for="item in newProducts">
                 <div class="overlay"></div>
                 <div class="container mt-md-5 pt-md-5 h-100 px-2 px-md-0">
                     <div class="row align-items-center justify-content-center flex-nowrap h-100" style="gap: 50px;">
@@ -200,11 +200,11 @@
             </div>
         </div>
         <div class="container">
-            <div class="row justify-content-center">
+            <div class="row justify-content-left">
                 <div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex" v-for="item in highlightProducts">
                     <div class="product d-flex flex-column">
                         <a v-bind:href="'/product/detail/'+item.productID" class="img-prod d-flex justify-content-center">
-                            <img class="img-fluid" v-bind:src="item.posterUrl"
+                            <img style="height: 255px;" v-bind:src="item.posterUrl"
                                  alt="Colorlib Template">
                             <div class="overlay"></div>
                         </a>

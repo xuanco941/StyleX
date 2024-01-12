@@ -20,7 +20,7 @@ namespace StyleX.DTOs
         public string ProductPartNameDefault { get; set; } = string.Empty;
         public string ProductPartNameCustom { get; set; } = string.Empty;
         public bool IsDefault { get; set; } = false;
-        public List<Material> materials { get; set; } = null!;
+        public List<Material> materials { get; set; } = new List<Material>();
 
     }
     public class AddProductModel
@@ -34,10 +34,10 @@ namespace StyleX.DTOs
 		public string description { get; set; } = string.Empty;
         public double price { get; set; }
         public double sale { get; set; }
-        public DateTime saleEndAt { get; set; }
+        public DateTime? saleEndAt { get; set; }
         public bool status { get; set; }
         public int categoryID { get; set; }
-        public List<string> productParts { get; set;} = null!;
+        public List<string> productParts { get; set; } = new List<string>();
     }
     public class UpdateProductModel
     {
@@ -60,6 +60,6 @@ namespace StyleX.DTOs
         public string productPartNameCustom { get; set; } = string.Empty;
         public bool isDefault { get; set; }
 
-        public List<int> materials { get; set; } = null!;
+        public List<int> materials { get; set; } = new List<int>();
     }
 }

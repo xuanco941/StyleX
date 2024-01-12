@@ -101,6 +101,8 @@ namespace StyleX.Controllers
                         }
                     }
 
+                    DateTime now = DateTime.Now;
+
                     var order = new Order()
                     {
                         Status = 0,
@@ -109,8 +111,8 @@ namespace StyleX.Controllers
                         PhoneNumber = model.phoneNumber,
                         Name = model.name,
                         TransportFee = Common.TransportFee,
-                        CreateAt = DateTime.Now,
-                        UpdateAt = DateTime.Now,
+                        CreateAt = now,
+                        UpdateAt = now,
                         Message = model.message ?? "",
                         PercentSale = percentSale,
                         BasePrice = tongTien,
@@ -128,6 +130,7 @@ namespace StyleX.Controllers
                         {
                             promotion.OrderID = order.OrderID;
                             promotion.Status = true; // đánh dấu promotion đã được dùng
+                            promotion.UsedAt = now;
                         }
 
                     }

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using StyleX;
@@ -10,12 +11,24 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Limits.MaxRequestBodySize = 1024 * 1024 * 300;
+});
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    //300MB
+    options.MultipartBodyLengthLimit = 1024 * 1024 * 300;
+});
+
 //auth 
-builder.Services.AddAuthentication(options => {
+builder.Services.AddAuthentication(options =>
+{
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-}).AddCookie(Common.CookieAuthUser ,option =>
+}).AddCookie(Common.CookieAuthUser, option =>
 {
     option.LoginPath = "/access/login";
     option.LogoutPath = "/access/logout";

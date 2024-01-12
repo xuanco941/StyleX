@@ -146,7 +146,7 @@ namespace StyleX.Controllers
 
         [HttpPost]
         [Authorize(AuthenticationSchemes = Common.CookieAuthUser)]
-        public IActionResult CheckLogin()
+        public async Task<IActionResult> CheckLogin()
         {
             try
             {
@@ -163,7 +163,9 @@ namespace StyleX.Controllers
                 }
                 else
                 {
-                    return new OkObjectResult(new { status = -1, message = "", data = 0 });
+                    await HttpContext.SignOutAsync(Common.CookieAuthUser);
+
+                    return new OkObjectResult(new { status = -1, message = "Vui lòng đăng nhập lại.", data = 0 });
                 }
             }
             catch (Exception e)

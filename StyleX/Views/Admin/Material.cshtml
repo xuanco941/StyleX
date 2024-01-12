@@ -547,6 +547,7 @@
                     formData.append('normalMap', self.dataAdd.fileNormalMap);
                     formData.append('roughnessMap', self.dataAdd.fileRoughnessMap);
                     formData.append('metalnessMap', self.dataAdd.fileMetalnessMap);
+                    formData.append('isDecal', self.dataAdd.isDecal);
 
 
                     self.dataAdd.isLoad = true;
@@ -615,6 +616,7 @@
                     formData.append('normalMap', self.dataUpdate.fileNormalMap);
                     formData.append('roughnessMap', self.dataUpdate.fileRoughnessMap);
                     formData.append('metalnessMap', self.dataUpdate.fileMetalnessMap);
+                    formData.append('isDecal', self.dataUpdate.isDecal);
 
                     self.dataUpdate.isLoad = true;
                     $.ajax({
