@@ -38,8 +38,8 @@
                                 </div>
                             </div>
                             <div class="col-3 col-md-4 product product-cart" style="position: relative" v-if="isLoad1==false && cartItems" v-for="item in cartItems" v-bind:value="item.cartItemID">
-                                <a v-bind:href="'/design?id='+item.cartItemID" style="text-decoration:none;">
-                                    <img class="mw-100 mh-100" v-bind:src="item.posterUrl" alt="" srcset="">
+                                <a v-bind:href="'/design?id='+item.cartItemID" style="text-decoration:none;" class="d-flex justify-content-center align-item-center">
+                                    <img style="height: 90px;" v-bind:src="item.posterUrl" alt="" srcset="">
 @*                                     <div class="text-center text-white" style="font-size:12px;">{{item.product.name}}</div>
  *@                                </a>
                             </div>
@@ -129,11 +129,17 @@
                 </div>
             </div>
             <div class="col-12 col-md-5 col-lg-6 col-xl-7 p-1" style="height: 100vh;">
-                <div class="d-flex justify-content-end" style="height:40px;">
-                    <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 15px;">Lưu lại</button>
-                    <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 15px;">Chia sẻ</button>
-                    <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 15px;">Tải về</button>
-                    <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 15px;">Reset</button>
+                <div class="d-flex justify-content-between" style="height:40px;">
+                    <div class="d-flex">
+                        <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 15px;">Trang chủ</button>
+                    </div>
+                    <div class="d-flex">
+                        <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 15px;">Lưu lại</button>
+                        <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 15px;">Chia sẻ</button>
+                        <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 15px;">Tải về</button>
+                        <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 15px;">Reset</button>
+                    </div>
+
                 </div>
                 <div id="hide-model-main" style="display: none; justify-content: center; align-items: center; height: calc(100% - 40px);">
                     <h1>
@@ -148,33 +154,11 @@
             </div>
             <div class="col-12 col-md-4 col-lg-3 col-xl-3 mt-3 mt-md-0 py-1"
                  style="height: 100vh; max-height: 100vh; cursor: default; overflow-y: auto;">
-                <nav class="mb-2" style="height: 36px;">
-                    <div class="nav nav-tabs justify-content-between h-100 flex-nowrap" id="nav-tab" role="tablist"
-                         style="font-size: 0.9rem; font-weight: 500;">
-                        <button class="nav-link active" id="nav-design-tab" data-bs-toggle="tab"
-                                data-bs-target="#nav-design" type="button" role="tab" aria-controls="nav-design"
-                                aria-selected="true" style="width: 32.5%; color: #149CEA;">
-                            Thiết kế
-                        </button>
-                        <button class="nav-link" id="nav-share-tab" data-bs-toggle="tab" data-bs-target="#nav-share"
-                                type="button" role="tab" aria-controls="nav-share" aria-selected="false"
-                                style="width: 32.5%; color: #149CEA;">
-                            Chia
-                            sẻ
-                        </button>
-                        <button class="nav-link" id="nav-download-tab" data-bs-toggle="tab"
-                                data-bs-target="#nav-download" type="button" role="tab" aria-controls="nav-download"
-                                aria-selected="false" style="width: 32.5%; color: #149CEA;">
-                            Tải về
-                        </button>
-                    </div>
-                </nav>
-                <div class="tab-content" id="nav-tabContent" style="max-height: calc(100% - 36px);">
-                    <div class="tab-pane fade show active" id="nav-design" role="tabpanel"
-                         aria-labelledby="nav-design-tab">
+                <div class="tab-content" style="max-height: calc(100% - 36px);">
+                    <div id="nav-design" >
 
-                        <div class="flex-shrink-0 w-100">
-                            <div id="app-select-position-model">
+                        <div class="flex-shrink-0 w-100" id="appDesign">
+                            <div>
                                 <label for="selectPositionModel" class="form-label" style="font-size: 0.9rem;">
                                     Chọn
                                     bộ phận thao tác:
@@ -186,7 +170,7 @@
                                         {{mat.nameCustom}}
                                     </option>
                                 </select>
-                                <div class="form-check form-switch d-flex align-items-center justify-content-end p-0 mt-1">
+                                <div class="form-check form-switch d-flex align-items-center justify-content-start p-0 mt-1">
                                     <input class="form-check-input mt-0 mx-0" type="checkbox"
                                            v-model="isNotHidePositionOther" id="hideOther" v-on:change="Select()">
                                     <label class="form-check-label mx-1" for="hideOther" style="font-size: 13px;">
@@ -196,7 +180,7 @@
                                 </div>
                             </div>
                             <ul class="list-unstyled ps-0 mt-4">
-                                <li class="mb-3" id="appChangeColor">
+                                <li class="mb-3" >
                                     <button class="btn btn-toggle align-items-center rounded collapsed"
                                             data-bs-toggle="collapse" data-bs-target="#color-collapse"
                                             aria-expanded="false">
@@ -205,7 +189,7 @@
                                     <div class="collapse mt-2" id="color-collapse"
                                          style="padding-left: 1.5rem; max-height: 500px; overflow-y: auto; overflow-x: hidden;">
                                         <div class="d-flex align-items-center">
-                                            <input v-model="data.color" v-on:input="ChangeColor()" type="color"
+                                            <input v-model="dataChangeColor.color" v-on:input="ChangeColor()" type="color"
                                                    class="form-control form-control-color product"
                                                    id="colorDesignInput" style="height:80px; width:120px;">
                                             <label class="mx-2" style="font-size: 0.9rem;">Đơn màu</label>
@@ -214,9 +198,9 @@
                                         <div>
                                             <div class="d-flex align-items-center">
                                                 <input hidden type="file" id="uploadImgColor" accept="image/*"
-                                                       v-on:change="GetUrlFileUpload">
+                                                       v-on:change="GetUrlFileUploadChangeColor">
                                                 <label for="uploadImgColor" style="width:80px;" role="button">
-                                                    <img v-bind:src="data.imageTexture" class="w-100 product"
+                                                    <img v-bind:src="dataChangeColor.imageTexture" class="w-100 product"
                                                          style="border-radius: 5px;">
                                                 </label>
                                                 <label class="mx-2" style="font-size: 0.9rem;">
@@ -232,14 +216,14 @@
                                                         <span class="position-absolute"
                                                               style="font-size: 12px; bottom: -9px; left: 0px;">0</span>
                                                         <input v-on:change="ChangeScaleTexture()"
-                                                               v-model="data.scaleTexture" type="range" class="form-range"
+                                                               v-model="dataChangeColor.scaleTexture" type="range" class="form-range"
                                                                min="0" max="2" step="0.1" id="scaleIp">
                                                         <span class="position-absolute"
                                                               style="font-size: 12px; bottom: -9px; right: 40px;">2</span>
                                                         <input class="from-control form-control-sm text-center" disabled
                                                                readonly
                                                                style="width: 27px; font-size: 14px; margin-left: 9px;color: #fff; padding: 1px;"
-                                                               type="text" v-bind:value="data.scaleTexture">
+                                                               type="text" v-bind:value="dataChangeColor.scaleTexture">
                                                     </div>
                                                 </div>
                                             </div>
@@ -249,24 +233,24 @@
                                                     <input style="box-shadow: none;" type="text"
                                                            class="form-control form-control-sm"
                                                            placeholder="Tìm kiếm hình ảnh"
-                                                           aria-describedby="button-search-image-bg" v-model="querySearch"
-                                                           v-on:keyup.enter="SearchImages()">
+                                                           aria-describedby="button-search-image-bg" v-model="dataChangeColor.querySearch"
+                                                           v-on:keyup.enter="SearchImageChangeColor()">
                                                     <button class="btn btn-outline-primary" type="button"
-                                                            id="button-search-image-bg" v-on:click="SearchImages()">
+                                                            id="button-search-image-bg" v-on:click="SearchImageChangeColor()">
                                                         <i class="fa-solid fa-magnifying-glass"></i>
                                                     </button>
                                                 </div>
                                                 <div class="row mt-2 w-100 justify-content-center mx-0">
-                                                    <div v-if="loadingImage"
+                                                    <div v-if="dataChangeColor.loadingImage"
                                                          class="d-flex justify-content-center align-items-center w-100"
                                                          style="height: 100px;">
                                                         <div class="spinner-border" role="status">
                                                             <span class="visually-hidden">Loading...</span>
                                                         </div>
                                                     </div>
-                                                    <img v-if="!loadingImage" style="max-width: 100%;"
+                                                    <img v-if="!dataChangeColor.loadingImage" style="max-width: 100%;"
                                                          class="col-3 px-1 py-1 product"
-                                                         v-for="(url,index) in listImages" v-bind:src="url"
+                                                         v-for="(url,index) in dataChangeColor.listImages" v-bind:src="url"
                                                          v-bind:alt="index" v-on:click="ChangeTexture(url)">
                                                 </div>
                                             </div>
@@ -282,13 +266,13 @@
                                     <div class="collapse show" id="metallic-roughness-collapse"
                                          style="margin-left: 1.5rem;">
 
-                                        <div v-if="loading" class="spinner-border" role="status">
+                                        <div v-if="dataChangeMaterial.loadingMaterial" class="spinner-border" role="status">
                                             <span class="visually-hidden">Loading...</span>
                                         </div>
-                                        <div v-if="!loading" class="radio-button-container">
+                                        <div v-if="!dataChangeMaterial.loadingMaterial" class="radio-button-container">
                                             <div class="radio-button">
                                                 <input type="radio" class="radio-button__input"
-                                                       v-on:change="changeMetallicRoughness(null)" value=""
+                                                       v-on:change="changeMaterial(null)" value=""
                                                        id="radio-change-r-default" name="radio-change-metallic-roughness">
                                                 <label class="radio-button__label" for="radio-change-r-default">
                                                     <span class="radio-button__custom"></span>
@@ -297,10 +281,10 @@
                                                     </span>
                                                 </label>
                                             </div>
-                                            <div v-for="item in listMetallicRoughness"
+                                            <div v-for="item in listMaterials"
                                                  class="radio-button d-flex align-items-center">
                                                 <input type="radio" class="radio-button__input"
-                                                       v-on:change="changeMetallicRoughness(item.url)"
+                                                       v-on:change="changeMaterial(item.url)"
                                                        v-bind:id="item.name" name="radio-change-metallic-roughness">
                                                 <label class="radio-button__label" v-bind:for="item.name">
                                                     <span class="radio-button__custom" style="top: 9px;"></span>
@@ -329,12 +313,6 @@
                                 </li>
                             </ul>
                         </div>
-                    </div>
-                    <div class="tab-pane fade" id="nav-share" role="tabpanel" aria-labelledby="nav-share-tab">
-                        ...
-                    </div>
-                    <div class="tab-pane fade" id="nav-download" role="tabpanel" aria-labelledby="nav-download-tab">
-                        ...
                     </div>
                 </div>
             </div>
@@ -418,7 +396,84 @@
         };
 
 
+        var appBackground = new Vue({
+            el: "#appBackground",
+            data: {
+                model: {},
+                data: {},
+                querySearch: '',
+                listImages: [],
+                typeImage: false,
+                loadingImage: true
+            },
+            methods: {
+                init: async function () {
+                    var self = this;
 
+                    this.data.type = 0; //2-toàn cảnh, 1-hình ảnh, 0 đơn màu
+                    this.data.background = 'transparent';
+
+                    document.getElementById("model-main").addEventListener('load', (e) => {
+                        self.model = e.target;
+                        self.ChangeBackground(self.data.type);
+                    });
+
+                    await this.SearchImages();
+
+                    this.$forceUpdate();
+                },
+                SearchImages: async function () {
+                    var self = this;
+                    self.loadingImage = true;
+                    var images = await SearchImages(self.querySearch, 28, 1);
+                    if (images.length > 0) {
+                        self.listImages = images.map(e => `https://images.unsplash.com/${e.url.trim()}?auto=format&fit=crop&w=500&h=500`);
+                    }
+                    self.loadingImage = false;
+                },
+                ChangeBackground: function (type) {
+                    var self = this;
+
+                    if (type == 2) self.data.type = 2;
+                    else if (type == 1) self.data.type = 1;
+                    else self.data.type = 0;
+
+                    if (self.data.type == 0 && self.data.background) {
+                        self.model.removeAttribute('skybox-image');
+                        self.model.style.backgroundImage = 'none';
+                        self.model.style.backgroundColor = self.data.background;
+                    }
+                    else if (self.data.type == 1 && self.data.background) {
+                        self.model.removeAttribute('skybox-image');
+                        self.model.style.backgroundImage = `url('${self.data.background}')`;
+                        self.model.style.backgroundColor = 'transparent';
+                    }
+                    else if (self.data.type == 2 && self.data.background) {
+                        self.model.setAttribute('skybox-image', self.data.background);
+                        self.model.style.backgroundImage = 'none';
+                        self.model.style.backgroundColor = 'transparent';
+                    }
+                    else {
+                        self.model.removeAttribute('skybox-image');
+                        self.model.style.backgroundImage = 'none';
+                        self.model.style.backgroundColor = 'transparent';
+                    }
+                },
+                ChangeImage: function (url) {
+                    this.data.background = url;
+                    this.ChangeTypeImage();
+                },
+                ChangeTypeImage: function () {
+                    var type = this.typeImage == true ? 2 : 1;
+                    this.ChangeBackground(type);
+                }
+
+
+            },
+            mounted() {
+                this.init();
+            },
+        });
         var appSelectModel = new Vue({
             el: "#appSelectModel",
             data: {
@@ -429,7 +484,8 @@
                 isLoad2: true,
                 listPartProduct: [],
 
-                productIDSelected: '@Html.Raw(ViewBag.id)'
+                productIDSelected: '@Html.Raw(ViewBag.id)',
+                model: {}
 
             },
             methods: {
@@ -440,6 +496,13 @@
                     window.addEventListener('load', () => {
                         if (self.productIDSelected) {
                             document.getElementById("model-main").src = '@Html.Raw(ViewBag.src)';
+                            document.getElementById("model-main").addEventListener('load', (e) => {
+                                self.model = e.target.model;
+                                for (var m of self.model.materials) {
+                                    m.setAlphaMode("OPAQUE");
+                                    m.pbrMetallicRoughness.setBaseColorFactor([m.pbrMetallicRoughness.baseColorFactor[0], m.pbrMetallicRoughness.baseColorFactor[1], m.pbrMetallicRoughness.baseColorFactor[2], 1]);
+                                }
+                            })
 
                             var cartIs = Array.from(document.querySelectorAll('.product-cart'));
 
@@ -523,7 +586,7 @@
                     var self = this;
                     await self.GetListCartItems();
                     await self.GetListProducts();
-                    if(self.productIDSelected){
+                    if (self.productIDSelected) {
                         await self.GetProductSetting();
                     }
                 },
@@ -589,103 +652,45 @@
             },
         });
 
-        var appBackground = new Vue({
-            el: "#appBackground",
+        var appDesign = new Vue({
+            el: "#appDesign",
             data: {
-                model: {},
-                data: {},
-                querySearch: '',
-                listImages: [],
-                typeImage: false,
-                loadingImage: true
-            },
-            methods: {
-                init: async function () {
-                    var self = this;
-
-                    this.data.type = 0; //2-toàn cảnh, 1-hình ảnh, 0 đơn màu
-                    this.data.background = 'transparent';
-
-                    document.getElementById("model-main").addEventListener('load', (e) => {
-                        self.model = e.target;
-                        self.ChangeBackground(self.data.type);
-                    });
-
-                    await this.SearchImages();
-
-                    this.$forceUpdate();
-                },
-                SearchImages: async function () {
-                    var self = this;
-                    self.loadingImage = true;
-                    var images = await SearchImages(self.querySearch, 28, 1);
-                    if (images.length > 0) {
-                        self.listImages = images.map(e => `https://images.unsplash.com/${e.url.trim()}?auto=format&fit=crop&w=500&h=500`);
-                    }
-                    self.loadingImage = false;
-                },
-                ChangeBackground: function (type) {
-                    var self = this;
-
-                    if (type == 2) self.data.type = 2;
-                    else if (type == 1) self.data.type = 1;
-                    else self.data.type = 0;
-
-                    if (self.data.type == 0 && self.data.background) {
-                        self.model.removeAttribute('skybox-image');
-                        self.model.style.backgroundImage = 'none';
-                        self.model.style.backgroundColor = self.data.background;
-                    }
-                    else if (self.data.type == 1 && self.data.background) {
-                        self.model.removeAttribute('skybox-image');
-                        self.model.style.backgroundImage = `url('${self.data.background}')`;
-                        self.model.style.backgroundColor = 'transparent';
-                    }
-                    else if (self.data.type == 2 && self.data.background) {
-                        self.model.setAttribute('skybox-image', self.data.background);
-                        self.model.style.backgroundImage = 'none';
-                        self.model.style.backgroundColor = 'transparent';
-                    }
-                    else {
-                        self.model.removeAttribute('skybox-image');
-                        self.model.style.backgroundImage = 'none';
-                        self.model.style.backgroundColor = 'transparent';
-                    }
-                },
-                ChangeImage: function (url) {
-                    this.data.background = url;
-                    this.ChangeTypeImage();
-                },
-                ChangeTypeImage: function () {
-                    var type = this.typeImage == true ? 2 : 1;
-                    this.ChangeBackground(type);
-                }
-
-
-            },
-            mounted() {
-                this.init();
-            },
-        });
-
-        var appSelect = new Vue({
-            el: "#app-select-position-model",
-            data: {
+                modelViewer: {},
                 model: {},
                 listMaterials: [],
                 materialSelectedName: "",
                 isNotHidePositionOther: false,
                 listPartProduct: [],
+
+                dataChangeColor: {
+                    imageTexture: "/images/none.svg",
+                    color: '#010101',
+                    scaleTexture: 1,
+                    querySearch: '',
+
+                    listImages: [],
+                    loadingImage: true,
+                },
+                dataChangeMaterial:{
+                    listMaterials: [],
+                    loadingMaterial: true
+                },
+
             },
             methods: {
                 init: async function () {
                     var self = this;
 
                     document.getElementById("model-main").addEventListener('load', (e) => {
-                        self.model = e.target;
+                        self.modelViewer = e.target;
+                        self.model = e.target.model;
                         self.listMaterials = e.target.model.materials;
-                        self.listPartProduct = appSelectModel.listPartProduct;
+                        self.listPartProduct = appSelectModel.listPartProduct; //list part name product
                     });
+
+
+                    await this.SearchImageChangeColor();
+                    await this.getListMaterialOfPartProductSelected();
 
                     this.$forceUpdate();
                 },
@@ -720,72 +725,35 @@
                     else {
                         return self.listMaterials;
                     }
-                }
-            },
-            mounted() {
-                this.init();
-            },
-        });
-
-        var appChangeColor = new Vue({
-            el: "#appChangeColor",
-            data: {
-                data: {},
-                querySearch: '',
-                listImages: [],
-                loadingImage: true,
-                model: {},
-                modelViewer: {}
-            },
-            methods: {
-                init: async function () {
-                    var self = this;
-                    self.modelViewer = document.getElementById("model-main");
-                    self.modelViewer.addEventListener('load', (e) => {
-                        self.model = e.target;
-                    });
-                    this.data.imageTexture = "/images/none.svg";
-                    this.data.color = '#010101';
-                    this.data.scaleTexture = 1;
-
-                    await this.SearchImages();
-
-                    this.$forceUpdate();
                 },
-                SearchImages: async function () {
+                SearchImageChangeColor: async function () {
                     var self = this;
-                    self.loadingImage = true;
-                    var images = await SearchImages(self.querySearch, 28, 1);
+                    self.dataChangeColor.loadingImage = true;
+                    var images = await SearchImages(self.dataChangeColor.querySearch, 28, 1);
                     if (images.length > 0) {
-                        self.listImages = images.map(e => `https://images.unsplash.com/${e.url.trim()}?auto=format&fit=crop&w=500&h=500`);
+                        self.dataChangeColor.listImages = images.map(e => `https://images.unsplash.com/${e.url.trim()}?auto=format&fit=crop&w=500&h=500`);
                     }
-                    self.loadingImage = false;
+                    self.dataChangeColor.loadingImage = false;
                 },
                 ChangeColor: function () {
                     var self = this;
-                    // var c = hexToRgb(color);
-                    // if (!c) {
-                    //     self.color = { r: 1, g: 1, b: 1 };
-                    // }
-                    // //chuyển thành linear RGB
-                    // var linear = rgbToLinearRGB([c.r, c.g, c.b]);
 
                     //gọi app select lấy meterial đang select để thay đổi màu
-                    for (var m of appSelect.GetMaterialsSelected()) {
-                        m.pbrMetallicRoughness.setBaseColorFactor(self.data.color);
+                    for (var m of self.GetMaterialsSelected()) {
+                        m.pbrMetallicRoughness.setBaseColorFactor(self.dataChangeColor.color);
                     }
 
                 },
                 ChangeTexture: async function (url) {
                     var self = this;
-                    self.data.imageTexture = url;
+                    self.dataChangeColor.imageTexture = url;
                     const texture = await self.modelViewer.createTexture(url);
-                    for (var m of appSelect.GetMaterialsSelected()) {
+                    for (var m of self.GetMaterialsSelected()) {
                         m.pbrMetallicRoughness['baseColorTexture'].setTexture(texture);
                     }
                     this.$forceUpdate();
                 },
-                GetUrlFileUpload: async function (e) {
+                GetUrlFileUploadChangeColor: async function (e) {
                     var self = this;
                     let file = e.target.files[0];
                     //check file ảnh tải lên
@@ -795,62 +763,34 @@
                     }
                 },
                 ChangeScaleTexture: function () {
-                    var scale = { u: this.data.scaleTexture, v: this.data.scaleTexture };
-                    for (var m of appSelect.GetMaterialsSelected()) {
+                    var self = this
+                    var scale = { u: this.dataChangeColor.scaleTexture, v: this.dataChangeColor.scaleTexture };
+                    for (var m of self.GetMaterialsSelected()) {
                         m.pbrMetallicRoughness['baseColorTexture'].texture.sampler.setScale(scale);
                     }
                     this.$forceUpdate();
-                }
-
-            },
-            mounted() {
-                this.init();
-            },
-        });
-
-
-        var appChangeMetallicRoughness = new Vue({
-            el: "#appChangeMetallicRoughness",
-            data: {
-                model: {},
-                modelViewer: {},
-                listMetallicRoughness: [],
-                loading: true
-            },
-            methods: {
-                init: async function () {
-                    var self = this;
-                    self.modelViewer = document.getElementById("model-main");
-                    self.modelViewer.addEventListener('load', (e) => {
-                        self.model = e.target;
-                    });
-
-                    await self.getListMetallicRoughness();
-
-
-                    this.$forceUpdate();
                 },
-                getListMetallicRoughness: async function () {
+                getListMaterialOfPartProductSelected: async function () {
                     var self = this;
-                    self.loading = true;
+                    self.dataChangeMaterial.loadingMaterial = true;
                     var textures1 = { name: 'jean', url: '/textures/jean.jpg' };
                     var textures2 = { name: 'coarse', url: '/textures/coarse-old-fabric_albedo.png' };
 
-                    this.listMetallicRoughness.push(textures1, textures2);
-                    self.loading = false;
+                    this.dataChangeMaterial.listMaterials.push(textures1, textures2);
+                    self.dataChangeMaterial.loadingMaterial = false;
 
                 },
-                changeMetallicRoughness: async function (url) {
+                changeMeterial: async function (url) {
                     var self = this;
                     if (url) {
                         const texture = await self.modelViewer.createTexture(url);
-                        for (var m of appSelect.GetMaterialsSelected()) {
+                        for (var m of self.GetMaterialsSelected()) {
                             m.pbrMetallicRoughness['metallicRoughnessTexture'].setTexture(texture);
                         }
                     }
                     else {
                         //url không tồn tại thì chuyển về chất liệu mặc định
-                        for (var m of appSelect.GetMaterialsSelected()) {
+                        for (var m of self.GetMaterialsSelected()) {
                             m.pbrMetallicRoughness['metallicRoughnessTexture'].setTexture(null);
                         }
                     }
@@ -862,6 +802,8 @@
                 this.init();
             },
         });
+
+
     </script>
 
 
