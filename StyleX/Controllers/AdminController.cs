@@ -630,12 +630,8 @@ namespace StyleX.Controllers
             {
                 var query1 = from p in _dbContext.Products
                              join c in _dbContext.Categories on p.CategoryID equals c.CategoryID
-                             join ps in _dbContext.ProductSettings on p.ProductID equals ps.ProductID into leftJoinTablePS
-                             from ps2 in leftJoinTablePS.DefaultIfEmpty()
-                             join wh in _dbContext.Warehouses on p.ProductID equals wh.ProductID into leftJoinTableW
-                             from w in leftJoinTableW.DefaultIfEmpty()
                              where (model.status == 0 || (model.status == 1 && p.Status == true) || (model.status == 2 && p.Status == false))
-                           && (model.categoryID == 0 || (model.categoryID == c.CategoryID))
+                                   && (model.categoryID == 0 || (model.categoryID == c.CategoryID))
                              select new
                              {
                                  p.ProductID,
@@ -648,36 +644,40 @@ namespace StyleX.Controllers
                                  p.Sale,
                                  p.SaleEndAt,
                                  p.Status,
-                                 Warehouse = w,
                                  CategoryID = c.CategoryID,
                                  CategoryName = c.Name,
                                  p.ModelUrl,
-                                 ProductSetting = ps2
-
                              };
 
-                var query2 = from p in query1
-                             group p by p.ProductID into g
-                             select new
-                             {
-                                 ProductID = g.Key,
-                                 PosterUrl = g.First().PosterUrl,
-                                 PosterDesignUrl1 = g.First().PosterDesignUrl1,
-                                 PosterDesignUrl2 = g.First().PosterDesignUrl2,
-                                 Name = g.First().Name,
-                                 Description = g.First().Description,
-                                 Price = g.First().Price,
-                                 Sale = g.First().Sale,
-                                 SaleEndAt = g.First().SaleEndAt,
-                                 Status = g.First().Status,
-                                 Warehouses = g.Select(x => x.Warehouse).ToList(),
-                                 CategoryID = g.First().CategoryID,
-                                 CategoryName = g.First().CategoryName,
-                                 ModelUrl = g.First().ModelUrl,
-                                 ProductSettings = g.Select(x => x.ProductSetting).ToList(),
+                var result = query1.ToList(); // Execute the main query and get results
 
-                             };
-                return new OkObjectResult(new { status = 1, message = "success", data = query2.ToList() });
+                // Now fetch related data for Warehouses and ProductSettings
+                var productIds = result.Select(p => p.ProductID).ToList();
+                var warehouses = _dbContext.Warehouses.Where(e => productIds.Contains(e.ProductID)).ToList();
+                var productSettings = _dbContext.ProductSettings.Where(e => productIds.Contains(e.ProductID)).ToList();
+
+                // Combine the related data with the main query results
+                var finalResult = result.Select(p => new
+                {
+                    p.ProductID,
+                    p.PosterUrl,
+                    p.PosterDesignUrl1,
+                    p.PosterDesignUrl2,
+                    p.Name,
+                    p.Description,
+                    p.Price,
+                    p.Sale,
+                    p.SaleEndAt,
+                    p.Status,
+                    Warehouses = warehouses.Where(e => e.ProductID == p.ProductID).ToList(),
+                    CategoryID = p.CategoryID,
+                    CategoryName = p.CategoryName,
+                    p.ModelUrl,
+                    ProductSettings = productSettings.Where(e => e.ProductID == p.ProductID).ToList()
+                }).ToList();
+
+
+                return new OkObjectResult(new { status = 1, message = "success", data = finalResult });
 
             }
             catch (Exception e)
