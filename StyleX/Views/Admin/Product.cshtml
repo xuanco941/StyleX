@@ -1013,14 +1013,15 @@
                         for (var m of e.target.model.materials) {
                             m.setAlphaMode("OPAQUE");
                         }
+                        self.dataSetting.productSettings = productSettings;
+                        self.dataSetting.productSettingID = productSettings[0].productSettingID;
+
+
+
+                        self.GetProductSettings();
                     });
 
-                    self.dataSetting.productSettings = productSettings;
-                    self.dataSetting.productSettingID = productSettings[0].productSettingID;
 
-
-
-                    await this.GetProductSettings();
                 },
                 SettingProduct: async function () {
                     var self = this;

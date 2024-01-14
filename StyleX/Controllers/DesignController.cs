@@ -98,6 +98,7 @@ namespace StyleX.Controllers
                                  ps.ProductPartNameDefault,
                                  ps.ProductPartNameCustom,
                                  ps.IsDefault,
+                                 ps.NameMaterialDefault,
                                  material = mat
                              };
                 var r = query1.ToList();
