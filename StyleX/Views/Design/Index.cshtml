@@ -40,8 +40,9 @@
                             <div class="col-3 col-md-4 product product-cart" style="position: relative" v-if="isLoad1==false && cartItems" v-for="item in cartItems" v-bind:value="item.cartItemID">
                                 <a v-bind:href="'/design?id='+item.cartItemID" style="text-decoration:none;" class="d-flex justify-content-center align-item-center">
                                     <img style="height: 90px;" v-bind:src="item.posterUrl" alt="" srcset="">
-@*                                     <div class="text-center text-white" style="font-size:12px;">{{item.product.name}}</div>
- *@                                </a>
+                                    @*                                     <div class="text-center text-white" style="font-size:12px;">{{item.product.name}}</div>
+                                    *@
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -59,8 +60,9 @@
                             <div class="col-3 col-md-4 product d-flex justify-content-center align-item-center" style="position: relative" v-if="isLoad2==false && products" v-for="item in products">
                                 <img style="height: 90px;" v-bind:src="item.posterUrl" alt="" srcset="">
                                 <button style="font-size:10.5px; padding: 0.2rem 0.35rem;" class="btn btn-primary btnDesignModel" v-on:click="AddCart(item.productID)">Thêm vào giỏ</button>
-@*                                 <div class="text-center" style="font-size:12px;">{{item.name}}</div>
- *@                            </div>
+                                @*                                 <div class="text-center" style="font-size:12px;">{{item.name}}</div>
+                                *@
+                            </div>
                         </div>
                     </div>
 
@@ -155,7 +157,7 @@
             <div class="col-12 col-md-4 col-lg-3 col-xl-3 mt-3 mt-md-0 py-1"
                  style="height: 100vh; max-height: 100vh; cursor: default; overflow-y: auto;">
                 <div class="tab-content" style="max-height: calc(100% - 36px);">
-                    <div id="nav-design" >
+                    <div id="nav-design">
 
                         <div class="flex-shrink-0 w-100" id="appDesign">
                             <div>
@@ -165,7 +167,6 @@
                                 </label>
                                 <select id="selectPositionModel" class="form-select" v-model="materialSelectedName"
                                         v-on:change="Select()">
-                                    <option value="">Toàn bộ phận</option>
                                     <option v-for="mat in listPartProduct" v-bind:value="mat.nameDefault">
                                         {{mat.nameCustom}}
                                     </option>
@@ -180,7 +181,7 @@
                                 </div>
                             </div>
                             <ul class="list-unstyled ps-0 mt-4">
-                                <li class="mb-3" >
+                                <li class="mb-3">
                                     <button class="btn btn-toggle align-items-center rounded collapsed"
                                             data-bs-toggle="collapse" data-bs-target="#color-collapse"
                                             aria-expanded="false">
@@ -257,7 +258,7 @@
                                         </div>
                                     </div>
                                 </li>
-                                <li class="mb-3" id="appChangeMetallicRoughness">
+                                <li class="mb-3">
                                     <button class="btn btn-toggle align-items-center rounded collapsed"
                                             data-bs-toggle="collapse" data-bs-target="#metallic-roughness-collapse"
                                             aria-expanded="true">
@@ -484,7 +485,7 @@
                 isLoad2: true,
                 listPartProduct: [],
 
-                productIDSelected: '@Html.Raw(ViewBag.id)',
+                productIDSelected: '@Html.Raw(ViewBag.id)', // id cartItem
                 model: {}
 
             },
@@ -671,7 +672,7 @@
                     listImages: [],
                     loadingImage: true,
                 },
-                dataChangeMaterial:{
+                dataChangeMaterial: {
                     listMaterials: [],
                     loadingMaterial: true
                 },
@@ -686,6 +687,7 @@
                         self.model = e.target.model;
                         self.listMaterials = e.target.model.materials;
                         self.listPartProduct = appSelectModel.listPartProduct; //list part name product
+                        self.materialSelectedName = self.listPartProduct[0].nameDefault;
                     });
 
 
@@ -694,8 +696,10 @@
 
                     this.$forceUpdate();
                 },
-                Select: function () {
+                Select: async function () {
                     var self = this;
+
+                    await self.getListMaterialOfPartProductSelected();
 
                     if (!self.materialSelectedName || self.isNotHidePositionOther) {
                         //set tất cả material của model về màu chưa opacity
@@ -772,15 +776,43 @@
                 },
                 getListMaterialOfPartProductSelected: async function () {
                     var self = this;
+                    var productSettingID = 0;
+                    if (self.materialSelectedName) {
+                        productSettingID = self.listPartProduct.find(e => e.nameDefault == self.materialSelectedName).productSettingID;
+                    }
+
+                    console.log(productSettingID);
                     self.dataChangeMaterial.loadingMaterial = true;
                     var textures1 = { name: 'jean', url: '/textures/jean.jpg' };
                     var textures2 = { name: 'coarse', url: '/textures/coarse-old-fabric_albedo.png' };
 
                     this.dataChangeMaterial.listMaterials.push(textures1, textures2);
-                    self.dataChangeMaterial.loadingMaterial = false;
+
+                    self.dataChangeMaterial.listMaterials = [];
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "/Design/GetMaterials",
+                        data: JSON.stringify({
+                            ID: productSettingID
+                        }),
+                        success: function (res) {
+                            self.dataChangeMaterial.loadingMaterial = false;
+                            if (res.status == 1) {
+                                self.dataChangeMaterial.listMaterials = res.data;
+                                console.log(res.data)
+                            }
+                            else {
+                                ShowAlert(res.message, "danger");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            self.dataChangeMaterial.loadingMaterial = false;
+                        }
+                    });
 
                 },
-                changeMeterial: async function (url) {
+                changeMaterial: async function (url) {
                     var self = this;
                     if (url) {
                         const texture = await self.modelViewer.createTexture(url);

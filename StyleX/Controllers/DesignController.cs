@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using StyleX.DTOs;
 using StyleX.Models;
 using System.Security.Claims;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace StyleX.Controllers
 {
@@ -113,6 +114,24 @@ namespace StyleX.Controllers
                              };
 
                 return new OkObjectResult(new { status = 1, message = "success", data = query2.ToList() });
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message, data = DBNull.Value });
+            }
+        }
+        [HttpPost]
+        public IActionResult GetMaterials([FromBody] IDModel model)
+        {
+            try
+            {
+
+                var query1 = _dbContext.ProductSettingMaterials.Include(e => e.Material).Where(e => e.ProductSettingID == model.ID).ToList();
+                var result = from p in query1 where p.Material.Status == true select new { materialID = p.Material.MaterialID, name = p.Material.Name, aoMap = p.Material.AoMap, normalMap = p.Material.NormalMap, roughnessMap = p.Material.RoughnessMap, metalnessMap = p.Material.MetalnessMap };
+                return new OkObjectResult(new { status = 1, message = "success", data = result.ToList() });
+
+
 
             }
             catch (Exception e)
