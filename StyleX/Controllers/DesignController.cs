@@ -128,7 +128,10 @@ namespace StyleX.Controllers
             {
 
                 var query1 = _dbContext.ProductSettingMaterials.Include(e => e.Material).Where(e => e.ProductSettingID == model.ID).ToList();
-                var result = from p in query1 where p.Material.Status == true select new { materialID = p.Material.MaterialID, name = p.Material.Name, aoMap = p.Material.AoMap, normalMap = p.Material.NormalMap, roughnessMap = p.Material.RoughnessMap, metalnessMap = p.Material.MetalnessMap };
+                var result = from p in query1
+                             where p.Material.Status == true
+                             select new
+                             { materialID = p.Material.MaterialID, name = p.Material.Name, preview = p.Material.Url, aoMap = p.Material.AoMap, normalMap = p.Material.NormalMap, roughnessMap = p.Material.RoughnessMap, metalnessMap = p.Material.MetalnessMap };
                 return new OkObjectResult(new { status = 1, message = "success", data = result.ToList() });
 
 

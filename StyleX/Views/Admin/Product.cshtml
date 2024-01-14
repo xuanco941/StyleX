@@ -319,7 +319,11 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label>Chất liệu</label>
+                                    <label>Tên chất liệu mặc định</label>
+                                    <input type="text" class="form-control" v-model="dataSetting.nameMaterialDefault">
+                                </div>
+                                <div class="form-group">
+                                    <label>Chất liệu thay đổi</label>
                                     <div class="d-flex flex-wrap">
                                         <div class="form-check mx-3 my-3 d-flex align-items-center" v-for="item in tableMaterial">
                                             <input style="height:18px; width:18px;" class="form-check-input mt-0" type="checkbox" v-bind:value="item.materialID" v-bind:id="item.name+item.materialID" v-model="dataSetting.materials">
@@ -438,6 +442,7 @@
                     productSettings: [],
                     productSettingID: 0,
                     productPartNameCustom: "",
+                    nameMaterialDefault: "",
 
                     materials: [],
                     isDefault: false,
@@ -454,6 +459,7 @@
             methods: {
                 init: async function () {
                     var self = this;
+
                     await this.GetCategory();
                     await this.GetProducts();
                     await this.GetMaterial();
@@ -960,16 +966,19 @@
                     var self = this;
 
                     var nameMat = self.dataSetting.productSettings.find(e => e.productSettingID == self.dataSetting.productSettingID).productPartNameDefault;
-                    for (var m of self.dataSetting.model.materials) {
-                        if (m.name != nameMat) {
-                            m.setAlphaMode("BLEND");
-                            m.pbrMetallicRoughness.setBaseColorFactor([m.pbrMetallicRoughness.baseColorFactor[0], m.pbrMetallicRoughness.baseColorFactor[1], m.pbrMetallicRoughness.baseColorFactor[2], 0.05]);
-                        }
-                        else {
-                            m.setAlphaMode("OPAQUE");
-                            m.pbrMetallicRoughness.setBaseColorFactor([m.pbrMetallicRoughness.baseColorFactor[0], m.pbrMetallicRoughness.baseColorFactor[1], m.pbrMetallicRoughness.baseColorFactor[2], 1]);
+                    if (self.dataSetting.model){
+                        for (var m of self.dataSetting.model.materials) {
+                            if (m.name != nameMat) {
+                                m.setAlphaMode("BLEND");
+                                m.pbrMetallicRoughness.setBaseColorFactor([m.pbrMetallicRoughness.baseColorFactor[0], m.pbrMetallicRoughness.baseColorFactor[1], m.pbrMetallicRoughness.baseColorFactor[2], 0.05]);
+                            }
+                            else {
+                                m.setAlphaMode("OPAQUE");
+                                m.pbrMetallicRoughness.setBaseColorFactor([m.pbrMetallicRoughness.baseColorFactor[0], m.pbrMetallicRoughness.baseColorFactor[1], m.pbrMetallicRoughness.baseColorFactor[2], 1]);
+                            }
                         }
                     }
+ 
 
 
                     $.ajax({
@@ -983,6 +992,7 @@
                             if (res.status == 1) {
                                 self.dataSetting.productPartNameCustom = res.data.productPartNameCustom;
                                 self.dataSetting.isDefault = res.data.isDefault;
+                                self.dataSetting.nameMaterialDefault = res.data.nameMaterialDefault;
                                 self.dataSetting.materials = res.data.materials.map(e => e.materialID);
                             }
                             else {
@@ -1004,8 +1014,12 @@
                             m.setAlphaMode("OPAQUE");
                         }
                     });
+
                     self.dataSetting.productSettings = productSettings;
                     self.dataSetting.productSettingID = productSettings[0].productSettingID;
+
+
+
                     await this.GetProductSettings();
                 },
                 SettingProduct: async function () {
@@ -1017,6 +1031,7 @@
                     formData.append('productSettingID', self.dataSetting.productSettingID);
                     formData.append('productPartNameCustom', self.dataSetting.productPartNameCustom);
                     formData.append('isDefault', self.dataSetting.isDefault);
+                    formData.append('nameMaterialDefault', self.dataSetting.nameMaterialDefault);
                     for (var i = 0; i < self.dataSetting.materials.length; i++) {
                         formData.append(`materials[${i}]`, self.dataSetting.materials[i]);
                     }

@@ -933,7 +933,10 @@ namespace StyleX.Controllers
                         mats.Add(amt);
                     }
                 }
-                var p = new ProductSettingsWithMaterial() { IsDefault = query.IsDefault, materials = mats, ProductPartNameCustom = query.ProductPartNameCustom, ProductPartNameDefault = query.ProductPartNameDefault, ProductSettingID = query.ProductSettingID };
+                var p = new ProductSettingsWithMaterial() { IsDefault = query.IsDefault,
+                    materials = mats, ProductPartNameCustom = query.ProductPartNameCustom, 
+                    ProductPartNameDefault = query.ProductPartNameDefault,
+                    ProductSettingID = query.ProductSettingID, NameMaterialDefault = query.NameMaterialDefault };
                 return new OkObjectResult(new { status = 1, message = "success", data = p });
 
             }
@@ -959,6 +962,7 @@ namespace StyleX.Controllers
                 }
                 ps.ProductPartNameCustom = md.productPartNameCustom;
                 ps.IsDefault = md.isDefault;
+                ps.NameMaterialDefault = md.nameMaterialDefault;
 
                 var oldMat = _dbContext.ProductSettingMaterials.Where(a => a.ProductSettingID == md.productSettingID).ToList();
                 if (oldMat != null && oldMat.Count() > 0)

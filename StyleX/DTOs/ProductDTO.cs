@@ -20,6 +20,7 @@ namespace StyleX.DTOs
         public string ProductPartNameDefault { get; set; } = string.Empty;
         public string ProductPartNameCustom { get; set; } = string.Empty;
         public bool IsDefault { get; set; } = false;
+        public string NameMaterialDefault { get; set; } = string.Empty;
         public List<Material> materials { get; set; } = new List<Material>();
 
     }
@@ -59,6 +60,7 @@ namespace StyleX.DTOs
 
         public string productPartNameCustom { get; set; } = string.Empty;
         public bool isDefault { get; set; }
+        public string nameMaterialDefault { get; set; } = string.Empty;
 
         public List<int> materials { get; set; } = new List<int>();
     }

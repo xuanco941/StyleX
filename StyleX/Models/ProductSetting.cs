@@ -16,7 +16,8 @@ namespace StyleX.Models
 
         //mặc định sẽ đặt về màu vải trắng , false sẽ giữ màu từ model 
         //pbrMetallicRoughness.baseColorTexture.setTexture(null)
-        public bool IsDefault { get; set; } = false; 
+        public bool IsDefault { get; set; } = false;
+        public string NameMaterialDefault { get; set; } = string.Empty;
         public int ProductID { get; set; }
         public Product Product { get; set; } = null!;
 
