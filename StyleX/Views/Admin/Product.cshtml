@@ -1065,7 +1065,7 @@
                     var self = this;
 
                     var nameMat = self.dataSetting.productSettings.find(e => e.productSettingID == self.dataSetting.productSettingID).productPartNameDefault;
-                    if (self.dataSetting.model) {
+                    if (self.dataSetting.model.materials) {
                         for (var m of self.dataSetting.model.materials) {
                             if (m.name != nameMat) {
                                 m.setAlphaMode("BLEND");
@@ -1093,6 +1093,8 @@
                                 self.dataSetting.isDefault = res.data.isDefault;
                                 self.dataSetting.nameMaterialDefault = res.data.nameMaterialDefault;
                                 self.dataSetting.materials = res.data.materials.map(e => e.materialID);
+                                self.$forceUpdate();
+
                             }
                             else {
                                 ShowAlert(res.message, "danger");
@@ -1112,14 +1114,13 @@
                         for (var m of e.target.model.materials) {
                             m.setAlphaMode("OPAQUE");
                         }
-                        self.dataSetting.productSettings = productSettings;
-                        self.dataSetting.productSettingID = productSettings[0].productSettingID;
 
-
-
-                        self.GetProductSettings();
                     });
+                    self.dataSetting.productSettings = productSettings;
+                    self.dataSetting.productSettingID = productSettings[0].productSettingID;
 
+
+                    await self.GetProductSettings();
 
                 },
                 SettingProduct: async function () {
