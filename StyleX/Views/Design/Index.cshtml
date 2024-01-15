@@ -180,7 +180,7 @@
                                     </label>
                                 </div>
                             </div>
-                            <ul class="list-unstyled ps-0 mt-4">
+                            <ul class="list-unstyled ps-0 mt-4" style="height:calc(100% - 140px)">
                                 <li class="mb-3">
                                     <button class="btn btn-toggle align-items-center rounded collapsed btn-c"
                                             data-bs-toggle="collapse" data-bs-target="#color-collapse" value="color-collapse"
@@ -188,11 +188,11 @@
                                         Màu sắc
                                     </button>
                                     <div class="collapse show mt-2 collapse-div" id="color-collapse"
-                                         style="padding-left: 1.5rem; max-height: 600px; overflow-y: auto; overflow-x: hidden;">
+                                         style="padding-left: 1.5rem; max-height: 100%; overflow-y: auto; overflow-x: hidden;">
                                         <div class="d-flex align-items-center">
                                             <input v-model="dataChangeColor.color" v-on:input="ChangeColor()" type="color"
                                                    class="form-control form-control-color product"
-                                                   id="colorDesignInput" style="height:80px; width:120px;">
+                                                   id="colorDesignInput" style="height:60px; width:100px;">
                                             <label class="mx-2" style="font-size: 0.9rem;">Đơn màu</label>
                                         </div>
                                         <div class="border-top my-3"></div>
@@ -200,8 +200,8 @@
                                             <div class="d-flex align-items-center">
                                                 <input hidden type="file" id="uploadImgColor" accept="image/*"
                                                        v-on:change="GetUrlFileUploadChangeColor">
-                                                <label for="uploadImgColor" style="width:80px;" role="button">
-                                                    <img v-bind:src="dataChangeColor.imageTexture" class="w-100 product"
+                                                <label for="uploadImgColor" style="height:60px;" role="button">
+                                                    <img v-bind:src="dataChangeColor.imageTexture" class="w-100 h-100 product"
                                                          style="border-radius: 5px;">
                                                 </label>
                                                 <label class="mx-2" style="font-size: 0.9rem;">
@@ -241,7 +241,7 @@
                                                         <i class="fa-solid fa-magnifying-glass"></i>
                                                     </button>
                                                 </div>
-                                                <div class="row mt-2 w-100 justify-content-center mx-0">
+                                                <div class="row mt-2 w-100 justify-content-center mx-0" style="max-height: 280px; overflow-y:auto">
                                                     <div v-if="dataChangeColor.loadingImage"
                                                          class="d-flex justify-content-center align-items-center w-100"
                                                          style="height: 100px;">
@@ -264,9 +264,9 @@
                                             aria-expanded="false">
                                         Chất liệu
                                     </button>
-                                    <div id="metallic-roughness-collapse" class="collapse collapse-div" style="margin-left: 1.5rem; max-height: 600px; overflow-y: auto; overflow-x: hidden;">
+                                    <div id="metallic-roughness-collapse" class="collapse collapse-div" style="margin-left: 1.5rem; min-height:100px; max-height:100%; overflow-y: auto; overflow-x: hidden;">
 
-                                        <div v-if="dataChangeMaterial.loadingMaterial" class="spinner-border" role="status">
+                                        <div v-if="dataChangeMaterial.loadingMaterial" class="spinner-border mt-4" role="status">
                                             <span class="visually-hidden">Loading...</span>
                                         </div>
                                         <div v-if="!dataChangeMaterial.loadingMaterial" class="radio-button-container pt-2 px-1" style=" display: block;">
@@ -304,10 +304,75 @@
                                     <button class="btn btn-toggle align-items-center rounded collapsed btn-c"
                                             data-bs-toggle="collapse" data-bs-target="#decal-collapse" value="decal-collapse"
                                             aria-expanded="false">
-                                        Dán decal
+                                        Dán hình
                                     </button>
-                                    <div class="collapse collapse-div" id="decal-collapse" style="margin-left: 1.5rem;max-height: 600px; overflow-y: auto; overflow-x: hidden;">
-                                        <span>abc</span>
+                                    <div class="collapse collapse-div" id="decal-collapse" style="margin-left: 1.5rem;max-height:100%; overflow-y: auto; overflow-x: hidden;">
+                                        <div>
+                                            <div class="d-flex align-items-center justify-content-between mt-2">
+                                                <div class="d-flex align-items-center">
+                                                    <input hidden type="file" id="uploadImgDecal" accept="image/*"
+                                                           v-on:change="GetUrlFileUploadChangeDecal">
+                                                    <label for="uploadImgDecal" style="height:60px;" role="button">
+                                                        <img v-bind:src="dataChangeDecal.image" class="w-100 h-100 product"
+                                                             style="border-radius: 5px;">
+                                                    </label>
+                                                    <label class="mx-2" style="font-size: 0.9rem;">
+                                                        Ảnh dán
+                                                    </label>
+                                                </div>
+                                                <button class="btn btn-primary" style="font-size:14.5px;" v-if="!dataChangeDecal.isActive" v-on:click="StartDecal()">Bắt đầu dán</button>
+                                                <button class="btn btn-danger" style="font-size:14.5px;" v-if="dataChangeDecal.isActive">Ngừng dán</button>
+
+                                                <button class="btn btn-warning" style="font-size:14.5px;">Xóa hình vừa dán</button>
+
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col-12">
+                                                    <label for="sizeI" class="form-label m-0"
+                                                           style="font-size: 14px;">Kích thước ảnh</label>
+                                                    <div class="position-relative d-flex flex-nowrap align-items-center"
+                                                         style="padding-right: 5px;">
+                                                        <span class="position-absolute"
+                                                              style="font-size: 12px; bottom: -9px; left: 0px;">0</span>
+                                                        <input v-model="dataChangeDecal.size" type="range" class="form-range"
+                                                               min="0" max="2" step="0.1" id="sizeI">
+                                                        <span class="position-absolute"
+                                                              style="font-size: 12px; bottom: -9px; right: 40px;">2</span>
+                                                        <input class="from-control form-control-sm text-center" disabled
+                                                               readonly
+                                                               style="width: 27px; font-size: 14px; margin-left: 9px;color: #fff; padding: 1px;"
+                                                               type="text" v-bind:value="dataChangeDecal.size">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="mt-4">
+                                                <div class="input-group input-group-sm mb-1">
+                                                    <input style="box-shadow: none;" type="text"
+                                                           class="form-control form-control-sm"
+                                                           placeholder="Tìm kiếm hình ảnh"
+                                                           aria-describedby="button-search-image-bg" v-model="dataChangeDecal.querySearch"
+                                                           v-on:keyup.enter="SearchImageChangeDecal()">
+                                                    <button class="btn btn-outline-primary" type="button"
+                                                            id="button-search-image-bg" v-on:click="SearchImageChangeDecal()">
+                                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="row mt-2 w-100 justify-content-center mx-0" style="max-height: 350px; overflow-y:auto">
+                                                    <div v-if="dataChangeDecal.loadingImage"
+                                                         class="d-flex justify-content-center align-items-center w-100"
+                                                         style="height: 100px;">
+                                                        <div class="spinner-border" role="status">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                        </div>
+                                                    </div>
+                                                    <img v-if="!dataChangeDecal.loadingImage" style="max-width: 100%;"
+                                                         class="col-3 px-1 py-1 product"
+                                                         v-for="(url,index) in dataChangeDecal.listImages" v-bind:src="url"
+                                                         v-bind:alt="index" v-on:click="ChangeImageDecal(url)">
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </li>
                             </ul>
@@ -714,6 +779,17 @@
                     listMaterials: [],
                     loadingMaterial: true
                 },
+                dataChangeDecal: {
+                    size: 1,
+                    image: '/images/none.svg',
+                    querySearch: '',
+
+                    listImages: [],
+                    loadingImage: true,
+
+                    isActive: false, 
+                    decals:[]
+                }
 
             },
             methods: {
@@ -733,6 +809,7 @@
 
 
                     await this.SearchImageChangeColor();
+                    await this.SearchImageChangeDecal();
 
                     this.$forceUpdate();
                 },
@@ -906,7 +983,35 @@
                         }
                     }
 
+                },
+                SearchImageChangeDecal: async function () {
+                    var self = this;
+                    self.dataChangeDecal.loadingImage = true;
+                    var images = await SearchImages(self.dataChangeDecal.querySearch, 28, 1);
+                    if (images.length > 0) {
+                        self.dataChangeDecal.listImages = images.map(e => `https://images.unsplash.com/${e.url.trim()}?auto=format&fit=crop&w=500&h=500`);
+                    }
+                    self.dataChangeDecal.loadingImage = false;
+                },
+                GetUrlFileUploadChangeDecal: async function (e) {
+                    var self = this;
+                    let file = e.target.files[0];
+                    //check file ảnh tải lên
+                    if (file && file['type'].split('/')[0] === 'image') {
+                        let url = URL.createObjectURL(file);
+                        self.ChangeImageDecal(url);
+                    }
+                },
+                ChangeImageDecal: function (url) {
+                    var self = this;
+                    self.dataChangeDecal.image = url;
+                    self.$forceUpdate();
+                },
+                StartDecal: function () {
+                    var self = this;
+                    self.dataChangeDecal.isActive = true;
                 }
+
 
             },
             mounted() {
@@ -1066,36 +1171,6 @@
         })
 
 
-
-
-
-
-        var appChangeDecal = new Vue({
-            el: "#appChangeDecal",
-            data: {
-                model: {},
-                modelViewer: {},
-            },
-            methods: {
-                init: async function () {
-                    var self = this;
-                    self.modelViewer = document.getElementById("model-main");
-                    self.modelViewer.addEventListener('load', (e) => {
-                        self.model = e.target;
-                    });
-
-
-
-
-                    this.$forceUpdate();
-                },
-
-
-            },
-            mounted() {
-                this.init();
-            },
-        });
 
 
     </script>
