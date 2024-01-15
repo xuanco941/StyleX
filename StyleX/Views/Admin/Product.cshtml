@@ -679,8 +679,6 @@
                     }
 
 
-
-
                     self.dataAdd.isLoad = true;
                     $.ajax({
                         url: '/admin/addproduct',
@@ -692,6 +690,34 @@
                             self.dataAdd.isLoad = false;
                             if (res.status == 1) {
                                 self.GetProducts();
+
+                                var proID = res.data;
+
+                                for (let elm of self.dataAdd.model.materials) {
+                                    var obj = Object.getOwnPropertySymbols(elm.pbrMetallicRoughness.metallicRoughnessTexture);
+                                    var materials = elm.pbrMetallicRoughness.metallicRoughnessTexture[obj.find(e => e.description === 'materials')];
+
+                                    var aoMap = "";
+                                    var normalMap = "";
+                                    var roughnessMap = "";
+                                    var metalnessMap = "";
+                                    console.log(materials);
+                                    //type Set
+                                    materials.forEach(a => {
+                                        // a.map = map;
+                                        aoMap = a.aoMap ? self.getImageByMap(a.aoMap.image) : null;
+                                        normalMap = a.normalMap ? self.getImageByMap(a.normalMap.image) : null;
+                                        roughnessMap = a.roughnessMap ? self.getImageByMap(a.roughnessMap.image) : null;
+                                        metalnessMap = a.metalnessMap ? self.getImageByMap(a.metalnessMap.image) : null;
+
+
+                                    });
+                                    self.AddProductPart(proID, elm.name, aoMap, normalMap, roughnessMap, metalnessMap);
+                                }
+
+
+
+
                                 ShowAlert(res.message, "success");
                                 self.dataAdd.name = "";
                                 self.dataAdd.status = true;
@@ -732,6 +758,79 @@
                         }
                     });
 
+                },
+                AddProductPart: async function (productID, name, aoMap, normalMap, roughnessMap, metalnessMap) {
+                    var self = this;
+
+                    var formData = new FormData();
+                    formData.append('productID', productID);
+                    formData.append('name', name);
+                    if (aoMap) {
+                        formData.append('aoMap', aoMap, 'aoMap.png');
+                    }
+                    else {
+                        formData.append('aoMap', aoMap);
+                    }
+                    if (normalMap) {
+                        formData.append('normalMap', normalMap, 'normalMap.png');
+                    }
+                    else {
+                        formData.append('normalMap', normalMap);
+                    }
+                    if (roughnessMap) {
+                        formData.append('roughnessMap', roughnessMap, 'roughnessMap.png');
+                    }
+                    else {
+                        formData.append('roughnessMap', roughnessMap);
+
+                    }
+                    if (metalnessMap) {
+                        formData.append('metalnessMap', metalnessMap, 'metalnessMap.png');
+                    }
+                    else {
+                        formData.append('metalnessMap', metalnessMap);
+                    }
+
+
+                    $.ajax({
+                        url: '/admin/addproductpart',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (res) {
+                            if (res.status == 1) {
+                                console.log(`Thêm ${name} thành công`);
+                            }
+                        },
+                        error: function (error) {
+                            ShowAlert(error.responseJSON.mesage, "danger");
+                        }
+                    });
+
+                },
+
+                getImageByMap: function (image) {
+                    if (!image) {
+                        return null;
+                    }
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.width = image.width;
+                    canvas.height = image.height;
+                    context.drawImage(image, 0, 0);
+
+                    var dataURL = canvas.toDataURL('image/png');
+
+                    // Convert base64 to binary
+                    var byteString = atob(dataURL.split(',')[1]);
+                    var mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
+                    var ab = new ArrayBuffer(byteString.length);
+                    var ia = new Uint8Array(ab);
+                    for (var i = 0; i < byteString.length; i++) {
+                        ia[i] = byteString.charCodeAt(i);
+                    }
+                    return new Blob([ab], { type: mimeString });
                 },
                 formatDateDisplay: function (inputDateString) {
                     if (!inputDateString) {
@@ -966,7 +1065,7 @@
                     var self = this;
 
                     var nameMat = self.dataSetting.productSettings.find(e => e.productSettingID == self.dataSetting.productSettingID).productPartNameDefault;
-                    if (self.dataSetting.model){
+                    if (self.dataSetting.model) {
                         for (var m of self.dataSetting.model.materials) {
                             if (m.name != nameMat) {
                                 m.setAlphaMode("BLEND");
@@ -978,7 +1077,7 @@
                             }
                         }
                     }
- 
+
 
 
                     $.ajax({

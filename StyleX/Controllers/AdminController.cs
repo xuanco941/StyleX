@@ -789,6 +789,10 @@ namespace StyleX.Controllers
                             ProductID = pro.ProductID,
                             ProductPartNameDefault = n,
                             ProductPartNameCustom = n,
+                            AoMap = "",
+                            NormalMap = "",
+                            RoughnessMap = "",
+                            MetalnessMap = ""
                         });
                     }
                     _dbContext.ProductSettings.AddRange(list);
@@ -797,21 +801,133 @@ namespace StyleX.Controllers
 
                     _dbContext.SaveChanges();
 
-                    return new OkObjectResult(new { status = 1, message = "Tải lên sản phẩm mới thành công." });
+                    return new OkObjectResult(new { status = 1, message = "Tải lên sản phẩm mới thành công.", data = pro.ProductID });
 
                 }
                 else
                 {
-                    return new OkObjectResult(new { status = -1, message = "File không khả dụng." });
+                    return new OkObjectResult(new { status = -1, message = "File không khả dụng.", data = -1 });
                 }
 
             }
             catch (Exception e)
             {
-                return new BadRequestObjectResult(new { status = -99, message = e.Message });
+                return new BadRequestObjectResult(new { status = -99, message = e.Message, data = -1 });
             }
 
         }
+        public IActionResult AddProductPart([FromForm] AddMatProductPart model)
+        {
+            try
+            {
+                var p = _dbContext.ProductSettings.FirstOrDefault(e => e.ProductID == model.productID && e.ProductPartNameDefault == model.name);
+                if (p == null)
+                {
+                    return new OkObjectResult(new { status = -1, message = "Bộ phận sản phẩm không khả dụng.", data = -1 });
+                }
+
+
+                string folderName = Guid.NewGuid().ToString();
+                string fileNameAoMap = "aoMap.png";
+                string fileNameNormalMap = "normalMap.png";
+                string fileNameRoughnessMap = "roughnessMap.png";
+                string fileNameMetalnessMap = "metalnessMap.png";
+                var filePath1 = Path.Combine(_environment.WebRootPath, Common.FolderProductPartMaterialDefault, folderName, fileNameAoMap);
+                var filePath2 = Path.Combine(_environment.WebRootPath, Common.FolderProductPartMaterialDefault, folderName, fileNameNormalMap);
+                var filePath3 = Path.Combine(_environment.WebRootPath, Common.FolderProductPartMaterialDefault, folderName, fileNameRoughnessMap);
+                var filePath4 = Path.Combine(_environment.WebRootPath, Common.FolderProductPartMaterialDefault, folderName, fileNameMetalnessMap);
+                if (model.aoMap != null)
+                {
+                    //tạo folder
+                    if (!string.IsNullOrEmpty(filePath1))
+                    {
+                        string? directoryPath = Path.GetDirectoryName(filePath1);
+                        if (directoryPath != null && !Directory.Exists(directoryPath))
+                        {
+                            Directory.CreateDirectory(directoryPath);
+                        }
+                    }
+                    using (var stream = new FileStream(filePath1, FileMode.Create))
+                    {
+                        model.aoMap.CopyTo(stream);
+                    }
+                    string pathSave = $"/{Common.FolderProductPartMaterialDefault}/{folderName}/";
+
+                    p.AoMap = pathSave + fileNameAoMap;
+                }
+                if (model.normalMap != null)
+                {
+                    //tạo folder
+                    if (!string.IsNullOrEmpty(filePath2))
+                    {
+                        string? directoryPath = Path.GetDirectoryName(filePath2);
+                        if (directoryPath != null && !Directory.Exists(directoryPath))
+                        {
+                            Directory.CreateDirectory(directoryPath);
+                        }
+                    }
+                    using (var stream = new FileStream(filePath2, FileMode.Create))
+                    {
+                        model.normalMap.CopyTo(stream);
+                    }
+                    string pathSave = $"/{Common.FolderProductPartMaterialDefault}/{folderName}/";
+
+                    p.NormalMap = pathSave + fileNameNormalMap;
+                }
+                if (model.roughnessMap != null)
+                {
+                    //tạo folder
+                    if (!string.IsNullOrEmpty(filePath3))
+                    {
+                        string? directoryPath = Path.GetDirectoryName(filePath3);
+                        if (directoryPath != null && !Directory.Exists(directoryPath))
+                        {
+                            Directory.CreateDirectory(directoryPath);
+                        }
+                    }
+                    using (var stream = new FileStream(filePath3, FileMode.Create))
+                    {
+                        model.roughnessMap.CopyTo(stream);
+                    }
+                    string pathSave = $"/{Common.FolderProductPartMaterialDefault}/{folderName}/";
+
+                    p.RoughnessMap = pathSave + fileNameRoughnessMap;
+                }
+                if (model.metalnessMap != null)
+                {
+                    //tạo folder
+                    if (!string.IsNullOrEmpty(filePath3))
+                    {
+                        string? directoryPath = Path.GetDirectoryName(filePath4);
+                        if (directoryPath != null && !Directory.Exists(directoryPath))
+                        {
+                            Directory.CreateDirectory(directoryPath);
+                        }
+                    }
+                    using (var stream = new FileStream(filePath4, FileMode.Create))
+                    {
+                        model.metalnessMap.CopyTo(stream);
+                    }
+                    string pathSave = $"/{Common.FolderProductPartMaterialDefault}/{folderName}/";
+
+                    p.MetalnessMap = pathSave + fileNameMetalnessMap;
+                }
+
+
+                _dbContext.SaveChanges();
+
+                return new OkObjectResult(new { status = 1, message = "Update chất liệu mặc định thành công.", data = p.ProductSettingID });
+
+
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message, data = -1 });
+            }
+
+        }
+
         public IActionResult UpdateProduct([FromForm] UpdateProductModel md)
         {
             try
@@ -933,10 +1049,15 @@ namespace StyleX.Controllers
                         mats.Add(amt);
                     }
                 }
-                var p = new ProductSettingsWithMaterial() { IsDefault = query.IsDefault,
-                    materials = mats, ProductPartNameCustom = query.ProductPartNameCustom, 
+                var p = new ProductSettingsWithMaterial()
+                {
+                    IsDefault = query.IsDefault,
+                    materials = mats,
+                    ProductPartNameCustom = query.ProductPartNameCustom,
                     ProductPartNameDefault = query.ProductPartNameDefault,
-                    ProductSettingID = query.ProductSettingID, NameMaterialDefault = query.NameMaterialDefault };
+                    ProductSettingID = query.ProductSettingID,
+                    NameMaterialDefault = query.NameMaterialDefault
+                };
                 return new OkObjectResult(new { status = 1, message = "success", data = p });
 
             }

@@ -364,10 +364,30 @@ namespace StyleX.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductSettingID"), 1L, 1);
 
+                    b.Property<string>("AoMap")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisplacementMap")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDefault")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Map")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MetalnessMap")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("NameMaterialDefault")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalMap")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -379,6 +399,10 @@ namespace StyleX.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProductPartNameDefault")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoughnessMap")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

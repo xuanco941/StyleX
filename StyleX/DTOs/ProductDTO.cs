@@ -39,6 +39,16 @@ namespace StyleX.DTOs
         public bool status { get; set; }
         public int categoryID { get; set; }
         public List<string> productParts { get; set; } = new List<string>();
+
+    }
+    public class AddMatProductPart
+    {
+        public int productID { get; set; }
+        public string name { get; set; } = string.Empty;
+        public IFormFile? aoMap { get; set; }
+        public IFormFile? normalMap { get; set; }
+        public IFormFile? roughnessMap { get; set; }
+        public IFormFile? metalnessMap { get; set; }
     }
     public class UpdateProductModel
     {

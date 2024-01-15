@@ -99,9 +99,12 @@ namespace StyleX.Controllers
                                  ps.ProductPartNameCustom,
                                  ps.IsDefault,
                                  ps.NameMaterialDefault,
+                                 ps.AoMap,
+                                 ps.NormalMap,
+                                 ps.RoughnessMap,
+                                 ps.MetalnessMap,
                                  material = mat
                              };
-                var r = query1.ToList();
 
                 var query2 = from q in query1
                              group q by q.ProductSettingID into g
@@ -111,6 +114,11 @@ namespace StyleX.Controllers
                                  nameDefault = g.First().ProductPartNameDefault,
                                  nameCustom = g.First().ProductPartNameCustom,
                                  isDefault = g.First().IsDefault,
+                                 nameMaterialDefault = g.First().NameMaterialDefault,
+                                 aoMap = g.First().AoMap,
+                                 normalMap = g.First().NormalMap,
+                                 roughnessMap = g.First().RoughnessMap,
+                                 metalnessMap = g.First().MetalnessMap,
                                  materials = g.Select(x => x.material).ToList()
                              };
 

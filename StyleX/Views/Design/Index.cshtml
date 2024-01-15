@@ -488,8 +488,6 @@
                 productIDSelected: '@Html.Raw(ViewBag.id)', // id cartItem
                 model: {},
 
-                matDefaults:[]
-
             },
             methods: {
                 init: async function () {
@@ -507,19 +505,6 @@
                                     m.setAlphaMode("OPAQUE");
                                     m.pbrMetallicRoughness.setBaseColorFactor([m.pbrMetallicRoughness.baseColorFactor[0], m.pbrMetallicRoughness.baseColorFactor[1], m.pbrMetallicRoughness.baseColorFactor[2], 1]);
 
-
-                                    //chất liệu vải mặc định
-                                    // var obj = Object.getOwnPropertySymbols(m.pbrMetallicRoughness.metallicRoughnessTexture);
-                                    // var mat = m.pbrMetallicRoughness.metallicRoughnessTexture[obj.find(elm => elm.description === 'materials')];
-                                    // console.log(mat)
-                                    // mat.forEach(a => {
-                                    //     // a.map = map;
-                                    //     a.aoMap = aoMap;
-                                    //     a.normalMap = normalMap;
-                                    //     a.roughnessMap = roughnessMap;
-                                    //     a.metalnessMap = metalnessMap;
-                                    // });
-                                    // self.matDefaults.push({ name: mat.name, materials: {mat.} })
                                 }
                             })
 
@@ -867,9 +852,26 @@
                         }
                     }
                     else {
-                        //url không tồn tại thì chuyển về chất liệu mặc định
-                        for (var m of self.GetMaterialsSelected()) {
-                            m.pbrMetallicRoughness['metallicRoughnessTexture'].setTexture(null);
+                        //mô phỏng cách ánh sáng tương tác với môi trường xung quanh
+                        var aoMap = new THREE.TextureLoader().load(self.partProductSelected.aoMap);
+                        //sử dụng để tạo ra chi tiết đồ họa
+                        var normalMap = new THREE.TextureLoader().load(self.partProductSelected.normalMap);
+                        // xác định độ nhám
+                        var roughnessMap = new THREE.TextureLoader().load(self.partProductSelected.roughnessMap);
+                        // xác định vị trí của các vùng kim loại trong vật liệu
+                        var metalnessMap = new THREE.TextureLoader().load(self.partProductSelected.metalnessMap);
+                        //thông tin về chiều cao của bề mặt vật liệu
+                        // var displacementMap = new THREE.TextureLoader().load(material.displacementMap);
+                        for (var elm of self.GetMaterialsSelected()) {
+                            var obj = Object.getOwnPropertySymbols(elm.pbrMetallicRoughness.metallicRoughnessTexture);
+                            var mat = elm.pbrMetallicRoughness.metallicRoughnessTexture[obj.find(e => e.description === 'materials')];
+                            mat.forEach(a => {
+                                // a.map = map;
+                                a.aoMap = aoMap;
+                                a.normalMap = normalMap;
+                                a.roughnessMap = roughnessMap;
+                                a.metalnessMap = metalnessMap;
+                            });
                         }
                     }
 
