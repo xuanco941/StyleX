@@ -1,9 +1,10 @@
 body{
     color: #ccc;
 }
-/* Tùy chỉnh thanh cuộn dọc */
+/* Tùy chỉnh thanh cuộn */
 ::-webkit-scrollbar {
-    width: 7px; /* Độ rộng thanh cuộn */
+    width: 7px; /* Độ rộng thanh cuộn*/
+    height: 7px;
   }
   
   ::-webkit-scrollbar-track {
