@@ -185,7 +185,7 @@
                                     <button class="btn btn-toggle align-items-center rounded collapsed btn-c"
                                             data-bs-toggle="collapse" data-bs-target="#color-collapse" value="color-collapse"
                                             aria-expanded="true">
-                                        Màu vải
+                                        Màu sắc
                                     </button>
                                     <div class="collapse show mt-2 collapse-div" id="color-collapse"
                                          style="padding-left: 1.5rem; max-height: 100%; overflow-y: auto; overflow-x: hidden;">
@@ -193,7 +193,7 @@
                                             <input v-model="dataChangeColor.color" v-on:input="ChangeColor()" type="color"
                                                    class="form-control form-control-color product"
                                                    id="colorDesignInput" style="height:60px; width:100px;">
-                                            <label class="mx-2" style="font-size: 0.9rem;">Đơn màu</label>
+                                            <label class="mx-2" style="font-size: 0.9rem;">Màu của vải</label>
                                         </div>
                                         <div class="border-top my-3"></div>
                                         <div>
@@ -205,7 +205,7 @@
                                                          style="border-radius: 5px;">
                                                 </label>
                                                 <label class="mx-2" style="font-size: 0.9rem;">
-                                                    Kết cấu màu từ ảnh
+                                                    Họa tiết
                                                 </label>
                                             </div>
                                             <div class="row mt-2">
@@ -218,13 +218,14 @@
                                                               style="font-size: 12px; bottom: -9px; left: 0px;">0</span>
                                                         <input v-on:change="ChangeScaleTexture()"
                                                                v-model="dataChangeColor.scaleTexture" type="range" class="form-range"
-                                                               min="0" max="2" step="0.1" id="scaleIp">
+                                                               min="0" max="1" step="0.001" id="scaleIp">
                                                         <span class="position-absolute"
-                                                              style="font-size: 12px; bottom: -9px; right: 40px;">2</span>
-                                                        <input class="from-control form-control-sm text-center" disabled
-                                                               readonly
-                                                               style="width: 27px; font-size: 14px; margin-left: 9px;color: #fff; padding: 1px;"
-                                                               type="text" v-bind:value="dataChangeColor.scaleTexture">
+                                                              style="font-size: 12px; bottom: -9px; right: 64px;">1</span>
+                                                        <input class="from-control form-control-sm text-center" step="0.001"
+                                                        disabled readonly
+                                                               style="width: 50px; font-size: 14px; margin-left: 9px;color: #ffffff; padding: 1px; background-color:#5f5f5f;"
+                                                               type="text" max="1" min="0" v-on:change="ChangeScaleTexture()"
+                                                               v-bind:value="dataChangeColor.scaleTexture">
                                                     </div>
                                                 </div>
                                             </div>
@@ -241,7 +242,7 @@
                                                         <i class="fa-solid fa-magnifying-glass"></i>
                                                     </button>
                                                 </div>
-                                                <div class="row mt-2 w-100 justify-content-center mx-0" style="max-height: 280px; overflow-y:auto">
+                                                <div class="row mt-2 w-100 justify-content-center mx-0" style="max-height: 300px; overflow-y:auto">
                                                     <div v-if="dataChangeColor.loadingImage"
                                                          class="d-flex justify-content-center align-items-center w-100"
                                                          style="height: 100px;">
@@ -335,12 +336,12 @@
                                                         <span class="position-absolute"
                                                               style="font-size: 12px; bottom: -9px; left: 0px;">0</span>
                                                         <input v-model="dataChangeDecal.sizePercent" type="range" class="form-range"
-                                                               min="0" max="10" step="0.001" id="sizeI">
+                                                               min="0" max="10" step="0.01" id="sizeI">
                                                         <span class="position-absolute"
-                                                              style="font-size: 12px; bottom: -9px; right: 40px;">10</span>
-                                                        <input class="from-control form-control-sm text-center" disabled
-                                                               readonly
-                                                               style="width: 27px; font-size: 14px; margin-left: 9px;color: #fff; padding: 1px;"
+                                                              style="font-size: 12px; bottom: -9px; right: 64px;">10</span>
+                                                        <input class="from-control form-control-sm text-center"
+                                                            disabled readonly
+                                                               style="width: 50px; font-size: 14px; margin-left: 9px;color: #ffffff; padding: 1px; background-color:#5f5f5f;"
                                                                type="text" v-bind:value="dataChangeDecal.sizePercent">
                                                     </div>
                                                 </div>
@@ -358,7 +359,7 @@
                                                         <i class="fa-solid fa-magnifying-glass"></i>
                                                     </button>
                                                 </div>
-                                                <div class="row mt-2 w-100 justify-content-center mx-0" style="max-height: 350px; overflow-y:auto">
+                                                <div class="row mt-2 w-100 justify-content-center mx-0" style="max-height: 300px; overflow-y:auto">
                                                     <div v-if="dataChangeDecal.loadingImage"
                                                          class="d-flex justify-content-center align-items-center w-100"
                                                          style="height: 100px;">
@@ -604,7 +605,15 @@
                                     //đặt về màu vải trắng nếu isDefault = true
                                     var partP = self.listPartProduct.find(z => z.nameDefault == m.name);
                                     if(partP && partP.isDefault == true){
-                                        // m.pbrMetallicRoughness.setBaseColorFactor('#FFFFFF');
+                                        var obj = Object.getOwnPropertySymbols(m.pbrMetallicRoughness.metallicRoughnessTexture);
+                                        var mat = m.pbrMetallicRoughness.metallicRoughnessTexture[obj.find(e2 => e2.description === 'materials')];
+                                        mat.forEach(a => {
+                                            //map là màu sắc cơ bản của vật liệu mà không có thông tin về ánh sáng hoặc bóng
+                                            a.map = null;
+                                            a.color.r = 1;
+                                            a.color.g = 1;
+                                            a.color.b = 1;
+                                        });
                                     }
                                 }
                             })
@@ -776,7 +785,7 @@
 
                 dataChangeColor: {
                     imageTexture: "/images/none.svg",
-                    color: '#010101',
+                    color: '#FFFFFF',
                     scaleTexture: 1,
                     querySearch: '',
 
@@ -843,7 +852,7 @@
                             const size = new THREE.Vector3();
                             boundingBox.getSize(size);
                             self.modelSize = size;
-
+                            console.log(self.modelSize);
                         });
                     }
 
@@ -916,8 +925,14 @@
                         m.normalTexture.setTexture(texture);
                         //change màu kết cấu
                         m.pbrMetallicRoughness['baseColorTexture'].setTexture(texture);
+
+                        m.pbrMetallicRoughness['baseColorTexture'].texture.sampler.setScale({ u: this.dataChangeColor.scaleTexture, v: this.dataChangeColor.scaleTexture });
+
+                        //set chế độ scale texture là ClampToEdge (0-1) //repeat = 10497
+                        m.pbrMetallicRoughness['baseColorTexture'].texture.sampler.setWrapS(33071);
+                        m.pbrMetallicRoughness['baseColorTexture'].texture.sampler.setWrapT(33071);
                     }
-                    this.$forceUpdate();
+                    self.$forceUpdate();
                 },
                 GetUrlFileUploadChangeColor: async function (e) {
                     var self = this;
@@ -1218,8 +1233,6 @@
 
     </script>
 
-
-    //
     <script type="module">
         //     import * as THREE from 'three';
         //     import { DecalGeometry } from 'three/addons/geometries/DecalGeometry.js';

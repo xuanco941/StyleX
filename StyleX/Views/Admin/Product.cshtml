@@ -108,7 +108,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body" style="max-height: 700px;">
+                <div class="modal-body" style="max-height: 550px;">
                     <div class="d-flex align-items-stretch">
                         <div class="col-md-5">
                             <model-viewer id="model-add" class="w-100 h-100" alt=""
@@ -118,7 +118,7 @@
                             </model-viewer>
                         </div>
                         <div class="col-md-7">
-                            <div class="px-2" style="overflow-y:auto; max-height:668px;">
+                            <div class="px-2" style="overflow-y:auto; max-height:480px;">
                                 <div class="form-group">
                                     <label>Thuộc danh mục</label>
                                     <select class="form-control" v-model="dataAdd.categoryID">
@@ -202,7 +202,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body" style="max-height: 700px;">
+                <div class="modal-body" style="max-height: 550px;">
                     <div class="d-flex align-items-stretch">
                         <div class="col-md-5">
                             <model-viewer id="model-update" class="w-100 h-100" alt=""
@@ -212,7 +212,7 @@
                             </model-viewer>
                         </div>
                         <div class="col-md-7">
-                            <div class="px-2" style="overflow-y:auto; max-height:668px;">
+                            <div class="px-2" style="overflow-y:auto; max-height:480px;">
                                 <div class="form-group">
                                     <label>Thuộc danh mục</label>
                                     <select class="form-control" v-model="dataUpdate.categoryID">
@@ -290,7 +290,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body" style="max-height: 700px;">
+                <div class="modal-body" style="max-height: 550px;">
                     <div class="d-flex align-items-stretch">
                         <div class="col-md-5">
                             <model-viewer id="model-setting" class="w-100 h-100" alt=""
@@ -1127,6 +1127,14 @@
                     var self = this;
 
                     console.log(this.dataSetting.materials);
+                    if(!self.dataSetting.productPartNameCustom){
+                        ShowAlert('Vui lòng nhập tên hiển thị','danger');
+                        return;
+                    }
+                    if (!self.dataSetting.nameMaterialDefault) {
+                        ShowAlert('Vui lòng nhập tên chất liệu mặc định','danger');
+                        return;
+                    }
 
                     var formData = new FormData();
                     formData.append('productSettingID', self.dataSetting.productSettingID);
