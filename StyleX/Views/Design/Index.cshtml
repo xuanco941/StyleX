@@ -314,8 +314,8 @@
                                                     <input hidden type="file" id="uploadImgDecal" accept="image/*"
                                                            v-on:change="GetUrlFileUploadChangeDecal">
                                                     <label for="uploadImgDecal" style="height:60px;" role="button">
-                                                        <img v-bind:src="dataChangeDecal.image" class="w-100 h-100 product"
-                                                             style="border-radius: 5px;">
+                                                        <img v-bind:src="dataChangeDecal.image" class="product"
+                                                             style="border-radius: 5px; width:60px; height:60px;">
                                                     </label>
                                                     <label class="mx-2" style="font-size: 0.9rem;">
                                                         Ảnh dán
@@ -348,6 +348,23 @@
                                                                type="text" v-bind:value="dataChangeDecal.sizePercent">
                                                     </div>
                                                 </div>
+                                                <div class="col-12 mt-2">
+                                                    <label class="form-label m-0"
+                                                           style="font-size: 14px;">Xoay ảnh</label>
+                                                    <div class="position-relative d-flex flex-nowrap align-items-center"
+                                                         style="padding-right: 5px;">
+                                                        <span class="position-absolute"
+                                                              style="font-size: 12px; bottom: -9px; left: 0px;">0</span>
+                                                        <input v-model="dataChangeDecal.rotation" type="range" class="form-range"
+                                                               min="0" max="360" step="1" v-on:change="ChangeImageDecal(dataChangeDecal.imageSelect)">
+                                                        <span class="position-absolute"
+                                                              style="font-size: 12px; bottom: -9px; right: 64px;">360</span>
+                                                        <input class="from-control form-control-sm text-center"
+                                                               disabled readonly
+                                                               style="width: 50px; font-size: 14px; margin-left: 9px;color: #ffffff; padding: 1px; background-color:#5f5f5f;"
+                                                               type="text" v-bind:value="dataChangeDecal.rotation">
+                                                    </div>
+                                                </div>
                                             </div>
 
                                             <div class="mt-4">
@@ -362,7 +379,7 @@
                                                         <i class="fa-solid fa-magnifying-glass"></i>
                                                     </button>
                                                 </div>
-                                                <div class="row mt-2 w-100 justify-content-center mx-0" style="max-height: 210px; overflow-y:auto">
+                                                <div class="row mt-2 w-100 justify-content-center mx-0" style="max-height: 160px; overflow-y:auto">
                                                     <div v-if="dataChangeDecal.loadingImage"
                                                          class="d-flex justify-content-center align-items-center w-100"
                                                          style="height: 100px;">
@@ -527,6 +544,46 @@
                 })
             });
         });
+
+        //xoay ảnh
+        function rotateImage(url, degrees, callback) {
+            var img = new Image();
+            img.crossOrigin = 'Anonymous';
+
+            img.onload = function () {
+                var canvas = document.createElement('canvas');
+                var ctx = canvas.getContext('2d');
+
+                var radians = (degrees * Math.PI) / 180;
+
+                var maxWidth = Math.abs(Math.cos(radians) * img.width) + Math.abs(Math.sin(radians) * img.height);
+                var maxHeight = Math.abs(Math.sin(radians) * img.width) + Math.abs(Math.cos(radians) * img.height);
+
+                canvas.width = maxWidth;
+                canvas.height = maxHeight;
+
+                ctx.translate(maxWidth / 2, maxHeight / 2);
+                ctx.rotate(radians);
+
+                ctx.drawImage(img, -img.width / 2, -img.height / 2);
+
+                // Chuyển đổi canvas thành Blob
+                canvas.toBlob(function (blob) {
+                    // Tạo URL từ Blob
+                    var rotatedImageUrl = URL.createObjectURL(blob);
+
+                    // Gọi lại hàm callback với URL Blob
+                    callback(rotatedImageUrl);
+                }, 'image/png');
+            };
+
+            img.src = url;
+        }
+        // // Sử dụng hàm và nhận URL Blob đã xoay
+        // rotateImage('/images/1.png', 90, function (rotatedImageUrl) {
+        //     // Thực hiện các thao tác cần thiết với URL Blob đã xoay ở đây
+        //     console.log(rotatedImageUrl);
+        // });
 
 
         var appBackground = new Vue({
@@ -821,6 +878,7 @@
                 dataChangeColor: {
                     imageTexture: "/images/none.svg",
                     color: '#FFFFFF',
+                    isFisrtChangeColor: true,
                     scaleTexture: 1,
                     querySearch: '',
 
@@ -832,10 +890,12 @@
                     loadingMaterial: true
                 },
                 dataChangeDecal: {
+                    rotation: 0,
                     sizePercent: 1,
                     sizePercentMin: 0.001,
                     sizePercentMax: 10,
                     sizePercentStep: 0.001,
+                    imageSelect: '/images/none.svg',
                     image: '/images/none.svg',
                     querySearch: '',
 
@@ -961,10 +1021,26 @@
                 ChangeColor: function () {
                     var self = this;
 
+
                     //gọi app select lấy meterial đang select để thay đổi màu
                     for (var m of self.GetMaterialsSelected()) {
+                        if (self.dataChangeColor.isFisrtChangeColor) {
+                            var obj = Object.getOwnPropertySymbols(m.pbrMetallicRoughness.metallicRoughnessTexture);
+                            var mat = m.pbrMetallicRoughness.metallicRoughnessTexture[obj.find(e2 => e2.description === 'materials')];
+                            mat.forEach(a => {
+                                //map là màu sắc cơ bản của vật liệu mà không có thông tin về ánh sáng hoặc bóng
+                                a.color.r = 1;
+                                a.color.g = 1;
+                                a.color.b = 1;
+                                a.map = null;
+                                //Specifies that the material needs to be recompiled.
+                                a.needsUpdate = true;
+                            });
+                        }
+
                         m.pbrMetallicRoughness.setBaseColorFactor(self.dataChangeColor.color);
                     }
+                    self.dataChangeColor.isFisrtChangeColor = false;
 
                 },
                 ChangeTexture: async function (url) {
@@ -1060,6 +1136,7 @@
                                 a.normalMap = normalMap;
                                 a.roughnessMap = roughnessMap;
                                 a.metalnessMap = metalnessMap;
+                                a.needsUpdate = true;
                             });
                         }
                     }
@@ -1083,6 +1160,7 @@
                                 a.normalMap = normalMap;
                                 a.roughnessMap = roughnessMap;
                                 a.metalnessMap = metalnessMap;
+                                a.needsUpdate = true;
                             });
                         }
                     }
@@ -1133,28 +1211,32 @@
                 },
                 ChangeImageDecal: function (url) {
                     var self = this;
-                    self.dataChangeDecal.image = url;
-                    //decal dán
-                    const textureLoader = new THREE.TextureLoader();
-                    const decalDiffuse = textureLoader.load(self.dataChangeDecal.image);
-                    decalDiffuse.colorSpace = THREE.SRGBColorSpace;
-                    const decalNormal = textureLoader.load(self.dataChangeDecal.image);
+                    self.dataChangeDecal.imageSelect = url;
+                    rotateImage(url, self.dataChangeDecal.rotation, function (img) {
+                        self.dataChangeDecal.image = img;
+                        //decal dán
+                        const textureLoader = new THREE.TextureLoader();
+                        const decalDiffuse = textureLoader.load(self.dataChangeDecal.image);
+                        decalDiffuse.colorSpace = THREE.SRGBColorSpace;
+                        const decalNormal = textureLoader.load(self.dataChangeDecal.image);
 
-                    self.dataChangeDecal.decalMaterial = new THREE.MeshStandardMaterial({
-                        // specular: 0x444444,
-                        map: decalDiffuse,
-                        normalMap: decalNormal,
-                        normalScale: new THREE.Vector2(1, 1),
-                        // shininess: 30,
-                        transparent: true,
-                        depthTest: true,
-                        depthWrite: false,
-                        polygonOffset: true,
-                        polygonOffsetFactor: - 4,
-                        wireframe: false,
-                        side: THREE.FrontSide
+                        self.dataChangeDecal.decalMaterial = new THREE.MeshStandardMaterial({
+                            // specular: 0x444444,
+                            map: decalDiffuse,
+                            normalMap: decalNormal,
+                            normalScale: new THREE.Vector2(1, 1),
+                            // shininess: 30,
+                            transparent: true,
+                            depthTest: true,
+                            depthWrite: false,
+                            polygonOffset: true,
+                            polygonOffsetFactor: - 4,
+                            wireframe: false,
+                            side: THREE.FrontSide
+                        });
+                        self.$forceUpdate();
                     });
-                    self.$forceUpdate();
+
                 },
                 StartDecal: function () {
                     var self = this;
@@ -1185,7 +1267,7 @@
                         polygonOffset: true,
                         polygonOffsetFactor: - 4,
                         wireframe: false,
-                        side: THREE.FrontSide
+                        side: THREE.FrontSide, //chỉ in ngoài
                     });
                     //khởi tạo tia
                     self.dataChangeDecal.raycaster = new THREE.Raycaster();
@@ -1277,11 +1359,11 @@
                     self.dataChangeDecal.position.copy(self.dataChangeDecal.intersection.point);
                     self.dataChangeDecal.orientation.copy(self.dataChangeDecal.mouseHelper.rotation);
 
-                    // const rotate = false;
-                    // if (rotate) orientation.z = Math.random() * 2 * Math.PI;
+                    // self.dataChangeDecal.orientation.z = 10 * 2 * Math.PI;
 
+                    // console.log(self.dataChangeDecal.orientation)
 
-                    // chia 100 chuyển thành mét
+                    // chia 100 từ cm chuyển thành mét
                     self.dataChangeDecal.size.set(self.dataChangeDecal.sizePercent / 100, self.dataChangeDecal.sizePercent / 100, self.dataChangeDecal.sizePercent / 100);
 
                     const m = new THREE.Mesh(new DecalGeometry(self.dataChangeDecal.mesh, self.dataChangeDecal.position, self.dataChangeDecal.orientation, self.dataChangeDecal.size), self.dataChangeDecal.decalMaterial.clone());
@@ -1290,27 +1372,35 @@
                     self.dataChangeDecal.decals.push(m);
                     self.scene.add(m);
 
+                    //rerender
+                    self.scene.queueRender();
+
+
                     console.log(self.dataChangeDecal.decals);
 
                 },
-                StopDecal: function(){
+                StopDecal: function () {
                     var self = this;
                     this.modelViewer.removeEventListener('click', self.shoot);
                     this.dataChangeDecal.isActive = false;
                 },
-                DeleteDecalNewest: function(){
+                DeleteDecalNewest: function () {
                     var self = this;
                     if (self.dataChangeDecal.decals.length > 0) {
-                        setTimeout(() => {
-                            var d = self.dataChangeDecal.decals.pop();
-                            self.scene.remove(d);
-                            d = null;
-                            console.log(self.scene);
-                        }, 0);
+                        var d = self.dataChangeDecal.decals.pop();
+                        self.scene.remove(d);
+                        d = null;
+                        console.log(self.scene);
+
+                        //rerender
+                        self.scene.queueRender();
                     }
-                    else{
+                    else {
                         ShowAlert('Chưa có hình dán nào trên mẫu.', 'warning');
                     }
+                },
+                ChangeRotationDecal: function () {
+
                 }
 
 
