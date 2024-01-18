@@ -197,17 +197,21 @@
                                         </div>
                                         <div class="border-top my-3"></div>
                                         <div>
-                                            <div class="d-flex align-items-center">
-                                                <input hidden type="file" id="uploadImgColor" accept="image/*"
-                                                       v-on:change="GetUrlFileUploadChangeColor">
-                                                <label for="uploadImgColor" style="height:60px;" role="button">
-                                                    <img v-bind:src="dataChangeColor.imageTexture" class="w-100 h-100 product"
-                                                         style="border-radius: 5px;">
-                                                </label>
-                                                <label class="mx-2" style="font-size: 0.9rem;">
-                                                    Họa tiết
-                                                </label>
+                                            <div class="d-flex align-items-center justify-content-start">
+                                                <div class="d-flex align-items-center">
+                                                    <input hidden type="file" id="uploadImgColor" accept="image/*"
+                                                           v-on:change="GetUrlFileUploadChangeColor">
+                                                    <label for="uploadImgColor" style="height:60px;" role="button">
+                                                        <img v-bind:src="dataChangeColor.imageTexture" class="w-100 h-100 product"
+                                                             style="border-radius: 5px;">
+                                                    </label>
+                                                    <label class="mx-2" style="font-size: 0.9rem;">
+                                                        Họa tiết
+                                                    </label>
+                                                </div>
+                                                <button class="btn btn-danger px-2 py-1" style="font-size:14px; margin-left:15px;" v-on:click="TextureDefault()">Xóa kết cấu</button>
                                             </div>
+
                                             <div class="row mt-2">
                                                 <div class="col-12">
                                                     <label for="scaleIp" class="form-label m-0"
@@ -273,8 +277,8 @@
                                         <div v-if="!dataChangeMaterial.loadingMaterial" class="radio-button-container pt-2 px-1" style=" display: block;">
                                             <div class="radio-button" style="height: 40px;">
                                                 <input type="radio" class="radio-button__input"
-                                                       v-on:change="changeMaterial(null)" value=""
-                                                       id="radio-change-r-default" name="radio-change-metallic-roughness">
+                                                       v-on:change="changeMaterial(null)"
+                                                       id="radio-change-r-default" name="radio-change-metallic-roughness" value="" v-model="dataChangeMaterial.matSelected">
                                                 <label class="radio-button__label" for="radio-change-r-default">
                                                     <span class="radio-button__custom"></span>
                                                     <span>
@@ -286,12 +290,13 @@
                                                  class="radio-button d-flex align-items-center">
                                                 <input type="radio" class="radio-button__input"
                                                        v-on:change="changeMaterial(item)"
-                                                       v-bind:id="item.name" name="radio-change-metallic-roughness">
+                                                       v-bind:id="item.name" name="radio-change-metallic-roughness" v-bind:value="item.materialID" v-model="dataChangeMaterial.matSelected">
                                                 <label class="radio-button__label" v-bind:for="item.name">
                                                     <span class="radio-button__custom" style="top: 9px;"></span>
                                                     <span class="d-flex align-items-center">
                                                         <span class="mx-1">{{item.name}}</span>
                                                         <img style="width: 30px;height: 30px;" v-bind:src="item.preview">
+                                                        <span v-if="item.isDecal==false">(không thể dán hình)</span>
                                                     </span>
                                                 </label>
                                             </div>
@@ -579,11 +584,6 @@
 
             img.src = url;
         }
-        // // Sử dụng hàm và nhận URL Blob đã xoay
-        // rotateImage('/images/1.png', 90, function (rotatedImageUrl) {
-        //     // Thực hiện các thao tác cần thiết với URL Blob đã xoay ở đây
-        //     console.log(rotatedImageUrl);
-        // });
 
 
         var appBackground = new Vue({
@@ -705,6 +705,7 @@
                                             a.color.r = 1;
                                             a.color.g = 1;
                                             a.color.b = 1;
+                                            a.needsUpdate = true;
                                         });
                                     }
                                 }
@@ -887,7 +888,8 @@
                 },
                 dataChangeMaterial: {
                     listMaterials: [],
-                    loadingMaterial: true
+                    loadingMaterial: true,
+                    matSelected: ''
                 },
                 dataChangeDecal: {
                     rotation: 0,
@@ -973,6 +975,26 @@
                     await this.SearchImageChangeDecal();
 
                     this.$forceUpdate();
+                },
+                TextureDefault: function () {
+                    var self = this;
+                    //gọi app select lấy meterial đang select để thay đổi màu
+                    for (var m of self.GetMaterialsSelected()) {
+                        var obj = Object.getOwnPropertySymbols(m.pbrMetallicRoughness.metallicRoughnessTexture);
+                        var mat = m.pbrMetallicRoughness.metallicRoughnessTexture[obj.find(e2 => e2.description === 'materials')];
+                        mat.forEach(a => {
+                            //map là màu sắc cơ bản của vật liệu mà không có thông tin về ánh sáng hoặc bóng
+                            a.color.r = 1;
+                            a.color.g = 1;
+                            a.color.b = 1;
+                            a.map = null;
+                            a.normalMap = null;
+                            //Specifies that the material needs to be recompiled.
+                            a.needsUpdate = true;
+                        });
+
+                        m.pbrMetallicRoughness.setBaseColorFactor(self.dataChangeColor.color);
+                    }
                 },
                 Select: async function () {
                     var self = this;
@@ -1115,6 +1137,10 @@
                     var self = this;
                     console.log(material)
                     if (material) {
+                        if (material.isDecal == false) {
+                            self.DeleteAllDecal();
+                            ShowAlert('Chất liệu này không thể dán hình!', 'info');
+                        }
                         //đại diện cho màu sắc cơ bản của vật liệu mà không có thông tin về ánh sáng hoặc bóng.
                         // var map = new THREE.TextureLoader().load(material.map);
                         //mô phỏng cách ánh sáng tương tác với môi trường xung quanh
@@ -1342,7 +1368,19 @@
                     var self = this;
 
                     var matSelected = self.modelViewer.materialFromPoint(event.clientX, event.clientY);
-                    if (!matSelected) return;
+
+                    //check bộ phận này chất liệu có thể in decal được hay không
+                    if (matSelected && matSelected.name == self.GetMaterialsSelected()[0].name) {
+                        var partP = self.listPartProduct.find(m => m.nameDefault == matSelected.name);
+                        var matP = partP.materials.find(d => d.materialID == self.dataChangeMaterial.matSelected);
+                        if (matP && matP.isDecal == false) {
+                            ShowAlert(`Chất liệu ${matP.name} của bộ phận ${partP.nameCustom} không thể dán hình`, 'warning');
+                            return;
+                        }
+                    }
+                    else {
+                        return;
+                    }
 
                     self.scene.traverse(function (object) {
 
@@ -1399,9 +1437,22 @@
                         ShowAlert('Chưa có hình dán nào trên mẫu.', 'warning');
                     }
                 },
-                ChangeRotationDecal: function () {
+                DeleteAllDecal: function () {
+                    var self = this;
+                    if (self.dataChangeDecal.decals.length > 0) {
+                        self.dataChangeDecal.decals.forEach(e => {
 
-                }
+                            self.scene.remove(e);
+                            e = null;
+
+                        })
+                        //rerender
+                        self.scene.queueRender();
+                    }
+                    else {
+                        ShowAlert('Chưa có hình dán nào trên mẫu.', 'warning');
+                    }
+                },
 
 
             },

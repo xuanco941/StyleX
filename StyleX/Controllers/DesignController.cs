@@ -140,7 +140,7 @@ namespace StyleX.Controllers
                 var result = from p in query1
                              where p.Material.Status == true
                              select new
-                             { materialID = p.Material.MaterialID, name = p.Material.Name, preview = p.Material.Url, aoMap = p.Material.AoMap, normalMap = p.Material.NormalMap, roughnessMap = p.Material.RoughnessMap, metalnessMap = p.Material.MetalnessMap };
+                             { materialID = p.Material.MaterialID, name = p.Material.Name, preview = p.Material.Url, aoMap = p.Material.AoMap, normalMap = p.Material.NormalMap, roughnessMap = p.Material.RoughnessMap, metalnessMap = p.Material.MetalnessMap, isDecal=p.Material.IsDecal };
                 return new OkObjectResult(new { status = 1, message = "success", data = result.ToList() });
 
 
