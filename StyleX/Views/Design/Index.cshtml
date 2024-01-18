@@ -209,7 +209,7 @@
                                                         Họa tiết
                                                     </label>
                                                 </div>
-                                                <button class="btn btn-danger px-2 py-1" style="font-size:14px; margin-left:15px;" v-on:click="TextureDefault()">Xóa kết cấu</button>
+                                                <button class="btn btn-danger px-2 py-1" style="font-size:14px; margin-left:15px;" v-on:click="TextureDefault()">Reset họa tiết</button>
                                             </div>
 
                                             <div class="row mt-2">
@@ -296,7 +296,7 @@
                                                     <span class="d-flex align-items-center">
                                                         <span class="mx-1">{{item.name}}</span>
                                                         <img style="width: 30px;height: 30px;" v-bind:src="item.preview">
-                                                        <span v-if="item.isDecal==false">(không thể dán hình)</span>
+                                                        <span v-if="item.isDecal==false">(không hỗ trợ thay đổi họa tiết và dán hình)</span>
                                                     </span>
                                                 </label>
                                             </div>
@@ -1014,7 +1014,7 @@
                     for (var m of self.listMaterials) {
                         if (m.name != self.materialSelectedName) {
                             m.setAlphaMode("BLEND");
-                            m.pbrMetallicRoughness.setBaseColorFactor([m.pbrMetallicRoughness.baseColorFactor[0], m.pbrMetallicRoughness.baseColorFactor[1], m.pbrMetallicRoughness.baseColorFactor[2], 0.05]);
+                            m.pbrMetallicRoughness.setBaseColorFactor([m.pbrMetallicRoughness.baseColorFactor[0], m.pbrMetallicRoughness.baseColorFactor[1], m.pbrMetallicRoughness.baseColorFactor[2], 0.15]);
                         }
                         else {
                             m.setAlphaMode("OPAQUE");
@@ -1067,6 +1067,15 @@
                 },
                 ChangeTexture: async function (url) {
                     var self = this;
+
+                    var partP = self.listPartProduct.find(m => m.nameDefault == self.GetMaterialsSelected()[0].name);
+                    var matP = partP.materials.find(d => d.materialID == self.dataChangeMaterial.matSelected);
+                    if (matP && matP.isDecal == false) {
+                        ShowAlert(`Chất liệu ${matP.name} của bộ phận ${partP.nameCustom} không hỗ trợ họa tiết!`, 'warning');
+                        return;
+                    }
+
+
                     self.dataChangeColor.imageTexture = url;
                     const texture = await self.modelViewer.createTexture(url);
                     for (var m of self.GetMaterialsSelected()) {
@@ -1138,8 +1147,21 @@
                     console.log(material)
                     if (material) {
                         if (material.isDecal == false) {
+                            //xóa tất cả decal
                             self.DeleteAllDecal();
-                            ShowAlert('Chất liệu này không thể dán hình!', 'info');
+
+                            for (var m of self.GetMaterialsSelected()) {
+                                var obj = Object.getOwnPropertySymbols(m.pbrMetallicRoughness.metallicRoughnessTexture);
+                                var mat = m.pbrMetallicRoughness.metallicRoughnessTexture[obj.find(e2 => e2.description === 'materials')];
+                                mat.forEach(a => {
+                                    //map là màu sắc cơ bản của vật liệu mà không có thông tin về ánh sáng hoặc bóng
+                                    a.map = null;
+                                    //Specifies that the material needs to be recompiled.
+                                    a.needsUpdate = true;
+                                });
+                            }
+
+                            ShowAlert('Chất liệu này không hỗ trợ in hoạ tiết và hình dán!', 'info');
                         }
                         //đại diện cho màu sắc cơ bản của vật liệu mà không có thông tin về ánh sáng hoặc bóng.
                         // var map = new THREE.TextureLoader().load(material.map);

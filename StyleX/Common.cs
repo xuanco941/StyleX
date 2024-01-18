@@ -13,7 +13,10 @@
         public const string FolderProducts = "products";
         public const string FolderCarts = "carts";
 
-        public const string FolderProductPartMaterialDefault = "productMaterialDefault";
+        public const string FolderProductPartMaterialDefault = "productMaterialDefaults";
+
+        public const string FolderDesignInfo = "designInfos";
+
 
         public const double TransportFee = 30000;
     }

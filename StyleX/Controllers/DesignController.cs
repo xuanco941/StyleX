@@ -151,6 +151,41 @@ namespace StyleX.Controllers
                 return new BadRequestObjectResult(new { status = -99, message = e.Message, data = DBNull.Value });
             }
         }
+        [HttpPost]
+        public IActionResult SaveDesign([FromBody] SaveDesignInfoModel model)
+        {
+            if(model == null)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = "Tham số lưu thiếu.", data = DBNull.Value });
+            }
+            try
+            {
+                if(model.cartItemID == 0)
+                {
+                    DesignInfo designInfo = new DesignInfo();
+                    designInfo.ColorR = model.colorR;
+                    designInfo.ColorG = model.colorG;
+                    designInfo.ColorB = model.colorB;
+                    designInfo.TextureScale = model.textureScale;
+
+                    designInfo.DesignName = model.designName;
+                    designInfo.NameMaterial = model.nameMaterial;
+
+
+                    string folderName = Guid.NewGuid().ToString();
+                    string fileNameImageTexture = "texture";
+
+
+                }
+
+                return new OkObjectResult(new { status = 1, message = "Lưu thành công", data = 1 });
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message, data = DBNull.Value });
+            }
+        }
+
 
     }
 }
