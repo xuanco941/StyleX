@@ -12,10 +12,7 @@ namespace StyleX.Models
         public string DesignName { get; set; } = string.Empty; // tên của bộ phận trên quần áo
 
         //color
-        public double ColorR { get; set; } = 1;
-        public double ColorG { get; set; } = 1;
-        public double ColorB { get; set; } = 1;
-
+        public string Color { get; set; } = "#ffffff";
 
         public string? ImageTexture { get; set; } //color image url
         public double? TextureScale { get; set; }

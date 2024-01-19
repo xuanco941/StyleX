@@ -135,8 +135,8 @@
                     <div class="d-flex">
                         <a href="/" style="font-size: 26px; color: #75a4e9; font-weight: 500; text-decoration: none;">StyleX</a>
                     </div>
-                    <div class="d-flex">
-                        <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 14px;">Lưu lại</button>
+                    <div class="d-flex" id="appFeatures">
+                        <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 14px;" v-on:click="Save()">Lưu lại</button>
                         <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 14px;">Chia sẻ</button>
                         <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 14px;">Tải về</button>
                         <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 14px;">Reset</button>
@@ -499,6 +499,22 @@
 
             return { r: linearized[0], g: linearized[1], b: linearized[2] };
         }
+
+        function linearRgbToStandardRgbHex(linearRgb) {
+            let standardRgb = [0, 0, 0];
+
+            for (let i = 0; i < 3; i++) {
+                if (linearRgb[i] <= 0.04045) {
+                    standardRgb[i] = linearRgb[i] / 12.92;
+                } else {
+                    standardRgb[i] = Math.pow((linearRgb[i] + 0.055) / 1.055, 2.4);
+                }
+            }
+
+            return '#' + standardRgb.map(channel => Math.round(channel * 255).toString(16).padStart(2, '0')).join('');
+        }
+
+
         //check image upload
         function isFileImage(file) {
             return file && file['type'].split('/')[0] === 'image';
@@ -583,6 +599,42 @@
             };
 
             img.src = url;
+        }
+        async function imageURLToBlob(url) {
+            return new Promise(function (resolve, reject) {
+                var img = new Image();
+                img.crossOrigin = 'Anonymous';
+
+                img.onload = function () {
+                    var canvas = document.createElement('canvas');
+                    var ctx = canvas.getContext('2d');
+
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+
+                    ctx.drawImage(img, 0, 0);
+
+                    // Convert canvas to Blob
+                    canvas.toBlob(function (b) {
+                        resolve(b);
+                    }, 'image/png');
+                };
+
+                img.onerror = function (error) {
+                    reject(error);
+                };
+
+                img.src = url;
+            });
+        }
+
+        function isURL(str) {
+            try {
+                new URL(str);
+                return true;
+            } catch (error) {
+                return false;
+            }
         }
 
 
@@ -1186,6 +1238,9 @@
                                 a.metalnessMap = metalnessMap;
                                 a.needsUpdate = true;
                             });
+
+                            //name để save
+                            elm.nameMatSave = material.name;
                         }
                     }
                     else {
@@ -1211,6 +1266,8 @@
                                 a.needsUpdate = true;
                             });
                         }
+                        //name để save
+                        elm.nameMatSave = partProductSelected.nameMaterialDefault;
                     }
 
                 },
@@ -1475,7 +1532,145 @@
                         ShowAlert('Chưa có hình dán nào trên mẫu.', 'warning');
                     }
                 },
+            },
+            mounted() {
+                this.init();
+            },
+        });
+        var appFeatures = new Vue({
+            el: "#appFeatures",
+            data: {
 
+            },
+            methods: {
+                init: async function () {
+                    var self = this;
+                    this.$forceUpdate();
+                },
+                Save: async function () {
+                    var self = this;
+                    if (!appSelectModel.productIDSelected && appSelectModel.listPartProduct) {
+                        ShowAlert('Vui lòng chọn mẫu thiết kế.', 'danger');
+                        return;
+                    }
+
+                    for (const productPart of appSelectModel.listPartProduct) {
+                        var formData = new FormData();
+
+                        var productPartOnModel = appDesign.listMaterials.find(e => e.name == productPart.nameDefault);
+
+                        formData.append('cartItemID', appSelectModel.productIDSelected);
+                        formData.append('designInfoID', 0);
+                        formData.append('designName', productPart.nameDefault);
+                        formData.append('nameMaterial', productPartOnModel.nameMatSave ?? "");
+
+                        //lấy thông tin map
+                        var obj = Object.getOwnPropertySymbols(productPartOnModel.pbrMetallicRoughness.metallicRoughnessTexture);
+                        var materials = productPartOnModel.pbrMetallicRoughness.metallicRoughnessTexture[obj.find(e => e.description === 'materials')];
+
+                        var aoMap = "";
+                        var normalMap = "";
+                        var roughnessMap = "";
+                        var metalnessMap = "";
+                        //type Set
+                        materials.forEach(a => {
+                            // a.map = map;
+                            aoMap = a.aoMap ? self.getImageByMap(a.aoMap.image) : null;
+                            normalMap = a.normalMap ? self.getImageByMap(a.normalMap.image) : null;
+                            roughnessMap = a.roughnessMap ? self.getImageByMap(a.roughnessMap.image) : null;
+                            metalnessMap = a.metalnessMap ? self.getImageByMap(a.metalnessMap.image) : null;
+                        });
+                        if (aoMap) {
+                            formData.append('aoMap', aoMap, 'aoMap.png');
+                        }
+                        else {
+                            formData.append('aoMap', aoMap);
+                        }
+                        if (normalMap) {
+                            formData.append('normalMap', normalMap, 'normalMap.png');
+                        }
+                        else {
+                            formData.append('normalMap', normalMap);
+                        }
+                        if (roughnessMap) {
+                            formData.append('roughnessMap', roughnessMap, 'roughnessMap.png');
+                        }
+                        else {
+                            formData.append('roughnessMap', roughnessMap);
+
+                        }
+                        if (metalnessMap) {
+                            formData.append('metalnessMap', metalnessMap, 'metalnessMap.png');
+                        }
+                        else {
+                            formData.append('metalnessMap', metalnessMap);
+                        }
+
+                        //lấy thông tin texture color
+
+                        formData.append('color', linearRgbToStandardRgbHex([productPartOnModel.pbrMetallicRoughness.baseColorFactor[0], productPartOnModel.pbrMetallicRoughness.baseColorFactor[1], productPartOnModel.pbrMetallicRoughness.baseColorFactor[2]]));
+
+                        if (isURL(productPartOnModel.pbrMetallicRoughness.baseColorTexture.texture.source.uri)) {
+                            var blobImageTexture = await imageURLToBlob(productPartOnModel.pbrMetallicRoughness.baseColorTexture.texture.source.uri);
+                            formData.append('imageTexture', blobImageTexture, 'imageTexture.png');
+
+                        } else {
+                            formData.append('imageTexture', null);
+                        }
+
+                        formData.append('textureScale', productPartOnModel.pbrMetallicRoughness.baseColorTexture.texture.sampler.scale.v);
+
+                        formData.append('imageCartItem', await appDesign.modelViewer.toBlob({ idealAspect: false }), 'imageCartItem.png');
+
+
+
+
+
+
+                        $.ajax({
+                            url: '/design/SaveDesign',
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function (res) {
+                                if (res.status == 1) {
+                                    ShowAlert(res.message, 'success');
+                                }
+                                else {
+                                    ShowAlert(res.message, 'danger');
+                                }
+                            },
+                            error: function (error) {
+                                ShowAlert(error.responseJSON.mesage, "danger");
+                            }
+                        });
+                    }
+
+
+                },
+                getImageByMap: function (image) {
+                    if (!image) {
+                        return null;
+                    }
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.width = image.width;
+                    canvas.height = image.height;
+                    context.drawImage(image, 0, 0);
+
+                    var dataURL = canvas.toDataURL('image/png');
+
+                    // Convert base64 to binary
+                    var byteString = atob(dataURL.split(',')[1]);
+                    var mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
+                    var ab = new ArrayBuffer(byteString.length);
+                    var ia = new Uint8Array(ab);
+                    for (var i = 0; i < byteString.length; i++) {
+                        ia[i] = byteString.charCodeAt(i);
+                    }
+                    return new Blob([ab], { type: mimeString });
+                },
 
             },
             mounted() {
@@ -1484,160 +1679,8 @@
         });
 
 
+
     </script>
-
-    <script type="module">
-        //     import * as THREE from 'three';
-        //     import { DecalGeometry } from 'three/addons/geometries/DecalGeometry.js';
-        //     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-
-        //     // Define the decal material
-        //     const textureLoader = new THREE.TextureLoader();
-        //     const decalDiffuse = textureLoader.load('/images/choose-1.jpg');
-        //     decalDiffuse.colorSpace = THREE.SRGBColorSpace;
-        //     const decalNormal = textureLoader.load('/images/choose-1.jpg');
-
-        //     const decalMaterial = new THREE.MeshStandardMaterial({
-        //         // specular: 0x444444,
-        //         map: decalDiffuse,
-        //         normalMap: decalNormal,
-        //         normalScale: new THREE.Vector2(1, 1),
-        //         // shininess: 30,
-        //         transparent: true,
-        //         depthTest: true,
-        //         depthWrite: false,
-        //         polygonOffset: true,
-        //         polygonOffsetFactor: - 4,
-        //         wireframe: false
-        //     });
-
-        //     var modelViewer = document.getElementById('model-main');
-
-        //     modelViewer.addEventListener('load', (elm) => {
-        //         var scene = elm.target[Object.getOwnPropertySymbols(elm.target).find(e => e.description === 'scene')];
-
-        //         let mesh;
-        //         let raycaster;
-        //         let line;
-        //         const decals = []; // lịch sử in
-        //         const intersects = [];
-
-        //         const mouse = new THREE.Vector2();
-        //         const position = new THREE.Vector3();
-        //         const orientation = new THREE.Euler();
-        //         const size = new THREE.Vector3(1, 1, 1);
-
-        //         let mouseHelper;
-
-        //         const intersection = {
-        //             intersects: false,
-        //             point: new THREE.Vector3(),
-        //             normal: new THREE.Vector3()
-        //         };
-
-        //         const geometry = new THREE.BufferGeometry();
-        //         geometry.setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
-
-        //         line = new THREE.Line(geometry, new THREE.LineBasicMaterial());
-        //         scene.add(line);
-        //         raycaster = new THREE.Raycaster();
-
-        //         mouseHelper = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 10), new THREE.MeshNormalMaterial());
-        //         mouseHelper.visible = false;
-        //         scene.add(mouseHelper);
-
-
-
-        //         function checkIntersection(x, y) {
-
-        //             if (mesh === undefined) return;
-
-        //             mouse.x = (x / window.innerWidth) * 2 - 1;
-        //             mouse.y = - (y / window.innerHeight) * 2 + 1;
-
-        //             raycaster.setFromCamera(mouse, scene.camera);
-        //             raycaster.intersectObject(mesh, false, intersects);
-
-        //             if (intersects.length > 0) {
-
-        //                 const p = intersects[0].point;
-        //                 mouseHelper.position.copy(p);
-        //                 intersection.point.copy(p);
-
-        //                 const n = intersects[0].face.normal.clone();
-        //                 n.transformDirection(mesh.matrixWorld);
-        //                 n.multiplyScalar(10);
-        //                 n.add(intersects[0].point);
-
-        //                 intersection.normal.copy(intersects[0].face.normal);
-        //                 mouseHelper.lookAt(n);
-
-        //                 const positions = line.geometry.attributes.position;
-        //                 positions.setXYZ(0, p.x, p.y, p.z);
-        //                 positions.setXYZ(1, n.x, n.y, n.z);
-        //                 positions.needsUpdate = true;
-
-        //                 intersection.intersects = true;
-
-        //                 intersects.length = 0;
-
-        //             } else {
-
-        //                 intersection.intersects = false;
-
-        //             }
-
-        //         }
-
-        //         function shoot() {
-
-        //             position.copy(intersection.point);
-        //             orientation.copy(mouseHelper.rotation);
-
-        //             const rotate = false;
-        //             if (rotate) orientation.z = Math.random() * 2 * Math.PI;
-
-        //             size.set(10, 10, 10);
-
-        //             const m = new THREE.Mesh(new DecalGeometry(mesh, position, orientation, size), decalMaterial.clone());
-        //             m.renderOrder = decals.length; // give decals a fixed render order
-
-        //             decals.push(m);
-        //             scene.add(m);
-
-        //             console.log(decals);
-
-        //         }
-
-
-        //         modelViewer.addEventListener('click', (event) => {
-        //             var matSelected = event.target.materialFromPoint(event.clientX, event.clientY);
-        //             if (!matSelected) return;
-
-        //             scene.traverse(function (object) {
-
-        //                 if (object.isMesh && object.material && object.material.name.toLowerCase() == matSelected.name.toLowerCase()) {
-        //                     mesh = object;
-        //                 }
-
-        //             });
-
-
-
-        //             checkIntersection(event.clientX, event.clientY);
-
-        //             if (intersection.intersects) shoot();
-        //             return;
-
-
-        //         })
-        //     })
-
-
-
-
-        // </script>
-
 
 
     <script type="module">
@@ -1651,52 +1694,6 @@
             link.click();
         }
 
-
-
-        //         import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
-
-        // function save(blob, filename) {
-        //   const link = document.createElement("a");
-        //   link.href = URL.createObjectURL(blob);
-        //   link.download = filename;
-        //   link.click();
-        //   URL.revokeObjectURL(link);
-        // }
-
-        // function saveString(text, filename) {
-        //   save(new Blob([text], { type: "text/plain" }), filename);
-        // }
-
-        // function saveArrayBuffer(buffer, filename) {
-        //   save(new Blob([buffer], { type: "application/octet-stream" }), filename);
-        // }
-
-        // function Expr(){
-        //                 const modelViewer = document.getElementById("model-main");
-
-        //     var scene = modelViewer[Object.getOwnPropertySymbols(modelViewer).find(e => e.description === 'scene')];
-
-        //      const exporter = new GLTFExporter();
-        // exporter.parse(
-        //   scene,
-        //   function (result) {
-        //     const name = `$exp.glb`;
-        //     if (result instanceof ArrayBuffer) {
-        //       saveArrayBuffer(result, name);
-        //     } else {
-        //       const output = JSON.stringify(result, null, 2);
-        //       saveString(output, name);
-        //     }
-        //   },
-        //   function (error) {
-        //     console.log(error);
-        //   },
-        //   {
-        //     binary: true
-        //   }
-        // );
-        // }
-        // Expr();
 
     </script>
 

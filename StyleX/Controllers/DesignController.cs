@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StyleX.DTOs;
 using StyleX.Models;
+using System;
 using System.Security.Claims;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace StyleX.Controllers
 {
@@ -12,9 +12,12 @@ namespace StyleX.Controllers
     public class DesignController : Controller
     {
         private readonly DatabaseContext _dbContext;
-        public DesignController(DatabaseContext dbContext)
+        private readonly IWebHostEnvironment _environment;
+
+        public DesignController(DatabaseContext dbContext, IWebHostEnvironment environment)
         {
             _dbContext = dbContext;
+            _environment = environment;
         }
         [HttpGet]
         public IActionResult Index(int? id)
@@ -152,7 +155,7 @@ namespace StyleX.Controllers
             }
         }
         [HttpPost]
-        public IActionResult SaveDesign([FromBody] SaveDesignInfoModel model)
+        public IActionResult SaveDesign([FromForm] SaveDesignInfoModel model)
         {
             if(model == null)
             {
@@ -160,21 +163,316 @@ namespace StyleX.Controllers
             }
             try
             {
-                if(model.cartItemID == 0)
+
+                var cartItem = _dbContext.CartItems.FirstOrDefault(e => e.CartItemID == model.cartItemID);
+                if (cartItem == null)
                 {
+                    return new NotFoundObjectResult(new { status = -99, message = "Sản phẩm thiết kế này không tồn tại.", data = DBNull.Value });
+                }
+
+
+                //chưa design lần nào
+                if (model.designInfoID == 0)
+                {
+                    string folderName = Guid.NewGuid().ToString();
+
+                    //thay ảnh preview
+                    string fileNamePreview = "preview" + Path.GetExtension(model.imageCartItem.FileName);
+                    var filePathImageCartItem = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileNamePreview);
+                    //tạo folder
+                    if (!string.IsNullOrEmpty(filePathImageCartItem))
+                    {
+                        string? directoryPath = Path.GetDirectoryName(filePathImageCartItem);
+                        if (directoryPath != null && !Directory.Exists(directoryPath))
+                        {
+                            Directory.CreateDirectory(directoryPath);
+                        }
+                    }
+                    using (var stream = new FileStream(filePathImageCartItem, FileMode.Create))
+                    {
+                        model.imageCartItem.CopyTo(stream);
+                    }
+
+                    cartItem.PosterUrl = $"/{Common.FolderDesignInfo}/{folderName}/" + fileNamePreview;
+
+
+
                     DesignInfo designInfo = new DesignInfo();
-                    designInfo.ColorR = model.colorR;
-                    designInfo.ColorG = model.colorG;
-                    designInfo.ColorB = model.colorB;
+                    designInfo.CartItemID = model.cartItemID;
+                    designInfo.Color = model.color;
                     designInfo.TextureScale = model.textureScale;
 
                     designInfo.DesignName = model.designName;
-                    designInfo.NameMaterial = model.nameMaterial;
+                    designInfo.NameMaterial = model.nameMaterial ?? "";
+                    designInfo.AoMap = "";
+                    designInfo.NormalMap = "";
+                    designInfo.MetalnessMap = "";
+                    designInfo.RoughnessMap = "";
+                    designInfo.ImageTexture = "";
 
 
-                    string folderName = Guid.NewGuid().ToString();
-                    string fileNameImageTexture = "texture";
 
+                    if (model.imageTexture != null)
+                    {
+                        string fileNameImageTexture = "textureColor" + Path.GetExtension(model.imageTexture.FileName);
+                        var filePathImageTexture = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileNameImageTexture);
+                        //tạo folder
+                        if (!string.IsNullOrEmpty(filePathImageTexture))
+                        {
+                            string? directoryPath = Path.GetDirectoryName(filePathImageTexture);
+                            if (directoryPath != null && !Directory.Exists(directoryPath))
+                            {
+                                Directory.CreateDirectory(directoryPath);
+                            }
+                        }
+                        using (var stream = new FileStream(filePathImageTexture, FileMode.Create))
+                        {
+                            model.imageTexture.CopyTo(stream);
+                        }
+
+                        designInfo.ImageTexture = $"/{Common.FolderDesignInfo}/{folderName}/" + fileNameImageTexture;
+                    }
+
+
+ 
+                    if (model.aoMap != null)
+                    {
+                        string fileNameAoMap = "aoMap" + Path.GetExtension(model.aoMap.FileName);
+                        var filePathImageAoMap = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileNameAoMap);
+                        //tạo folder
+                        if (!string.IsNullOrEmpty(filePathImageAoMap))
+                        {
+                            string? directoryPath = Path.GetDirectoryName(filePathImageAoMap);
+                            if (directoryPath != null && !Directory.Exists(directoryPath))
+                            {
+                                Directory.CreateDirectory(directoryPath);
+                            }
+                        }
+                        using (var stream = new FileStream(filePathImageAoMap, FileMode.Create))
+                        {
+                            model.aoMap.CopyTo(stream);
+                        }
+
+                        designInfo.AoMap = $"/{Common.FolderDesignInfo}/{folderName}/" + fileNameAoMap;
+                    }
+
+
+
+                    if (model.normalMap != null)
+                    {
+                        string fileNameNormalMap = "normalMap" + Path.GetExtension(model.normalMap.FileName);
+                        var filePathImagenormalMap = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileNameNormalMap);
+                        //tạo folder
+                        if (!string.IsNullOrEmpty(filePathImagenormalMap))
+                        {
+                            string? directoryPath = Path.GetDirectoryName(filePathImagenormalMap);
+                            if (directoryPath != null && !Directory.Exists(directoryPath))
+                            {
+                                Directory.CreateDirectory(directoryPath);
+                            }
+                        }
+                        using (var stream = new FileStream(filePathImagenormalMap, FileMode.Create))
+                        {
+                            model.normalMap.CopyTo(stream);
+                        }
+
+                        designInfo.NormalMap = $"/{Common.FolderDesignInfo}/{folderName}/" + fileNameNormalMap;
+                    }
+
+
+                    if (model.roughnessMap != null)
+                    {
+                        string fileNameroughnessMap = "roughnessMap" + Path.GetExtension(model.roughnessMap.FileName);
+                        var filePathImageroughnessMap = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileNameroughnessMap);
+                        //tạo folder
+                        if (!string.IsNullOrEmpty(filePathImageroughnessMap))
+                        {
+                            string? directoryPath = Path.GetDirectoryName(filePathImageroughnessMap);
+                            if (directoryPath != null && !Directory.Exists(directoryPath))
+                            {
+                                Directory.CreateDirectory(directoryPath);
+                            }
+                        }
+                        using (var stream = new FileStream(filePathImageroughnessMap, FileMode.Create))
+                        {
+                            model.roughnessMap.CopyTo(stream);
+                        }
+
+                        designInfo.RoughnessMap = $"/{Common.FolderDesignInfo}/{folderName}/" + fileNameroughnessMap;
+                    }
+
+
+                    if (model.metalnessMap != null)
+                    {
+                        string fileNamemetalnessMap = "metalnessMap" + Path.GetExtension(model.metalnessMap.FileName);
+                        var filePathImagemetalnessMap = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileNamemetalnessMap);
+                        //tạo folder
+                        if (!string.IsNullOrEmpty(filePathImagemetalnessMap))
+                        {
+                            string? directoryPath = Path.GetDirectoryName(filePathImagemetalnessMap);
+                            if (directoryPath != null && !Directory.Exists(directoryPath))
+                            {
+                                Directory.CreateDirectory(directoryPath);
+                            }
+                        }
+                        using (var stream = new FileStream(filePathImagemetalnessMap, FileMode.Create))
+                        {
+                            model.metalnessMap.CopyTo(stream);
+                        }
+
+                        designInfo.MetalnessMap = $"/{Common.FolderDesignInfo}/{folderName}/" + fileNamemetalnessMap;
+                    }
+
+
+                    _dbContext.DesignInfos.Add(designInfo);
+                    _dbContext.SaveChanges();
+                }
+                else
+                {
+                    var designInfo = _dbContext.DesignInfos.FirstOrDefault(e => e.DesignInfoID == model.designInfoID);
+                    if (designInfo == null)
+                    {
+                        return new NotFoundObjectResult(new { status = -99, message = "Bộ phận thiết kế này không tồn tại.", data = DBNull.Value });
+                    }
+                    designInfo.Color = model.color;
+                    designInfo.TextureScale = model.textureScale;
+
+                    designInfo.DesignName = model.designName;
+                    designInfo.NameMaterial = model.nameMaterial ?? "";
+                    designInfo.AoMap = "";
+                    designInfo.NormalMap = "";
+                    designInfo.MetalnessMap = "";
+                    designInfo.RoughnessMap = "";
+
+                    string[] cacPhan = cartItem.PosterUrl.Split('/');
+                    string folderName = cacPhan[cacPhan.Length - 2];
+                    string pathSave = $"/{Common.FolderDesignInfo}/{folderName}/";
+
+                    if (model.imageCartItem != null && model.imageCartItem.Length > 0)
+                    {
+
+                        // Xóa file cũ
+                        var oldFilePath = Path.Combine(_environment.WebRootPath, cartItem.PosterUrl.TrimStart('/'));
+
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            System.IO.File.Delete(oldFilePath);
+
+                        }
+                        string fileName = "preview" + Path.GetExtension(model.imageCartItem.FileName);
+                        var filePath = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            model.imageCartItem.CopyTo(stream);
+                        }
+                        cartItem.PosterUrl = pathSave + fileName;
+                    }
+
+                    if (model.imageTexture != null && model.imageTexture.Length > 0)
+                    {
+
+                        // Xóa file cũ
+                        var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.ImageTexture.TrimStart('/'));
+
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            System.IO.File.Delete(oldFilePath);
+
+                        }
+                        string fileName = "imageTexture" + Path.GetExtension(model.imageTexture.FileName);
+                        var filePath = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            model.imageTexture.CopyTo(stream);
+                        }
+                        designInfo.ImageTexture = pathSave + fileName;
+                    }
+
+
+                    if (model.aoMap != null && model.aoMap.Length > 0)
+                    {
+
+                        // Xóa file cũ
+                        var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.AoMap.TrimStart('/'));
+
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            System.IO.File.Delete(oldFilePath);
+
+                        }
+                        string fileName = "aoMap" + Path.GetExtension(model.aoMap.FileName);
+                        var filePath = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            model.aoMap.CopyTo(stream);
+                        }
+                        designInfo.AoMap = pathSave + fileName;
+                    }
+                    if (model.normalMap != null && model.normalMap.Length > 0)
+                    {
+
+                        // Xóa file cũ
+                        var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.NormalMap.TrimStart('/'));
+
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            System.IO.File.Delete(oldFilePath);
+
+                        }
+                        string fileName = "normalMap" + Path.GetExtension(model.normalMap.FileName);
+                        var filePath = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            model.normalMap.CopyTo(stream);
+                        }
+                        designInfo.NormalMap = pathSave + fileName;
+                    }
+                    if (model.roughnessMap != null && model.roughnessMap.Length > 0)
+                    {
+
+                        // Xóa file cũ
+                        var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.RoughnessMap.TrimStart('/'));
+
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            System.IO.File.Delete(oldFilePath);
+
+                        }
+                        string fileName = "roughnessMap" + Path.GetExtension(model.roughnessMap.FileName);
+                        var filePath = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            model.roughnessMap.CopyTo(stream);
+                        }
+                        designInfo.RoughnessMap = pathSave + fileName;
+                    }
+                    if (model.metalnessMap != null && model.metalnessMap.Length > 0)
+                    {
+
+                        // Xóa file cũ
+                        var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.MetalnessMap.TrimStart('/'));
+
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            System.IO.File.Delete(oldFilePath);
+
+                        }
+                        string fileName = "metalnessMap" + Path.GetExtension(model.metalnessMap.FileName);
+                        var filePath = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            model.metalnessMap.CopyTo(stream);
+                        }
+                        designInfo.MetalnessMap = pathSave + fileName;
+                    }
+
+                    _dbContext.SaveChanges();
 
                 }
 

@@ -14,7 +14,7 @@ namespace StyleX.Models
         public string? Size { get; set; } = string.Empty;
         public int Status { get; set; } //0 là sản phẩm trong cart và đang design, 1 là đã vào đơn order
         public double Sale { get; set; } // khuyến mại tại thời điểm đặt đơn
-		public double Price { get; set; } // khuyến mại tại thời điểm đặt đơn
+		public double Price { get; set; } // giá tiền sp tại thời điểm đặt đơn
 
 
 		public int? OrderID { get; set; }

@@ -176,24 +176,35 @@ namespace StyleX.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DesignInfoID"), 1L, 1);
 
+                    b.Property<string>("AoMap")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("CartItemID")
                         .HasColumnType("int");
 
                     b.Property<string>("Color")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DesignName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImageMaterial")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ImageTexture")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double?>("TextureRotation")
-                        .HasColumnType("float");
+                    b.Property<string>("MetalnessMap")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameMaterial")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalMap")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoughnessMap")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double?>("TextureScale")
                         .HasColumnType("float");
@@ -368,16 +379,8 @@ namespace StyleX.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DisplacementMap")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsDefault")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Map")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MetalnessMap")
                         .IsRequired()
