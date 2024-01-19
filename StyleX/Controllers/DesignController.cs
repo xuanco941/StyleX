@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using StyleX.DTOs;
 using StyleX.Models;
 using System;
+using System.Drawing;
 using System.Security.Claims;
 
 namespace StyleX.Controllers
@@ -106,7 +107,8 @@ namespace StyleX.Controllers
                                  ps.NormalMap,
                                  ps.RoughnessMap,
                                  ps.MetalnessMap,
-                                 material = mat
+                                 material = mat,
+
                              };
 
                 var query2 = from q in query1
@@ -122,8 +124,12 @@ namespace StyleX.Controllers
                                  normalMap = g.First().NormalMap,
                                  roughnessMap = g.First().RoughnessMap,
                                  metalnessMap = g.First().MetalnessMap,
-                                 materials = g.Select(x => x.material).ToList()
+                                 materials = g.Select(x => x.material),
+
+                                 designInfo = _dbContext.DesignInfos.FirstOrDefault(e => e.DesignName == g.First().ProductPartNameDefault && e.CartItemID == model.ID)
                              };
+
+
 
                 return new OkObjectResult(new { status = 1, message = "success", data = query2.ToList() });
 
@@ -143,7 +149,7 @@ namespace StyleX.Controllers
                 var result = from p in query1
                              where p.Material.Status == true
                              select new
-                             { materialID = p.Material.MaterialID, name = p.Material.Name, preview = p.Material.Url, aoMap = p.Material.AoMap, normalMap = p.Material.NormalMap, roughnessMap = p.Material.RoughnessMap, metalnessMap = p.Material.MetalnessMap, isDecal=p.Material.IsDecal };
+                             { materialID = p.Material.MaterialID, name = p.Material.Name, preview = p.Material.Url, aoMap = p.Material.AoMap, normalMap = p.Material.NormalMap, roughnessMap = p.Material.RoughnessMap, metalnessMap = p.Material.MetalnessMap, isDecal = p.Material.IsDecal };
                 return new OkObjectResult(new { status = 1, message = "success", data = result.ToList() });
 
 
@@ -157,7 +163,7 @@ namespace StyleX.Controllers
         [HttpPost]
         public IActionResult SaveDesign([FromForm] SaveDesignInfoModel model)
         {
-            if(model == null)
+            if (model == null)
             {
                 return new BadRequestObjectResult(new { status = -99, message = "Tham số lưu thiếu.", data = DBNull.Value });
             }
@@ -170,6 +176,7 @@ namespace StyleX.Controllers
                     return new NotFoundObjectResult(new { status = -99, message = "Sản phẩm thiết kế này không tồn tại.", data = DBNull.Value });
                 }
 
+                DesignInfo designInfoResutl = new DesignInfo();
 
                 //chưa design lần nào
                 if (model.designInfoID == 0)
@@ -234,7 +241,7 @@ namespace StyleX.Controllers
                     }
 
 
- 
+
                     if (model.aoMap != null)
                     {
                         string fileNameAoMap = "aoMap" + Path.GetExtension(model.aoMap.FileName);
@@ -326,6 +333,7 @@ namespace StyleX.Controllers
 
                     _dbContext.DesignInfos.Add(designInfo);
                     _dbContext.SaveChanges();
+                    designInfoResutl = designInfo;
                 }
                 else
                 {
@@ -336,7 +344,6 @@ namespace StyleX.Controllers
                     }
                     designInfo.Color = model.color;
                     designInfo.TextureScale = model.textureScale;
-
                     designInfo.DesignName = model.designName;
                     designInfo.NameMaterial = model.nameMaterial ?? "";
                     designInfo.AoMap = "";
@@ -348,11 +355,10 @@ namespace StyleX.Controllers
                     string folderName = cacPhan[cacPhan.Length - 2];
                     string pathSave = $"/{Common.FolderDesignInfo}/{folderName}/";
 
-                    if (model.imageCartItem != null && model.imageCartItem.Length > 0)
+                    if ((model.imageCartItem != null && string.IsNullOrEmpty(cartItem.PosterUrl) == false))
                     {
-
                         // Xóa file cũ
-                        var oldFilePath = Path.Combine(_environment.WebRootPath, cartItem.PosterUrl.TrimStart('/'));
+                        var oldFilePath = Path.Combine(_environment.WebRootPath, cartItem.PosterUrl?.TrimStart('/') ?? "");
 
                         if (System.IO.File.Exists(oldFilePath))
                         {
@@ -372,14 +378,18 @@ namespace StyleX.Controllers
                     if (model.imageTexture != null && model.imageTexture.Length > 0)
                     {
 
-                        // Xóa file cũ
-                        var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.ImageTexture.TrimStart('/'));
-
-                        if (System.IO.File.Exists(oldFilePath))
+                        if (string.IsNullOrEmpty(designInfo.ImageTexture) == false)
                         {
-                            System.IO.File.Delete(oldFilePath);
+                            // Xóa file cũ
+                            var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.ImageTexture.TrimStart('/'));
 
+                            if (System.IO.File.Exists(oldFilePath))
+                            {
+                                System.IO.File.Delete(oldFilePath);
+
+                            }
                         }
+
                         string fileName = "imageTexture" + Path.GetExtension(model.imageTexture.FileName);
                         var filePath = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileName);
 
@@ -394,14 +404,18 @@ namespace StyleX.Controllers
                     if (model.aoMap != null && model.aoMap.Length > 0)
                     {
 
-                        // Xóa file cũ
-                        var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.AoMap.TrimStart('/'));
-
-                        if (System.IO.File.Exists(oldFilePath))
+                        if (string.IsNullOrEmpty(designInfo.AoMap) == false)
                         {
-                            System.IO.File.Delete(oldFilePath);
+                            // Xóa file cũ
+                            var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.AoMap.TrimStart('/'));
 
+                            if (System.IO.File.Exists(oldFilePath))
+                            {
+                                System.IO.File.Delete(oldFilePath);
+
+                            }
                         }
+
                         string fileName = "aoMap" + Path.GetExtension(model.aoMap.FileName);
                         var filePath = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileName);
 
@@ -413,15 +427,18 @@ namespace StyleX.Controllers
                     }
                     if (model.normalMap != null && model.normalMap.Length > 0)
                     {
-
-                        // Xóa file cũ
-                        var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.NormalMap.TrimStart('/'));
-
-                        if (System.IO.File.Exists(oldFilePath))
+                        if (string.IsNullOrEmpty(designInfo.NormalMap) == false)
                         {
-                            System.IO.File.Delete(oldFilePath);
+                            // Xóa file cũ
+                            var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.NormalMap.TrimStart('/'));
 
+                            if (System.IO.File.Exists(oldFilePath))
+                            {
+                                System.IO.File.Delete(oldFilePath);
+
+                            }
                         }
+
                         string fileName = "normalMap" + Path.GetExtension(model.normalMap.FileName);
                         var filePath = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileName);
 
@@ -433,15 +450,18 @@ namespace StyleX.Controllers
                     }
                     if (model.roughnessMap != null && model.roughnessMap.Length > 0)
                     {
-
-                        // Xóa file cũ
-                        var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.RoughnessMap.TrimStart('/'));
-
-                        if (System.IO.File.Exists(oldFilePath))
+                        if (string.IsNullOrEmpty(designInfo.RoughnessMap) == false)
                         {
-                            System.IO.File.Delete(oldFilePath);
+                            // Xóa file cũ
+                            var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.RoughnessMap.TrimStart('/'));
 
+                            if (System.IO.File.Exists(oldFilePath))
+                            {
+                                System.IO.File.Delete(oldFilePath);
+
+                            }
                         }
+
                         string fileName = "roughnessMap" + Path.GetExtension(model.roughnessMap.FileName);
                         var filePath = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileName);
 
@@ -453,15 +473,18 @@ namespace StyleX.Controllers
                     }
                     if (model.metalnessMap != null && model.metalnessMap.Length > 0)
                     {
-
-                        // Xóa file cũ
-                        var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.MetalnessMap.TrimStart('/'));
-
-                        if (System.IO.File.Exists(oldFilePath))
+                        if (string.IsNullOrEmpty(designInfo.MetalnessMap) == false)
                         {
-                            System.IO.File.Delete(oldFilePath);
+                            // Xóa file cũ
+                            var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.MetalnessMap.TrimStart('/'));
 
+                            if (System.IO.File.Exists(oldFilePath))
+                            {
+                                System.IO.File.Delete(oldFilePath);
+
+                            }
                         }
+
                         string fileName = "metalnessMap" + Path.GetExtension(model.metalnessMap.FileName);
                         var filePath = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileName);
 
@@ -473,10 +496,10 @@ namespace StyleX.Controllers
                     }
 
                     _dbContext.SaveChanges();
-
+                    designInfoResutl = designInfo;
                 }
 
-                return new OkObjectResult(new { status = 1, message = "Lưu thành công", data = 1 });
+                return new OkObjectResult(new { status = 1, message = "Lưu thành công", data = designInfoResutl });
             }
             catch (Exception e)
             {

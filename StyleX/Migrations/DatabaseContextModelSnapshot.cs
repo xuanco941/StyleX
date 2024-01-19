@@ -203,6 +203,9 @@ namespace StyleX.Migrations
                     b.Property<string>("NormalMap")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ProductSettingID")
+                        .HasColumnType("int");
+
                     b.Property<string>("RoughnessMap")
                         .HasColumnType("nvarchar(max)");
 

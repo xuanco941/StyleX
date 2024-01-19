@@ -26,5 +26,6 @@ namespace StyleX.Models
 
         public int CartItemID { get; set; }
         public CartItem CartItem { get; set; } = null!;
+
     }
 }

@@ -728,6 +728,7 @@
 
                 productIDSelected: '@Html.Raw(ViewBag.id)', // id cartItem
                 model: {},
+                modelViewer: {}
 
             },
             methods: {
@@ -740,7 +741,8 @@
 
                             //set về OPAQUE
                             document.getElementById("model-main").src = '@Html.Raw(ViewBag.src)';
-                            document.getElementById("model-main").addEventListener('load', (e) => {
+                            document.getElementById("model-main").addEventListener('load', async (e) => {
+                                self.modelViewer = e.target;
                                 self.model = e.target.model;
                                 for (var m of self.model.materials) {
                                     m.setAlphaMode("OPAQUE");
@@ -761,7 +763,41 @@
                                         });
                                     }
                                 }
-                            })
+
+                                //load design cũ
+                                for (var productPart of self.listPartProduct) {
+                                    if (!productPart.designInfo) {
+                                        continue;
+                                    }
+                                    else {
+                                        console.log(productPart);
+                                        var productPartOnModel = self.model.materials.find(e => e.name == productPart.nameDefault);
+                                        //màu
+                                        productPartOnModel.pbrMetallicRoughness.setBaseColorFactor(productPart.designInfo.color);
+                                        //họa tiết
+                                        if (productPart.designInfo.imageTexture) {
+                                            console.log(window.location.origin + productPart.designInfo.imageTexture);
+                                            const texture = await self.modelViewer.createTexture(window.location.origin + productPart.designInfo.imageTexture);
+                                            console.log(texture)
+                                            //change kết cấu
+                                            productPartOnModel.normalTexture.setTexture(texture);
+                                            //change màu kết cấu
+                                            productPartOnModel.pbrMetallicRoughness['baseColorTexture'].setTexture(texture);
+                                        }
+                                        productPartOnModel.pbrMetallicRoughness['baseColorTexture'].texture.sampler.setScale({ u: productPart.designInfo.textureScale, v: productPart.designInfo.textureScale });
+
+                                        //set scale
+
+                                        //set chế độ scale texture là ClampToEdge (0-1) //repeat = 10497
+                                        productPartOnModel.pbrMetallicRoughness['baseColorTexture'].texture.sampler.setWrapS(33071);
+                                        productPartOnModel.pbrMetallicRoughness['baseColorTexture'].texture.sampler.setWrapT(33071);
+
+                                        //name material
+                                        productPartOnModel.nameMatSave = productPart.designInfo.nameMaterial;
+
+                                    }
+                                }
+                            });
 
                             //set màu select cart
                             var cartIs = Array.from(document.querySelectorAll('.product-cart'));
@@ -771,6 +807,7 @@
                                 if (self.productIDSelected == value) {
                                     e.style.border = '1.5px solid #149CEA';
                                     e.style.backgroundColor = '#20a9f745';
+                                    e.id = "product-cart-selected";
                                 }
                             });
 
@@ -782,6 +819,7 @@
                         }
 
                     });
+
 
 
                     this.$forceUpdate();
@@ -997,6 +1035,9 @@
                         self.listPartProduct = appSelectModel.listPartProduct; //list part name product
                         self.materialSelectedName = self.listPartProduct[0].nameDefault;
                         self.partProductSelected = self.listPartProduct[0];
+                        self.dataChangeColor.color = self.listPartProduct[0].designInfo.color;
+                        self.dataChangeColor.scaleTexture = self.listPartProduct[0].designInfo.textureScale;
+
                         self.getListMaterialOfPartProductSelected();
 
                     });
@@ -1121,11 +1162,14 @@
                     var self = this;
 
                     var partP = self.listPartProduct.find(m => m.nameDefault == self.GetMaterialsSelected()[0].name);
-                    var matP = partP.materials.find(d => d.materialID == self.dataChangeMaterial.matSelected);
-                    if (matP && matP.isDecal == false) {
-                        ShowAlert(`Chất liệu ${matP.name} của bộ phận ${partP.nameCustom} không hỗ trợ họa tiết!`, 'warning');
-                        return;
+                    if (self.dataChangeMaterial.matSelected) {
+                        var matP = partP.materials.find(d => d.materialID == self.dataChangeMaterial.matSelected);
+                        if (matP && matP.isDecal == false) {
+                            ShowAlert(`Chất liệu ${matP.name} của bộ phận ${partP.nameCustom} không hỗ trợ họa tiết!`, 'warning');
+                            return;
+                        }
                     }
+
 
 
                     self.dataChangeColor.imageTexture = url;
@@ -1549,7 +1593,7 @@
                 },
                 Save: async function () {
                     var self = this;
-                    if (!appSelectModel.productIDSelected && appSelectModel.listPartProduct) {
+                    if (!appSelectModel.productIDSelected || !appSelectModel.listPartProduct) {
                         ShowAlert('Vui lòng chọn mẫu thiết kế.', 'danger');
                         return;
                     }
@@ -1560,7 +1604,8 @@
                         var productPartOnModel = appDesign.listMaterials.find(e => e.name == productPart.nameDefault);
 
                         formData.append('cartItemID', appSelectModel.productIDSelected);
-                        formData.append('designInfoID', 0);
+                        formData.append('productSettingID', productPart.productSettingID);
+                        formData.append('designInfoID', productPart ? productPart.designInfo.designInfoID : 0);
                         formData.append('designName', productPart.nameDefault);
                         formData.append('nameMaterial', productPartOnModel.nameMatSave ?? "");
 
@@ -1607,8 +1652,8 @@
                         }
 
                         //lấy thông tin texture color
-
-                        formData.append('color', linearRgbToStandardRgbHex([productPartOnModel.pbrMetallicRoughness.baseColorFactor[0], productPartOnModel.pbrMetallicRoughness.baseColorFactor[1], productPartOnModel.pbrMetallicRoughness.baseColorFactor[2]]));
+                        var colorM = new THREE.Color(productPartOnModel.pbrMetallicRoughness.baseColorFactor[0], productPartOnModel.pbrMetallicRoughness.baseColorFactor[1], productPartOnModel.pbrMetallicRoughness.baseColorFactor[2]).getHexString();
+                        formData.append('color', "#" + colorM);
 
                         if (isURL(productPartOnModel.pbrMetallicRoughness.baseColorTexture.texture.source.uri)) {
                             var blobImageTexture = await imageURLToBlob(productPartOnModel.pbrMetallicRoughness.baseColorTexture.texture.source.uri);
@@ -1620,7 +1665,8 @@
 
                         formData.append('textureScale', productPartOnModel.pbrMetallicRoughness.baseColorTexture.texture.sampler.scale.v);
 
-                        formData.append('imageCartItem', await appDesign.modelViewer.toBlob({ idealAspect: false }), 'imageCartItem.png');
+                        var imageCartItem = await appDesign.modelViewer.toBlob({ idealAspect: false });
+                        formData.append('imageCartItem', imageCartItem, 'imageCartItem.png');
 
 
 
@@ -1635,7 +1681,10 @@
                             contentType: false,
                             success: function (res) {
                                 if (res.status == 1) {
+                                    productPart.designInfo = res.data;
                                     ShowAlert(res.message, 'success');
+                                    document.querySelector('#product-cart-selected a img').src = URL.createObjectURL(imageCartItem);
+
                                 }
                                 else {
                                     ShowAlert(res.message, 'danger');

@@ -4,6 +4,7 @@
     {
         public int designInfoID { get; set; } // nếu = 0 thì tạo mới, khác 0 thì cập nhật
         public int cartItemID { get; set; }
+        public int productSettingID { get; set; }
         public IFormFile imageCartItem { get; set; } = null!;
         public string designName { get; set; } = string.Empty; // tên của bộ phận trên quần áo
         public string color { get; set; } = "#ffffff";
