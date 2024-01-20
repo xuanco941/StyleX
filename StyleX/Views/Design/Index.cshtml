@@ -500,20 +500,6 @@
             return { r: linearized[0], g: linearized[1], b: linearized[2] };
         }
 
-        function linearRgbToStandardRgbHex(linearRgb) {
-            let standardRgb = [0, 0, 0];
-
-            for (let i = 0; i < 3; i++) {
-                if (linearRgb[i] <= 0.04045) {
-                    standardRgb[i] = linearRgb[i] / 12.92;
-                } else {
-                    standardRgb[i] = Math.pow((linearRgb[i] + 0.055) / 1.055, 2.4);
-                }
-            }
-
-            return '#' + standardRgb.map(channel => Math.round(channel * 255).toString(16).padStart(2, '0')).join('');
-        }
-
 
         //check image upload
         function isFileImage(file) {
@@ -728,7 +714,8 @@
 
                 productIDSelected: '@Html.Raw(ViewBag.id)', // id cartItem
                 model: {},
-                modelViewer: {}
+                modelViewer: {},
+                defaultMat: []
 
             },
             methods: {
@@ -736,6 +723,8 @@
                     var self = this;
 
                     await this.GetModels();
+
+
                     window.addEventListener('load', () => {
                         if (self.productIDSelected) {
 
@@ -745,6 +734,20 @@
                                 self.modelViewer = e.target;
                                 self.model = e.target.model;
                                 for (var m of self.model.materials) {
+
+                                    //get default mat
+                                    var defaultObjMat = {};
+                                    var qq = Object.getOwnPropertySymbols(m.pbrMetallicRoughness.metallicRoughnessTexture);
+                                    var zz = m.pbrMetallicRoughness.metallicRoughnessTexture[qq.find(e2 => e2.description === 'materials')];
+                                    zz.forEach(a => {
+                                        defaultObjMat = { ...a };
+                                    });
+                                    self.defaultMat.push({ name: m.name, defaultObjMat: defaultObjMat });
+
+                                    console.log(self.defaultMat);
+
+
+                                    m.nameMatSave = '';
                                     m.setAlphaMode("OPAQUE");
                                     m.pbrMetallicRoughness.setBaseColorFactor([m.pbrMetallicRoughness.baseColorFactor[0], m.pbrMetallicRoughness.baseColorFactor[1], m.pbrMetallicRoughness.baseColorFactor[2], 1]);
 
@@ -764,6 +767,7 @@
                                     }
                                 }
 
+                                var isRunLoadTex = true;
                                 //load design cũ
                                 for (var productPart of self.listPartProduct) {
                                     if (!productPart.designInfo) {
@@ -772,28 +776,68 @@
                                     else {
                                         console.log(productPart);
                                         var productPartOnModel = self.model.materials.find(e => e.name == productPart.nameDefault);
-                                        //màu
-                                        productPartOnModel.pbrMetallicRoughness.setBaseColorFactor(productPart.designInfo.color);
+
+
+
+                                        //name material
+                                        productPartOnModel.nameMatSave = productPart.designInfo.nameMaterial;
+
+
+
+
+                                        if (productPart.designInfo.nameMaterial) {
+                                            var objz = Object.getOwnPropertySymbols(productPartOnModel.pbrMetallicRoughness.metallicRoughnessTexture);
+                                            var matz = productPartOnModel.pbrMetallicRoughness.metallicRoughnessTexture[objz.find(e => e.description === 'materials')];
+                                            matz.forEach(a => {
+                                                // a.map = map;
+                                                a.aoMap = productPart.designInfo.aoMap ? new THREE.TextureLoader().load(productPart.designInfo.aoMap) : a.aoMap;
+                                                a.normalMap = productPart.designInfo.normalMap ? new THREE.TextureLoader().load(productPart.designInfo.normalMap) : a.normalMap;
+                                                a.roughnessMap = productPart.designInfo.roughnessMap ? new THREE.TextureLoader().load(productPart.designInfo.roughnessMap) : a.roughnessMap;
+                                                a.metalnessMap = productPart.designInfo.metalnessMap ? new THREE.TextureLoader().load(productPart.designInfo.metalnessMap) : a.metalnessMap;
+                                                a.needsUpdate = true;
+                                            });
+                                        } else {
+                                            var dMat = self.defaultMat.find(e => e.name == productPartOnModel.name);
+                                            var objz = Object.getOwnPropertySymbols(productPartOnModel.pbrMetallicRoughness.metallicRoughnessTexture);
+                                            var matz = productPartOnModel.pbrMetallicRoughness.metallicRoughnessTexture[objz.find(e => e.description === 'materials')];
+                                            matz.forEach(a => {
+                                                // a.map = map;
+                                                a.aoMap = dMat.defaultObjMat.aoMap;
+                                                a.normalMap = dMat.defaultObjMat.normalMap;
+                                                a.roughnessMap = dMat.defaultObjMat.roughnessMap;
+                                                a.metalnessMap = dMat.defaultObjMat.metalnessMap;
+                                                a.needsUpdate = true;
+                                            });
+                                        }
                                         //họa tiết
                                         if (productPart.designInfo.imageTexture) {
-                                            console.log(window.location.origin + productPart.designInfo.imageTexture);
+
                                             const texture = await self.modelViewer.createTexture(window.location.origin + productPart.designInfo.imageTexture);
-                                            console.log(texture)
                                             //change kết cấu
                                             productPartOnModel.normalTexture.setTexture(texture);
                                             //change màu kết cấu
                                             productPartOnModel.pbrMetallicRoughness['baseColorTexture'].setTexture(texture);
+
+                                            if (isRunLoadTex){
+                                                appDesign.ChangeTexture(productPart.designInfo.imageTexture);
+                                            }
+
                                         }
-                                        productPartOnModel.pbrMetallicRoughness['baseColorTexture'].texture.sampler.setScale({ u: productPart.designInfo.textureScale, v: productPart.designInfo.textureScale });
+                                        isRunLoadTex = false;
+
+
+
+                                        //màu
+                                        productPartOnModel.pbrMetallicRoughness.setBaseColorFactor(productPart.designInfo.color);
+
+
+
 
                                         //set scale
-
+                                        productPartOnModel.pbrMetallicRoughness['baseColorTexture'].texture.sampler.setScale({ u: productPart.designInfo.textureScale, v: productPart.designInfo.textureScale });
                                         //set chế độ scale texture là ClampToEdge (0-1) //repeat = 10497
                                         productPartOnModel.pbrMetallicRoughness['baseColorTexture'].texture.sampler.setWrapS(33071);
                                         productPartOnModel.pbrMetallicRoughness['baseColorTexture'].texture.sampler.setWrapT(33071);
-
-                                        //name material
-                                        productPartOnModel.nameMatSave = productPart.designInfo.nameMaterial;
 
                                     }
                                 }
@@ -982,6 +1026,7 @@
                     matSelected: ''
                 },
                 dataChangeDecal: {
+                    dataSave: [],
                     rotation: 0,
                     sizePercent: 1,
                     sizePercentMin: 0.001,
@@ -1035,8 +1080,8 @@
                         self.listPartProduct = appSelectModel.listPartProduct; //list part name product
                         self.materialSelectedName = self.listPartProduct[0].nameDefault;
                         self.partProductSelected = self.listPartProduct[0];
-                        self.dataChangeColor.color = self.listPartProduct[0].designInfo.color;
-                        self.dataChangeColor.scaleTexture = self.listPartProduct[0].designInfo.textureScale;
+                        self.dataChangeColor.color = self.listPartProduct[0].designInfo ? self.listPartProduct[0].designInfo.color : '#ffffff';
+                        self.dataChangeColor.scaleTexture = self.listPartProduct[0].designInfo ? self.listPartProduct[0].designInfo.textureScale : 1;
 
                         self.getListMaterialOfPartProductSelected();
 
@@ -1073,6 +1118,7 @@
                     var self = this;
                     //gọi app select lấy meterial đang select để thay đổi màu
                     for (var m of self.GetMaterialsSelected()) {
+                        // var proP = self.listPartProduct.find(e => e.nameDefault == m.name);
                         var obj = Object.getOwnPropertySymbols(m.pbrMetallicRoughness.metallicRoughnessTexture);
                         var mat = m.pbrMetallicRoughness.metallicRoughnessTexture[obj.find(e2 => e2.description === 'materials')];
                         mat.forEach(a => {
@@ -1082,6 +1128,7 @@
                             a.color.b = 1;
                             a.map = null;
                             a.normalMap = null;
+
                             //Specifies that the material needs to be recompiled.
                             a.needsUpdate = true;
                         });
@@ -1094,6 +1141,7 @@
 
                     self.partProductSelected = self.listPartProduct.find(e => e.nameDefault == self.materialSelectedName);
                     await self.getListMaterialOfPartProductSelected();
+
 
                     if (!self.materialSelectedName || self.isNotHidePositionOther) {
                         //set tất cả material của model về màu chưa opacity
@@ -1139,7 +1187,7 @@
 
                     //gọi app select lấy meterial đang select để thay đổi màu
                     for (var m of self.GetMaterialsSelected()) {
-                        if (self.dataChangeColor.isFisrtChangeColor) {
+                        if (self.dataChangeColor.isFisrtChangeColor || !self.partProductSelected.designInfo || !self.partProductSelected.designInfo.imageTexture) {
                             var obj = Object.getOwnPropertySymbols(m.pbrMetallicRoughness.metallicRoughnessTexture);
                             var mat = m.pbrMetallicRoughness.metallicRoughnessTexture[obj.find(e2 => e2.description === 'materials')];
                             mat.forEach(a => {
@@ -1147,7 +1195,7 @@
                                 a.color.r = 1;
                                 a.color.g = 1;
                                 a.color.b = 1;
-                                a.map = null;
+                                // a.map = null;
                                 //Specifies that the material needs to be recompiled.
                                 a.needsUpdate = true;
                             });
@@ -1162,7 +1210,8 @@
                     var self = this;
 
                     var partP = self.listPartProduct.find(m => m.nameDefault == self.GetMaterialsSelected()[0].name);
-                    if (self.dataChangeMaterial.matSelected) {
+                    if (self.dataChangeMaterial.matSelected && partP.materials && partP.materials.length > 0) {
+                        console.log(partP);
                         var matP = partP.materials.find(d => d.materialID == self.dataChangeMaterial.matSelected);
                         if (matP && matP.isDecal == false) {
                             ShowAlert(`Chất liệu ${matP.name} của bộ phận ${partP.nameCustom} không hỗ trợ họa tiết!`, 'warning');
@@ -1175,6 +1224,21 @@
                     self.dataChangeColor.imageTexture = url;
                     const texture = await self.modelViewer.createTexture(url);
                     for (var m of self.GetMaterialsSelected()) {
+                        if (self.dataChangeColor.isFisrtChangeColor) {
+                            var obj = Object.getOwnPropertySymbols(m.pbrMetallicRoughness.metallicRoughnessTexture);
+                            var mat = m.pbrMetallicRoughness.metallicRoughnessTexture[obj.find(e2 => e2.description === 'materials')];
+                            mat.forEach(a => {
+                                //map là màu sắc cơ bản của vật liệu mà không có thông tin về ánh sáng hoặc bóng
+                                // a.color.r = 1;
+                                // a.color.g = 1;
+                                // a.color.b = 1;
+                                a.map = null;
+                                //Specifies that the material needs to be recompiled.
+                                a.needsUpdate = true;
+                            });
+                        }
+
+
                         //change kết cấu
                         m.normalTexture.setTexture(texture);
                         //change màu kết cấu
@@ -1185,7 +1249,22 @@
                         //set chế độ scale texture là ClampToEdge (0-1) //repeat = 10497
                         m.pbrMetallicRoughness['baseColorTexture'].texture.sampler.setWrapS(33071);
                         m.pbrMetallicRoughness['baseColorTexture'].texture.sampler.setWrapT(33071);
+
+
+
                     }
+                    for (var m of self.GetMaterialsSelected()) {
+                        console.log(m)
+                        if (m.nameMatSave) {
+                            var matbyid = self.dataChangeMaterial.listMaterials.find(e => e.name == m.nameMatSave);
+                            self.changeMaterial(null);
+                            self.changeMaterial(matbyid);
+                            m.needsUpdate = true;
+                        }
+
+                    }
+
+                    self.dataChangeColor.isFisrtChangeColor = false;
                     self.$forceUpdate();
                 },
                 GetUrlFileUploadChangeColor: async function (e) {
@@ -1226,6 +1305,19 @@
                             self.dataChangeMaterial.loadingMaterial = false;
                             if (res.status == 1) {
                                 self.dataChangeMaterial.listMaterials = res.data;
+                                //change id mat selected
+                                if (self.partProductSelected.designInfo) {
+                                    var x = self.dataChangeMaterial.listMaterials.find(e => e.name == self.partProductSelected.designInfo.nameMaterial);
+                                    if (x) {
+                                        self.dataChangeMaterial.matSelected = x.materialID;
+                                    }
+                                    else {
+                                        self.dataChangeMaterial.matSelected = "";
+                                    }
+                                }
+                                else {
+                                    self.dataChangeMaterial.matSelected = "";
+                                }
                                 console.log(res.data)
                             }
                             else {
@@ -1238,7 +1330,7 @@
                     });
 
                 },
-                changeMaterial: async function (material) {
+                changeMaterial: function (material) {
                     var self = this;
                     console.log(material)
                     if (material) {
@@ -1288,30 +1380,28 @@
                         }
                     }
                     else {
-                        //mô phỏng cách ánh sáng tương tác với môi trường xung quanh
-                        var aoMap = new THREE.TextureLoader().load(self.partProductSelected.aoMap);
-                        //sử dụng để tạo ra chi tiết đồ họa
-                        var normalMap = new THREE.TextureLoader().load(self.partProductSelected.normalMap);
-                        // xác định độ nhám
-                        var roughnessMap = new THREE.TextureLoader().load(self.partProductSelected.roughnessMap);
-                        // xác định vị trí của các vùng kim loại trong vật liệu
-                        var metalnessMap = new THREE.TextureLoader().load(self.partProductSelected.metalnessMap);
-                        //thông tin về chiều cao của bề mặt vật liệu
-                        // var displacementMap = new THREE.TextureLoader().load(material.displacementMap);
+
                         for (var elm of self.GetMaterialsSelected()) {
+                            var defaultMatE = appSelectModel.defaultMat.find(e => e.name == elm.name);
                             var obj = Object.getOwnPropertySymbols(elm.pbrMetallicRoughness.metallicRoughnessTexture);
                             var mat = elm.pbrMetallicRoughness.metallicRoughnessTexture[obj.find(e => e.description === 'materials')];
                             mat.forEach(a => {
+                                // a.map = defaultMatE.defaultObjMat.map;
+                                a.aoMap = defaultMatE.defaultObjMat.aoMap;
+                                a.normalMap = defaultMatE.defaultObjMat.normalMap;
+                                a.roughnessMap = defaultMatE.defaultObjMat.roughnessMap;
+                                a.metalnessMap = defaultMatE.defaultObjMat.metalnessMap;
+
                                 // a.map = map;
-                                a.aoMap = aoMap;
-                                a.normalMap = normalMap;
-                                a.roughnessMap = roughnessMap;
-                                a.metalnessMap = metalnessMap;
+                                // a.aoMap = self.partProductSelected.aoMap ? new THREE.TextureLoader().load(window.location.origin + self.partProductSelected.aoMap) : a.aoMap;
+                                // a.normalMap = self.partProductSelected.normalMap ? new THREE.TextureLoader().load(window.location.origin + self.partProductSelected.normalMap) : a.normalMap;
+                                // a.roughnessMap = self.partProductSelected.roughnessMap ? new THREE.TextureLoader().load(window.location.origin + self.partProductSelected.roughnessMap) : a.roughnessMap;
+                                // a.metalnessMap = self.partProductSelected.metalnessMap ? new THREE.TextureLoader().load(window.location.origin + self.partProductSelected.metalnessMap) : a.metalnessMap;
                                 a.needsUpdate = true;
                             });
                         }
                         //name để save
-                        elm.nameMatSave = partProductSelected.nameMaterialDefault;
+                        elm.nameMatSave = self.partProductSelected.nameMaterialDefault;
                     }
 
                 },
@@ -1536,6 +1626,7 @@
                     //rerender
                     self.scene.queueRender();
 
+                    // self.dataChangeDecal.dataSave.push({ image: self.dataChangeDecal.image, size: self.dataChangeDecal.sizePercent / 100, );
 
                     console.log(self.dataChangeDecal.decals);
 
@@ -1597,6 +1688,7 @@
                         ShowAlert('Vui lòng chọn mẫu thiết kế.', 'danger');
                         return;
                     }
+                    var imageCartItem = await appDesign.modelViewer.toBlob({ idealAspect: false });
 
                     for (const productPart of appSelectModel.listPartProduct) {
                         var formData = new FormData();
@@ -1605,7 +1697,7 @@
 
                         formData.append('cartItemID', appSelectModel.productIDSelected);
                         formData.append('productSettingID', productPart.productSettingID);
-                        formData.append('designInfoID', productPart ? productPart.designInfo.designInfoID : 0);
+                        formData.append('designInfoID', productPart.designInfo ? productPart.designInfo.designInfoID : 0);
                         formData.append('designName', productPart.nameDefault);
                         formData.append('nameMaterial', productPartOnModel.nameMatSave ?? "");
 
@@ -1665,7 +1757,6 @@
 
                         formData.append('textureScale', productPartOnModel.pbrMetallicRoughness.baseColorTexture.texture.sampler.scale.v);
 
-                        var imageCartItem = await appDesign.modelViewer.toBlob({ idealAspect: false });
                         formData.append('imageCartItem', imageCartItem, 'imageCartItem.png');
 
 
@@ -1698,6 +1789,9 @@
 
 
                 },
+                SaveDecal: async function(){
+                    // self.dataChangeDecal.dataSave;
+                },
                 getImageByMap: function (image) {
                     if (!image) {
                         return null;
@@ -1720,6 +1814,7 @@
                     }
                     return new Blob([ab], { type: mimeString });
                 },
+
 
             },
             mounted() {

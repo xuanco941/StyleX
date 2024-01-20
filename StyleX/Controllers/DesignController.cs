@@ -184,7 +184,7 @@ namespace StyleX.Controllers
                     string folderName = Guid.NewGuid().ToString();
 
                     //thay ảnh preview
-                    string fileNamePreview = "preview" + Path.GetExtension(model.imageCartItem.FileName);
+                    string fileNamePreview = "preview"+Guid.NewGuid() + Path.GetExtension(model.imageCartItem.FileName);
                     var filePathImageCartItem = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileNamePreview);
                     //tạo folder
                     if (!string.IsNullOrEmpty(filePathImageCartItem))
@@ -221,7 +221,7 @@ namespace StyleX.Controllers
 
                     if (model.imageTexture != null)
                     {
-                        string fileNameImageTexture = "textureColor" + Path.GetExtension(model.imageTexture.FileName);
+                        string fileNameImageTexture = "textureColor" + Guid.NewGuid() + Path.GetExtension(model.imageTexture.FileName);
                         var filePathImageTexture = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileNameImageTexture);
                         //tạo folder
                         if (!string.IsNullOrEmpty(filePathImageTexture))
@@ -244,7 +244,7 @@ namespace StyleX.Controllers
 
                     if (model.aoMap != null)
                     {
-                        string fileNameAoMap = "aoMap" + Path.GetExtension(model.aoMap.FileName);
+                        string fileNameAoMap = "aoMap" + Guid.NewGuid() + Path.GetExtension(model.aoMap.FileName);
                         var filePathImageAoMap = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileNameAoMap);
                         //tạo folder
                         if (!string.IsNullOrEmpty(filePathImageAoMap))
@@ -267,7 +267,7 @@ namespace StyleX.Controllers
 
                     if (model.normalMap != null)
                     {
-                        string fileNameNormalMap = "normalMap" + Path.GetExtension(model.normalMap.FileName);
+                        string fileNameNormalMap = "normalMap" + Guid.NewGuid() + Path.GetExtension(model.normalMap.FileName);
                         var filePathImagenormalMap = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileNameNormalMap);
                         //tạo folder
                         if (!string.IsNullOrEmpty(filePathImagenormalMap))
@@ -311,7 +311,7 @@ namespace StyleX.Controllers
 
                     if (model.metalnessMap != null)
                     {
-                        string fileNamemetalnessMap = "metalnessMap" + Path.GetExtension(model.metalnessMap.FileName);
+                        string fileNamemetalnessMap = "metalnessMap" + Guid.NewGuid() + Path.GetExtension(model.metalnessMap.FileName);
                         var filePathImagemetalnessMap = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileNamemetalnessMap);
                         //tạo folder
                         if (!string.IsNullOrEmpty(filePathImagemetalnessMap))
@@ -365,7 +365,7 @@ namespace StyleX.Controllers
                             System.IO.File.Delete(oldFilePath);
 
                         }
-                        string fileName = "preview" + Path.GetExtension(model.imageCartItem.FileName);
+                        string fileName = "preview" + Guid.NewGuid() + Path.GetExtension(model.imageCartItem.FileName);
                         var filePath = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileName);
 
                         using (var stream = new FileStream(filePath, FileMode.Create))
@@ -390,7 +390,7 @@ namespace StyleX.Controllers
                             }
                         }
 
-                        string fileName = "imageTexture" + Path.GetExtension(model.imageTexture.FileName);
+                        string fileName = "imageTexture" + Guid.NewGuid() + Path.GetExtension(model.imageTexture.FileName);
                         var filePath = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileName);
 
                         using (var stream = new FileStream(filePath, FileMode.Create))
@@ -416,7 +416,7 @@ namespace StyleX.Controllers
                             }
                         }
 
-                        string fileName = "aoMap" + Path.GetExtension(model.aoMap.FileName);
+                        string fileName = "aoMap" + Guid.NewGuid() + Path.GetExtension(model.aoMap.FileName);
                         var filePath = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileName);
 
                         using (var stream = new FileStream(filePath, FileMode.Create))
@@ -439,7 +439,7 @@ namespace StyleX.Controllers
                             }
                         }
 
-                        string fileName = "normalMap" + Path.GetExtension(model.normalMap.FileName);
+                        string fileName = "normalMap" + Guid.NewGuid() + Path.GetExtension(model.normalMap.FileName);
                         var filePath = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileName);
 
                         using (var stream = new FileStream(filePath, FileMode.Create))
@@ -462,7 +462,7 @@ namespace StyleX.Controllers
                             }
                         }
 
-                        string fileName = "roughnessMap" + Path.GetExtension(model.roughnessMap.FileName);
+                        string fileName = "roughnessMap" + Guid.NewGuid() + Path.GetExtension(model.roughnessMap.FileName);
                         var filePath = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileName);
 
                         using (var stream = new FileStream(filePath, FileMode.Create))
@@ -485,7 +485,7 @@ namespace StyleX.Controllers
                             }
                         }
 
-                        string fileName = "metalnessMap" + Path.GetExtension(model.metalnessMap.FileName);
+                        string fileName = "metalnessMap" + Guid.NewGuid() + Path.GetExtension(model.metalnessMap.FileName);
                         var filePath = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileName);
 
                         using (var stream = new FileStream(filePath, FileMode.Create))
