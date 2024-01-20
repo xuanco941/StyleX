@@ -116,7 +116,7 @@ namespace StyleX.Controllers
                         Message = model.message ?? "",
                         PercentSale = percentSale,
                         BasePrice = tongTien,
-                        NetPrice = tongTien - (tongTien * percentSale / 100) - Common.TransportFee
+                        NetPrice = tongTien - (tongTien * percentSale / 100) + Common.TransportFee
                     };
                     _dbContext.Orders.Add(order);
                     _dbContext.SaveChanges();
@@ -181,7 +181,7 @@ namespace StyleX.Controllers
                     }
 
                     order.BasePrice = tongTien;
-                    order.NetPrice = tongTien - (tongTien * percentSale / 100) - Common.TransportFee;
+                    order.NetPrice = tongTien - (tongTien * percentSale / 100) + Common.TransportFee;
 
 
 

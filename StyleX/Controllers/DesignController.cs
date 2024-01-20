@@ -9,7 +9,6 @@ using System.Security.Claims;
 
 namespace StyleX.Controllers
 {
-    [Authorize(AuthenticationSchemes = Common.CookieAuthUser)]
     public class DesignController : Controller
     {
         private readonly DatabaseContext _dbContext;
@@ -20,6 +19,7 @@ namespace StyleX.Controllers
             _dbContext = dbContext;
             _environment = environment;
         }
+        [Authorize(AuthenticationSchemes = Common.CookieAuthUser)]
         [HttpGet]
         public IActionResult Index(int? id)
         {
@@ -28,7 +28,7 @@ namespace StyleX.Controllers
                 string accountID = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 if (string.IsNullOrEmpty(accountID) == false)
                 {
-                    var cartItem = _dbContext.CartItems.Include(e => e.Product).FirstOrDefault(x => x.CartItemID == id.Value && x.AccountID == Convert.ToInt32(accountID));
+                    var cartItem = _dbContext.CartItems.Include(e => e.Product).FirstOrDefault(x => x.CartItemID == id.Value && x.Status==0 && x.AccountID == Convert.ToInt32(accountID));
                     if (cartItem != null)
                     {
                         ViewBag.id = id;
@@ -39,6 +39,21 @@ namespace StyleX.Controllers
             }
             return View();
         }
+        [HttpGet]
+        public IActionResult ViewDesign(int? id)
+        {
+            if (id.HasValue == true)
+            {
+                var cartItem = _dbContext.CartItems.Include(e => e.Product).FirstOrDefault(x => x.CartItemID == id.Value);
+                if (cartItem != null)
+                {
+                    ViewBag.id = id;
+                    ViewBag.src = cartItem.Product.ModelUrl;
+                }
+            }
+            return View();
+        }
+        [Authorize(AuthenticationSchemes = Common.CookieAuthUser)]
         [HttpPost]
         public IActionResult GetCartItems()
         {
@@ -62,6 +77,7 @@ namespace StyleX.Controllers
                 return new BadRequestObjectResult(new { status = -99, message = e.Message, data = cartItems });
             }
         }
+        [Authorize(AuthenticationSchemes = Common.CookieAuthUser)]
         [HttpPost]
         public IActionResult GetProducts()
         {
@@ -78,6 +94,7 @@ namespace StyleX.Controllers
                 return new BadRequestObjectResult(new { status = -99, message = e.Message, data = products });
             }
         }
+        [Authorize(AuthenticationSchemes = Common.CookieAuthUser)]
         [HttpPost]
         public IActionResult GetProductSetting([FromBody] IDModel model)
         {
@@ -139,6 +156,7 @@ namespace StyleX.Controllers
                 return new BadRequestObjectResult(new { status = -99, message = e.Message, data = DBNull.Value });
             }
         }
+        [Authorize(AuthenticationSchemes = Common.CookieAuthUser)]
         [HttpPost]
         public IActionResult GetMaterials([FromBody] IDModel model)
         {
@@ -160,6 +178,7 @@ namespace StyleX.Controllers
                 return new BadRequestObjectResult(new { status = -99, message = e.Message, data = DBNull.Value });
             }
         }
+        [Authorize(AuthenticationSchemes = Common.CookieAuthUser)]
         [HttpPost]
         public IActionResult SaveDesign([FromForm] SaveDesignInfoModel model)
         {
@@ -184,7 +203,7 @@ namespace StyleX.Controllers
                     string folderName = Guid.NewGuid().ToString();
 
                     //thay ảnh preview
-                    string fileNamePreview = "preview"+Guid.NewGuid() + Path.GetExtension(model.imageCartItem.FileName);
+                    string fileNamePreview = "preview" + Guid.NewGuid() + Path.GetExtension(model.imageCartItem.FileName);
                     var filePathImageCartItem = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileNamePreview);
                     //tạo folder
                     if (!string.IsNullOrEmpty(filePathImageCartItem))
@@ -375,20 +394,21 @@ namespace StyleX.Controllers
                         cartItem.PosterUrl = pathSave + fileName;
                     }
 
+
+                    if (string.IsNullOrEmpty(designInfo.ImageTexture) == false)
+                    {
+                        // Xóa file cũ
+                        var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.ImageTexture.TrimStart('/'));
+
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            System.IO.File.Delete(oldFilePath);
+
+                        }
+                        designInfo.ImageTexture = "";
+                    }
                     if (model.imageTexture != null && model.imageTexture.Length > 0)
                     {
-
-                        if (string.IsNullOrEmpty(designInfo.ImageTexture) == false)
-                        {
-                            // Xóa file cũ
-                            var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.ImageTexture.TrimStart('/'));
-
-                            if (System.IO.File.Exists(oldFilePath))
-                            {
-                                System.IO.File.Delete(oldFilePath);
-
-                            }
-                        }
 
                         string fileName = "imageTexture" + Guid.NewGuid() + Path.GetExtension(model.imageTexture.FileName);
                         var filePath = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileName);
@@ -400,21 +420,19 @@ namespace StyleX.Controllers
                         designInfo.ImageTexture = pathSave + fileName;
                     }
 
+                    if (string.IsNullOrEmpty(designInfo.AoMap) == false)
+                    {
+                        // Xóa file cũ
+                        var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.AoMap.TrimStart('/'));
 
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            System.IO.File.Delete(oldFilePath);
+                        }
+                        designInfo.AoMap = "";
+                    }
                     if (model.aoMap != null && model.aoMap.Length > 0)
                     {
-
-                        if (string.IsNullOrEmpty(designInfo.AoMap) == false)
-                        {
-                            // Xóa file cũ
-                            var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.AoMap.TrimStart('/'));
-
-                            if (System.IO.File.Exists(oldFilePath))
-                            {
-                                System.IO.File.Delete(oldFilePath);
-
-                            }
-                        }
 
                         string fileName = "aoMap" + Guid.NewGuid() + Path.GetExtension(model.aoMap.FileName);
                         var filePath = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileName);
@@ -425,19 +443,19 @@ namespace StyleX.Controllers
                         }
                         designInfo.AoMap = pathSave + fileName;
                     }
+                    if (string.IsNullOrEmpty(designInfo.NormalMap) == false)
+                    {
+                        // Xóa file cũ
+                        var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.NormalMap.TrimStart('/'));
+
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            System.IO.File.Delete(oldFilePath);
+                        }
+                        designInfo.NormalMap = "";
+                    }
                     if (model.normalMap != null && model.normalMap.Length > 0)
                     {
-                        if (string.IsNullOrEmpty(designInfo.NormalMap) == false)
-                        {
-                            // Xóa file cũ
-                            var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.NormalMap.TrimStart('/'));
-
-                            if (System.IO.File.Exists(oldFilePath))
-                            {
-                                System.IO.File.Delete(oldFilePath);
-
-                            }
-                        }
 
                         string fileName = "normalMap" + Guid.NewGuid() + Path.GetExtension(model.normalMap.FileName);
                         var filePath = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileName);
@@ -448,19 +466,20 @@ namespace StyleX.Controllers
                         }
                         designInfo.NormalMap = pathSave + fileName;
                     }
+                    if (string.IsNullOrEmpty(designInfo.RoughnessMap) == false)
+                    {
+                        // Xóa file cũ
+                        var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.RoughnessMap.TrimStart('/'));
+
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            System.IO.File.Delete(oldFilePath);
+
+                        }
+                        designInfo.RoughnessMap = "";
+                    }
                     if (model.roughnessMap != null && model.roughnessMap.Length > 0)
                     {
-                        if (string.IsNullOrEmpty(designInfo.RoughnessMap) == false)
-                        {
-                            // Xóa file cũ
-                            var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.RoughnessMap.TrimStart('/'));
-
-                            if (System.IO.File.Exists(oldFilePath))
-                            {
-                                System.IO.File.Delete(oldFilePath);
-
-                            }
-                        }
 
                         string fileName = "roughnessMap" + Guid.NewGuid() + Path.GetExtension(model.roughnessMap.FileName);
                         var filePath = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileName);
@@ -471,19 +490,20 @@ namespace StyleX.Controllers
                         }
                         designInfo.RoughnessMap = pathSave + fileName;
                     }
+                    if (string.IsNullOrEmpty(designInfo.MetalnessMap) == false)
+                    {
+                        // Xóa file cũ
+                        var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.MetalnessMap.TrimStart('/'));
+
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            System.IO.File.Delete(oldFilePath);
+
+                        }
+                        designInfo.MetalnessMap = "";
+                    }
                     if (model.metalnessMap != null && model.metalnessMap.Length > 0)
                     {
-                        if (string.IsNullOrEmpty(designInfo.MetalnessMap) == false)
-                        {
-                            // Xóa file cũ
-                            var oldFilePath = Path.Combine(_environment.WebRootPath, designInfo.MetalnessMap.TrimStart('/'));
-
-                            if (System.IO.File.Exists(oldFilePath))
-                            {
-                                System.IO.File.Delete(oldFilePath);
-
-                            }
-                        }
 
                         string fileName = "metalnessMap" + Guid.NewGuid() + Path.GetExtension(model.metalnessMap.FileName);
                         var filePath = Path.Combine(_environment.WebRootPath, Common.FolderDesignInfo, folderName, fileName);
@@ -507,6 +527,107 @@ namespace StyleX.Controllers
             }
         }
 
+
+
+        [Authorize(AuthenticationSchemes = Common.CookieAuthUser)]
+        [HttpPost]
+        public IActionResult SaveDecal([FromForm] SaveDecalInfoModel model)
+        {
+            if (model == null)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = "Tham số lưu thiếu.", data = DBNull.Value });
+            }
+            try
+            {
+
+                var cartItem = _dbContext.CartItems.FirstOrDefault(e => e.CartItemID == model.cartItemID);
+                if (cartItem == null)
+                {
+                    return new NotFoundObjectResult(new { status = -99, message = "Sản phẩm thiết kế này không tồn tại.", data = DBNull.Value });
+                }
+
+                DecalInfo decalInfo = new DecalInfo();
+
+                string folderName = Guid.NewGuid().ToString();
+                //ảnh 
+                string fileNamePreview = "image" + Guid.NewGuid() + Path.GetExtension(model.image.FileName);
+                var filePathImage = Path.Combine(_environment.WebRootPath, Common.FolderDecalInfo, folderName, fileNamePreview);
+                //tạo folder
+                if (!string.IsNullOrEmpty(filePathImage))
+                {
+                    string? directoryPath = Path.GetDirectoryName(filePathImage);
+                    if (directoryPath != null && !Directory.Exists(directoryPath))
+                    {
+                        Directory.CreateDirectory(directoryPath);
+                    }
+                }
+                using (var stream = new FileStream(filePathImage, FileMode.Create))
+                {
+                    model.image.CopyTo(stream);
+                }
+
+                decalInfo.Image = $"/{Common.FolderDecalInfo}/{folderName}/" + fileNamePreview;
+
+                decalInfo.PositionX = model.positionX;
+                decalInfo.PositionZ = model.positionZ;
+                decalInfo.PositionY = model.positionY;
+                decalInfo.OrientationX = model.orientationX;
+                decalInfo.OrientationZ = model.orientationZ;
+                decalInfo.OrientationY = model.orientationY;
+                decalInfo.Size = model.size;
+                decalInfo.MeshUuid = model.meshUuid;
+                decalInfo.RenderOrder = model.renderOrder;
+                decalInfo.CartItemID = model.cartItemID;
+
+                _dbContext.DecalInfos.Add(decalInfo);
+                _dbContext.SaveChanges();
+
+
+                return new OkObjectResult(new { status = 1, message = "Lưu thành công", data = decalInfo });
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message, data = DBNull.Value });
+            }
+        }
+
+        [HttpPost]
+        public IActionResult DeleteAllDecal([FromBody] IDModel model)
+        {
+            try
+            {
+
+                var decalInfos = _dbContext.DecalInfos.Where(e => e.CartItemID == model.ID);
+                if (decalInfos != null && decalInfos.Count() > 0)
+                {
+
+                    _dbContext.DecalInfos.RemoveRange(decalInfos);
+                    _dbContext.SaveChanges();
+                }
+
+                return new OkObjectResult(new { status = 1, message = "Xóa thành công", data = 1 });
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message, data = DBNull.Value });
+            }
+        }
+        [HttpPost]
+        public IActionResult GetDecals([FromBody] IDModel model)
+        {
+            List<DecalInfo> products = new List<DecalInfo>();
+            try
+            {
+                products = _dbContext.DecalInfos.Where(e => e.CartItemID == model.ID).ToList();
+
+                return new OkObjectResult(new { status = 1, message = "success", data = products });
+
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new { status = -99, message = e.Message, data = products });
+            }
+        }
 
     }
 }

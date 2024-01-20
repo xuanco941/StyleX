@@ -385,7 +385,7 @@
                             var tien = p.product.price * p.amount - (p.product.price * p.amount * p.product.sale / 100);
                             self.dataThanhToan.tongTien = self.dataThanhToan.tongTien + tien;
                         });
-                        self.dataThanhToan.thanhToan = self.dataThanhToan.tongTien - (self.dataThanhToan.tongTien * numberPromotion / 100) - @Html.Raw(Common.TransportFee);
+                        self.dataThanhToan.thanhToan = self.dataThanhToan.tongTien - (self.dataThanhToan.tongTien * numberPromotion / 100) + @Html.Raw(Common.TransportFee);
                     }
 
                     console.log(self.cartSelected);

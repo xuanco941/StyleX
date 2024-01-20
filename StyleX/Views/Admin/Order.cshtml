@@ -114,7 +114,7 @@
                                 <td>{{Number(item.product.price).toLocaleString('en-US')}}</td>
                                 <td>{{Number(item.product.sale).toLocaleString('en-US')}}%</td>
                                 <td>{{Number((item.product.price*item.amount) - (item.product.price/100*item.product.sale) * item.amount).toLocaleString('en-US')}}</td>
-                                <td><button class="btn btn-success">Xem 3D</button></td>
+                                <td><a class="btn btn-success" v-bind:href="'/design/viewdesign?id='+item.cartItemID">Xem 3D</a></td>
                             </tr>
                         </tbody>
                     </table>

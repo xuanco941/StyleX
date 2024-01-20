@@ -15,4 +15,21 @@
         public IFormFile? roughnessMap { get; set; } // xác định độ nhám
         public IFormFile? metalnessMap { get; set; } // xác định vị trí của các vùng kim loại trong vật liệu
     }
+
+    public class SaveDecalInfoModel
+    {
+        public IFormFile image { get; set; } = null!;
+        public string meshUuid { get; set; } = null!;
+        public double positionX { get; set; }
+        public double positionY { get; set; }
+        public double positionZ { get; set; }
+        public double orientationX { get; set; }
+        public double orientationY { get; set; }
+        public double orientationZ { get; set; }
+
+        public int renderOrder { get; set; }
+        public double size { get; set; }
+
+        public int cartItemID { get; set; }
+    }
 }

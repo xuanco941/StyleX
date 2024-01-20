@@ -16,6 +16,8 @@
         public const string FolderProductPartMaterialDefault = "productMaterialDefaults";
 
         public const string FolderDesignInfo = "designInfos";
+        public const string FolderDecalInfo = "decalInfos";
+
 
 
         public const double TransportFee = 30000;
