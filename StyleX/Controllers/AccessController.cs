@@ -114,7 +114,7 @@ namespace StyleX.Controllers
                 else
                 {
                     string keyActive = Guid.NewGuid().ToString();
-                    string linkActive = $"<a href=\"https://{HttpContext.Request.Host.Value}/Access/Login/?keyActive={keyActive}\">StyleX - Nhấn vào đây để kích hoạt tài khoản của bạn.</a>";
+                    string linkActive = $"<a href=\"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}/Access/Login/?keyActive={keyActive}\">StyleX - Nhấn vào đây để kích hoạt tài khoản của bạn.</a>";
 
                     _dbContext.Accounts.Add(new Models.Account() { Email = sigupDto.email, Password = sigupDto.password, isActive = false, keyActive = keyActive, Role = Common.RoleUser });
                     if (_dbContext.SaveChanges() > 0)

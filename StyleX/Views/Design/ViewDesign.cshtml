@@ -137,10 +137,8 @@
                         <a href="/" style="font-size: 26px; color: #75a4e9; font-weight: 500; text-decoration: none;">StyleX</a>
                     </div>
                     <div class="d-flex" id="appFeatures">
-                        @*                         <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 14px;" v-on:click="Save()">Lưu lại</button>
-                        *@                        @*                         <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 14px;">Chia sẻ</button>
-                        *@                        <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 14px;" v-on:click="captureModel()">Chụp ảnh</button>
-                        <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 14px;" v-on:click="exportGLB()">Tải về</button>
+                        <button class="btn btn-info mx-2 my-1 d-flex align-items-center" style="font-size: 14px;" v-on:click="captureModel()">Chụp ảnh <i style="margin-left:6px;" class="fa-solid fa-camera"></i></button>
+                        <button class="btn btn-warning mx-2 my-1 d-flex align-items-center" style="font-size: 14px;" v-on:click="exportGLB()">Tải về <i style="margin-left:6px;" class="fa-solid fa-download"></i></button>
                     </div>
 
                 </div>
@@ -445,7 +443,12 @@
     </div>
     <canvas hidden id="myCanvas" width="200" height="200" style="background-color: transparent">
     </canvas>
-
+    <!-- loader -->
+    <div id="screen-loader" style="z-index:10000;position:fixed;padding: 0px; left: 0; top: 0; width:100%;height:100%; transform: none; background-color: rgba(0,0,0,0.3); display:none;justify-content:center;align-items:center;">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
     <!--vue2 development-->
     <script src="/library/js/jquery.min.js"></script>
 
@@ -471,7 +474,13 @@
         import { SearchImages } from '/js/search-image.js';
         // console.log(await SearchImages('cat', 10, 1));
 
-
+        const screenLoader = document.getElementById('screen-loader');
+        function ShowLoader() {
+            screenLoader.style.display = 'flex';
+        };
+        function HideLoader() {
+            screenLoader.style.display = 'none';
+        };
         function hexToRgb(hex) {
 
             if (!hex) {
@@ -647,7 +656,7 @@
                         self.ChangeBackground(self.data.type);
                     });
 
-                    await this.SearchImages();
+                    // await this.SearchImages();
 
                     this.$forceUpdate();
                 },
@@ -723,7 +732,10 @@
                 init: async function () {
                     var self = this;
 
-                    await this.GetModels();
+                    // await this.GetModels();
+                    if (self.productIDSelected) {
+                        await self.GetProductSetting();
+                    }
 
 
                     window.addEventListener('load', () => {
@@ -1087,35 +1099,35 @@
                         self.dataChangeColor.color = self.listPartProduct[0].designInfo ? self.listPartProduct[0].designInfo.color : '#ffffff';
                         self.dataChangeColor.scaleTexture = self.listPartProduct[0].designInfo ? self.listPartProduct[0].designInfo.textureScale : 1;
 
-                        self.getListMaterialOfPartProductSelected();
+                        // self.getListMaterialOfPartProductSelected();
                         await self.GetDecals();
 
                     });
 
-                    var srcModel = '@Html.Raw(ViewBag.src)';
-                    if (srcModel) {
-                        //lấy thông tin chiều cao, rộng, sâu của model
-                        new GLTFLoader().load(srcModel, (gltf) => {
-                            //Lấy thông tin kích thước của model
-                            const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
-                            const size = new THREE.Vector3();
-                            boundingBox.getSize(size);
-                            self.modelSize = size;
-                            //set kích thước min max của ảnh decal (m)
-                            //*100 chuyển thành cm
-                            self.dataChangeDecal.sizePercentMax = (size.y / 2 * 100).toFixed(3);
-                            self.dataChangeDecal.sizePercentMin = (size.y).toFixed(3);
-                            self.dataChangeDecal.sizePercentStep = (size.y).toFixed(3);
-                            self.dataChangeDecal.sizePercent = (size.y / 5 * 100).toFixed(3);
+                    // var srcModel = '@Html.Raw(ViewBag.src)';
+                    // if (srcModel) {
+                    //     //lấy thông tin chiều cao, rộng, sâu của model
+                    //     new GLTFLoader().load(srcModel, (gltf) => {
+                    //         //Lấy thông tin kích thước của model
+                    //         const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
+                    //         const size = new THREE.Vector3();
+                    //         boundingBox.getSize(size);
+                    //         self.modelSize = size;
+                    //         //set kích thước min max của ảnh decal (m)
+                    //         //*100 chuyển thành cm
+                    //         self.dataChangeDecal.sizePercentMax = (size.y / 2 * 100).toFixed(3);
+                    //         self.dataChangeDecal.sizePercentMin = (size.y).toFixed(3);
+                    //         self.dataChangeDecal.sizePercentStep = (size.y).toFixed(3);
+                    //         self.dataChangeDecal.sizePercent = (size.y / 5 * 100).toFixed(3);
 
-                            console.log(self.modelSize);
-                        });
-                    }
+                    //         console.log(self.modelSize);
+                    //     });
+                    // }
 
 
 
-                    await this.SearchImageChangeColor();
-                    await this.SearchImageChangeDecal();
+                    // await this.SearchImageChangeColor();
+                    // await this.SearchImageChangeDecal();
 
                     this.$forceUpdate();
                 },
@@ -1694,6 +1706,7 @@
                 },
                 GetDecals: async function () {
                     var self = this;
+                    ShowLoader();
                     self.dataChangeDecal.dataSave = [];
                     self.dataChangeDecal.decals = [];
 
@@ -1769,13 +1782,15 @@
                                
                                 //rerender
                                 self.scene.queueRender();
-
+                                HideLoader();
                             }
                             else {
+                                HideLoader();
                                 ShowAlert(res.message, "danger");
                             }
                         },
                         error: function (error) {
+                            HideLoader();
                             ShowAlert(error, "danger");
                         }
                     });

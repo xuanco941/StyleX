@@ -29,7 +29,7 @@
             <div class="col-12 col-md-3 col-lg-3 col-xl-2 mb-3 mb-md-0" style="height: 100vh; cursor: default;">
                 <div id="appSelectModel" style="height: calc(65% - 32px); padding-bottom: 8px;">
                     <div style="min-height:50%; max-height:50%; overflow-y: auto;overflow-x:hidden;" class="px-2 py-1">
-                        <h6 class="text-center mt-3 mb-0" style="color: #ccc; height: 30px;">MẪU TRONG GIỎ</h6>
+                        <h6 class="text-center mt-3 mb-0" style="color: #ccc; height: 30px;">THIẾT KẾ CỦA BẠN</h6>
                         <div class="row g-1 pb-1" style="font-size: 16px;max-height: calc(100% - 30px);">
                             <div v-if="isLoad1" class="d-flex justify-content-center align-items-center w-100"
                                  style="height: 100px;">
@@ -59,7 +59,7 @@
                             </div>
                             <div class="col-3 col-md-4 product d-flex justify-content-center align-item-center" style="position: relative" v-if="isLoad2==false && products" v-for="item in products">
                                 <img style="height: 90px;" v-bind:src="item.posterUrl" alt="" srcset="">
-                                <button style="font-size:10.5px; padding: 0.2rem 0.35rem;" class="btn btn-primary btnDesignModel" v-on:click="AddCart(item.productID)">Thêm vào giỏ</button>
+                                <button style="font-size:10.5px; padding: 0.2rem 0.35rem;" class="btn btn-primary btnDesignModel" v-on:click="AddCart(item.productID)">Thêm design</button>
                                 @*                                 <div class="text-center" style="font-size:12px;">{{item.name}}</div>
                                 *@
                             </div>
@@ -130,19 +130,80 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-5 col-lg-6 col-xl-7 p-1" style="height: 100vh;">
+            <div class="col-12 col-md-5 col-lg-6 col-xl-8 p-1" style="height: 100vh;">
                 <div class="d-flex justify-content-between" style="height:40px;">
                     <div class="d-flex">
                         <a href="/" style="font-size: 26px; color: #75a4e9; font-weight: 500; text-decoration: none;">StyleX</a>
                     </div>
-                    <div class="d-flex" id="appFeatures">
-                        <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 14px;" v-on:click="Save()">Lưu lại</button>
-@*                         <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 14px;">Chia sẻ</button>
- *@                        <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 14px;" v-on:click="captureModel()">Chụp ảnh</button>
-                        <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 14px;" v-on:click="exportGLB()">Tải về</button>
+                    <div class="d-flex" id="appFeatures" style="overflow-x:auto; overflow-y:hidden;">
+                        <button class="btn btn-success mx-2 my-1 d-flex align-items-center" style="font-size: 14px;" v-on:click="Save()">Lưu lại <i style="margin-left:6px;" class="fa-solid fa-file-arrow-down"></i></button>
+                        <button class="btn btn-primary mx-2 my-1 d-flex align-items-center" style="font-size: 14px;" data-bs-toggle="modal" data-bs-target="#qrshare">Chia sẻ <i style="margin-left:6px;" class="fa-solid fa-share"></i></button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="qrshare" tabindex="-1" aria-labelledby="qrshareLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div v-if="productIDSelected" class="modal-body d-flex justify-content-center flex-wrap">
+                                        <a class="d-block text-primary mb-1" v-bind:href="linkView" target="_blank">{{linkView}}</a>
+                                        <div id="qrcode"></div>
+                                    </div>
+                                    <div v-if="!productIDSelected" class="modal-body d-flex justify-content-center flex-wrap text-dark">
+                                        Vui lòng chọn mô hình...
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-info mx-2 my-1 d-flex align-items-center" style="font-size: 14px;" v-on:click="captureModel()">Chụp ảnh <i style="margin-left:6px;" class="fa-solid fa-camera"></i></button>
+                        <button class="btn btn-warning mx-2 my-1 d-flex align-items-center" style="font-size: 14px;" v-on:click="exportGLB()">Tải về <i style="margin-left:6px;" class="fa-solid fa-download"></i></button>
+                        <button class="btn btn-light mx-2 my-1 d-flex align-items-center" style="font-size: 14px;" data-bs-toggle="modal" data-bs-target="#question">Hướng dẫn <i style="margin-left:6px;" class="fa-solid fa-question"></i></button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="question" tabindex="-1" aria-labelledby="qrshareLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-dark">Hướng dẫn</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" style="color:black;">
+                                        <h6>Thông tin sản phẩm</h6>
+                                        <div v-if="productIDSelected">
+                                            <div v-for="item in listPartProduct">
+                                                <div>
+                                                    {{item.nameCustom}}: chất liệu mặc định trên mô hình là loại {{item.nameMaterialDefault}}, có thể thay đổi bởi {{item.materials.length+1}} loại khác nhau(
+                                                    <span v-for="m in item.materials">{{m.name + ', '}}</span>{{item.nameMaterialDefault}})
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div v-if="!productIDSelected" class="d-flex justify-content-center flex-wrap text-dark">
+                                            Vui lòng chọn mô hình...
+                                        </div>
+                                        <h6 class="mt-2">Hướng dẫn sử dụng</h6>
+                                        <div>
+                                            1.Bạn có thể chọn màu sắc và họa tiết của từng bộ phận trên sản phẩm thông qua hình ảnh có sẵn hoặc ảnh của bạn trong mục màu sắc.
+                                            <br>
+                                            2.Bạn có thể chọn chất liệu của từng bộ phận trên sản phẩm trong mục chất liệu.
+                                            <br>
+                                            3.Bạn có thể dán hình ảnh hoặc chữ lên sản phẩm trong mục dán hình.
+                                            <br>
+                                            4.Chúng tôi luôn hỗ trợ bạn bất cứ lúc nào qua, vui lòng để lại lời nhắn cho chúng tôi qua <a href="https://facebook.com/xuanco941" target="_blank">facebook này</a>
+                                        </div>
+                                        <h6 class="mt-2">Xem AR</h6>
+                                        <div>
+                                            Bạn cần sử dụng thiết bị hỗ trợ AR để truy cập tính năng này.
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
+
                 <div id="hide-model-main" style="display: none; justify-content: center; align-items: center; height: calc(100% - 40px);">
                     <h1>
                         Vui lòng chọn mẫu
@@ -154,7 +215,7 @@
                               max-camera-orbit="auto auto 300%">
                 </model-viewer>
             </div>
-            <div class="col-12 col-md-4 col-lg-3 col-xl-3 mt-3 mt-md-0 py-1"
+            <div class="col-12 col-md-4 col-lg-3 col-xl-2 mt-3 mt-md-0 py-1"
                  style="height: 100vh; max-height: 100vh; cursor: default; overflow-y: auto;">
                 <div class="tab-content" style="max-height: calc(100% - 36px);">
                     <div id="nav-design">
@@ -327,10 +388,10 @@
                                                     </label>
                                                 </div>
                                                 <div class="d-flex align-items-center">
-                                                    <button class="btn btn-primary mx-1" style="font-size:14.5px;" v-if="!dataChangeDecal.isActive" v-on:click="StartDecal()">Bắt đầu dán</button>
-                                                    <button class="btn btn-danger mx-1" style="font-size:14.5px;" v-if="dataChangeDecal.isActive" v-on:click="StopDecal()">Ngừng dán</button>
+                                                    <button class="btn btn-primary mx-1" style="font-size:14px; padding: 4px 8px" v-if="!dataChangeDecal.isActive" v-on:click="StartDecal()">Bắt đầu dán</button>
+                                                    <button class="btn btn-danger mx-1" style="font-size:14px; padding: 4px 8px" v-if="dataChangeDecal.isActive" v-on:click="StopDecal()">Ngừng dán</button>
 
-                                                    <button class="btn btn-warning mx-1" style="font-size:14.5px;" v-on:click="DeleteDecalNewest()">Xóa hình vừa dán</button>
+                                                    <button class="btn btn-warning mx-1" style="font-size:14px;padding: 4px 8px" v-on:click="DeleteDecalNewest()">Xóa</button>
                                                 </div>
 
 
@@ -445,12 +506,21 @@
     <canvas hidden id="myCanvas" width="200" height="200" style="background-color: transparent">
     </canvas>
 
+
+    <!-- loader -->
+    <div id="screen-loader" style="z-index:10000;position:fixed;padding: 0px; left: 0; top: 0; width:100%;height:100%; transform: none; background-color: rgba(0,0,0,0.3); display:none;justify-content:center;align-items:center;">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
     <!--vue2 development-->
     <script src="/library/js/jquery.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <!--vue2 production-->
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <script type="importmap">
         {
@@ -470,6 +540,13 @@
         import { SearchImages } from '/js/search-image.js';
         // console.log(await SearchImages('cat', 10, 1));
 
+        const screenLoader = document.getElementById('screen-loader');
+        function ShowLoader() {
+            screenLoader.style.display = 'flex';
+        };
+        function HideLoader() {
+            screenLoader.style.display = 'none';
+        };
 
         function hexToRgb(hex) {
 
@@ -979,6 +1056,7 @@
                         success: function (res) {
                             if (res.status == 1) {
                                 self.listPartProduct = res.data;
+                                appFeatures.listPartProduct = res.data;
                                 console.log(self.listPartProduct)
 
                             }
@@ -1706,7 +1784,7 @@
                         success: function (res) {
                             if (res.status == 1) {
                                 console.log(res.data);
-                                for(var e of res.data) {
+                                for (var e of res.data) {
                                     //
                                     self.dataChangeDecal.dataSave.push({
                                         meshUuid: e.meshUuid,
@@ -1749,7 +1827,7 @@
                                         }
 
                                     });
-                                    if(!mesh){
+                                    if (!mesh) {
                                         continue;
                                     }
                                     console.log(mesh);
@@ -1788,11 +1866,24 @@
         var appFeatures = new Vue({
             el: "#appFeatures",
             data: {
-
+                productIDSelected: '@Html.Raw(ViewBag.id)', // id cartItem
+                linkView: window.location.origin + '/design/viewdesign?id=' + '@Html.Raw(ViewBag.id)',
+                listPartProduct: []
             },
             methods: {
                 init: async function () {
                     var self = this;
+                    if (self.productIDSelected) {
+                        var qrcode = new QRCode(document.getElementById("qrcode"), {
+                            text: self.linkView,
+                            width: 256,
+                            height: 256,
+                            colorDark: "#000000",
+                            colorLight: "#ffffff",
+                            correctLevel: QRCode.CorrectLevel.H
+                        });
+                        console.log(qrcode);
+                    }
                     this.$forceUpdate();
                 },
                 Save: async function () {
@@ -1801,6 +1892,7 @@
                         ShowAlert('Vui lòng chọn mẫu thiết kế.', 'danger');
                         return;
                     }
+                    ShowLoader();
 
                     await self.DeleteDecal();
                     //add new decals
@@ -1893,13 +1985,18 @@
                                     productPart.designInfo = res.data;
                                     ShowAlert(res.message, 'success');
                                     document.querySelector('#product-cart-selected a img').src = URL.createObjectURL(imageCartItem);
+                                    HideLoader();
                                 }
                                 else {
                                     ShowAlert(res.message, 'danger');
+                                    HideLoader();
+
                                 }
                             },
                             error: function (error) {
-                                ShowAlert(error.responseJSON.mesage, "danger");
+                                ShowAlert(error, "danger");
+                                HideLoader();
+
                             }
                         });
                     }
@@ -1972,7 +2069,7 @@
                     });
                 },
                 exportGLB: async function () {
-                    if(appSelectModel.productIDSelected){
+                    if (appSelectModel.productIDSelected) {
                         const modelViewer = document.getElementById("model-main");
                         const glTF = await modelViewer.exportScene();
                         const file = new File([glTF], "export.glb");
@@ -1981,7 +2078,7 @@
                         link.href = URL.createObjectURL(file);
                         link.click();
                     }
-                    else{
+                    else {
                         ShowAlert('Vui lòng chọn mẫu thiết kế.', 'warning');
                     }
                 },
