@@ -43,7 +43,10 @@ builder.Services.AddAuthentication(options =>
 
 //service db 
 builder.Services.AddDbContext<DatabaseContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));// shorthand getSection("ConnectionStrings")["DefaultConnection"]
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),sqlServerOptions =>
+    {
+        sqlServerOptions.EnableRetryOnFailure();
+    }));// shorthand getSection("ConnectionStrings")["DefaultConnection"]
 
 builder.Services.AddSingleton<IWebHostEnvironment>(builder.Environment);
 
