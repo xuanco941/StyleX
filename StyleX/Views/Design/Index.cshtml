@@ -174,7 +174,7 @@
                                             <div v-for="item in listPartProduct">
                                                 <div>
                                                     {{item.nameCustom}}: chất liệu mặc định trên mô hình là loại {{item.nameMaterialDefault}}, có thể thay đổi bởi {{item.materials.length+1}} loại khác nhau(
-                                                    <span v-for="m in item.materials">{{m.name + ', '}}</span>{{item.nameMaterialDefault}})
+                                                    <span v-if="item.materials.length > 0 && item.materials[0]" v-for="m in item.materials">{{m.name + ', '}}</span>{{item.nameMaterialDefault}})
                                                 </div>
                                             </div>
                                         </div>
@@ -1672,11 +1672,14 @@
                     //check bộ phận này chất liệu có thể in decal được hay không
                     if (matSelected && matSelected.name == self.GetMaterialsSelected()[0].name) {
                         var partP = self.listPartProduct.find(m => m.nameDefault == matSelected.name);
-                        var matP = partP.materials.find(d => d.materialID == self.dataChangeMaterial.matSelected);
-                        if (matP && matP.isDecal == false) {
-                            ShowAlert(`Chất liệu ${matP.name} của bộ phận ${partP.nameCustom} không thể dán hình`, 'warning');
-                            return;
+                        if (partP && partP.materials.length > 0 && partP.materials[0]){
+                            var matP = partP.materials.find(d => d.materialID == self.dataChangeMaterial.matSelected);
+                            if (matP && matP.isDecal == false) {
+                                ShowAlert(`Chất liệu ${matP.name} của bộ phận ${partP.nameCustom} không thể dán hình`, 'warning');
+                                return;
+                            }
                         }
+                       
                     }
                     else {
                         return;
