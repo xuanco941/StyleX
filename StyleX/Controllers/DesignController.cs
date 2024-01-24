@@ -33,6 +33,7 @@ namespace StyleX.Controllers
                     {
                         ViewBag.id = id;
                         ViewBag.src = cartItem.Product.ModelUrl;
+                        ViewBag.poster = cartItem.Product.PosterUrl;
                     }
                 }
 
@@ -49,6 +50,8 @@ namespace StyleX.Controllers
                 {
                     ViewBag.id = id;
                     ViewBag.src = cartItem.Product.ModelUrl;
+                    ViewBag.poster = cartItem.Product.PosterUrl;
+
                 }
             }
             return View();

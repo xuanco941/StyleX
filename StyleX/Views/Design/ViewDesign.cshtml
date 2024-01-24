@@ -68,67 +68,6 @@
 
 
                 </div>
-                <div class="border-top my-2"></div>
-                <div id="appBackground" style="height: calc(35%); padding-bottom: 8px;">
-                    <div style="height: 70px;">
-                        <h6 class="text-center my-2" style="color: #ccc;">BACKGROUND</h6>
-                        <ul class="nav nav-pills mb-2 d-flex justify-content-between" id="pills-tab" role="tablist">
-                            <li class="nav-item" style="width: 48%;" role="presentation">
-                                <button style="font-size: 11px; letter-spacing: 1px;"
-                                        class="w-100 nav-link active button-universe mt-1 mb-1" data-bs-toggle="pill"
-                                        data-bs-target="#pills-background-image" type="button" role="tab"
-                                        aria-controls="pills-background-image" aria-selected="false">
-                                    Hình ảnh
-                                </button>
-                            </li>
-                            <li class="nav-item" style="width: 48%;" role="presentation">
-                                <button style="font-size: 11px; letter-spacing: 1px;"
-                                        class="w-100 nav-link button-universe mt-1 mb-1" data-bs-toggle="pill"
-                                        data-bs-target="#pills-background-color" type="button" role="tab"
-                                        aria-controls="pills-background-color" aria-selected="true">
-                                    Đơn màu
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="tab-content" id="pills-tabContent"
-                         style="overflow-y: auto;max-height: calc(100% - 70px);">
-                        <div class="tab-pane fade show active" id="pills-background-image" role="tabpanel">
-                            <div class="form-check form-switch d-flex align-items-center justify-content-start p-0">
-                                <input class="form-check-input mt-0 mx-0" type="checkbox" v-model="typeImage"
-                                       id="stToanCanh" v-on:change="ChangeTypeImage()">
-                                <label class="form-check-label mx-1" for="stToanCanh" style="font-size: 10px;">
-                                    Toàn
-                                    cảnh
-                                </label>
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <input style="box-shadow: none;" type="text" class="form-control form-control-sm"
-                                       placeholder="Tìm kiếm hình ảnh" aria-describedby="button-search-image-bg"
-                                       v-model="querySearch" v-on:keyup.enter="SearchImages()">
-                                <button class="btn btn-outline-primary" type="button" id="button-search-image-bg"
-                                        v-on:click="SearchImages()">
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-                                </button>
-                            </div>
-                            <div class="row mt-2 w-100 justify-content-center mx-0">
-                                <div v-if="loadingImage" class="d-flex justify-content-center align-items-center w-100"
-                                     style="height: 100px;">
-                                    <div class="spinner-border" role="status">
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div>
-                                </div>
-                                <img v-if="!loadingImage" style="max-width: 100%;" class="col-3 px-1 py-1 product"
-                                     v-for="(url,index) in listImages" v-bind:src="url" v-bind:alt="index"
-                                     v-on:click="ChangeImage(url)">
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="pills-background-color" role="tabpanel">
-                            <input style="height: 100px;" type="color" class="form-control form-control-color w-100"
-                                   title="Chọn màu nền" v-on:input="ChangeBackground(0)" v-model="data.background">
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <div class="col-12 p-1" style="height: 100vh;">
@@ -635,84 +574,6 @@
         }
 
 
-        var appBackground = new Vue({
-            el: "#appBackground",
-            data: {
-                model: {},
-                data: {},
-                querySearch: '',
-                listImages: [],
-                typeImage: false,
-                loadingImage: true
-            },
-            methods: {
-                init: async function () {
-                    var self = this;
-
-                    this.data.type = 0; //2-toàn cảnh, 1-hình ảnh, 0 đơn màu
-                    this.data.background = 'transparent';
-
-                    document.getElementById("model-main").addEventListener('load', (e) => {
-                        self.model = e.target;
-                        self.ChangeBackground(self.data.type);
-                    });
-
-                    // await this.SearchImages();
-
-                    this.$forceUpdate();
-                },
-                SearchImages: async function () {
-                    var self = this;
-                    self.loadingImage = true;
-                    var images = await SearchImages(self.querySearch, 28, 1);
-                    if (images.length > 0) {
-                        self.listImages = images.map(e => `https://images.unsplash.com/${e.url.trim()}?auto=format&fit=crop&w=500&h=500`);
-                    }
-                    self.loadingImage = false;
-                },
-                ChangeBackground: function (type) {
-                    var self = this;
-
-                    if (type == 2) self.data.type = 2;
-                    else if (type == 1) self.data.type = 1;
-                    else self.data.type = 0;
-
-                    if (self.data.type == 0 && self.data.background) {
-                        self.model.removeAttribute('skybox-image');
-                        self.model.style.backgroundImage = 'none';
-                        self.model.style.backgroundColor = self.data.background;
-                    }
-                    else if (self.data.type == 1 && self.data.background) {
-                        self.model.removeAttribute('skybox-image');
-                        self.model.style.backgroundImage = `url('${self.data.background}')`;
-                        self.model.style.backgroundColor = 'transparent';
-                    }
-                    else if (self.data.type == 2 && self.data.background) {
-                        self.model.setAttribute('skybox-image', self.data.background);
-                        self.model.style.backgroundImage = 'none';
-                        self.model.style.backgroundColor = 'transparent';
-                    }
-                    else {
-                        self.model.removeAttribute('skybox-image');
-                        self.model.style.backgroundImage = 'none';
-                        self.model.style.backgroundColor = 'transparent';
-                    }
-                },
-                ChangeImage: function (url) {
-                    this.data.background = url;
-                    this.ChangeTypeImage();
-                },
-                ChangeTypeImage: function () {
-                    var type = this.typeImage == true ? 2 : 1;
-                    this.ChangeBackground(type);
-                }
-
-
-            },
-            mounted() {
-                this.init();
-            },
-        });
         var appSelectModel = new Vue({
             el: "#appSelectModel",
             data: {
@@ -744,6 +605,8 @@
 
                             //set về OPAQUE
                             document.getElementById("model-main").src = '@Html.Raw(ViewBag.src)';
+                            document.getElementById("model-main").poster = '@Html.Raw(ViewBag.poster)';
+
                             document.getElementById("model-main").addEventListener('load', async (e) => {
                                 self.modelViewer = e.target;
                                 self.model = e.target.model;

@@ -29,7 +29,7 @@
                             </div>
                         </div>
                         <model-viewer class="col-6 col-md-6 h-100" alt=""
-                                      v-bind:src="item.modelUrl" ar shadow-intensity="1" camera-controls disable-pan
+                                      v-bind:src="item.modelUrl" v-bind:poster="item.posterUrl" ar shadow-intensity="1" camera-controls disable-pan
                                       disable-tap auto-rotate autoplay shadow-softness="0.1" min-camera-orbit="auto auto 100%"
                                       max-camera-orbit="auto auto 150%">
                         </model-viewer>
@@ -47,7 +47,7 @@
             <div class="row" style="height: 600px">
                 <div class="col-md-6">
                     <model-viewer class="w-100 h-100" alt="model-sale"
-                                  v-bind:src="saleProducts.modelUrl" ar shadow-intensity="1" camera-controls disable-pan
+                                  v-bind:src="saleProducts.modelUrl" v-bind:poster="saleProducts.posterUrl" ar shadow-intensity="1" camera-controls disable-pan
                                   disable-tap auto-rotate autoplay shadow-softness="0.1" min-camera-orbit="auto auto 100%"
                                   max-camera-orbit="auto auto 150%">
                     </model-viewer>
