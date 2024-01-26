@@ -1224,8 +1224,9 @@ namespace StyleX.Controllers
 
         #endregion
         #region Order
-        public IActionResult Order()
+        public IActionResult Order(int? orderID)
         {
+            ViewBag.orderID = orderID;
             return View();
         }
         [HttpPost]
