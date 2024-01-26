@@ -245,5 +245,5 @@ GO
 INSERT INTO [Account] ([FullName], [Email], [Password], [PhoneNumber], [Address], [isActive], [keyActive], [Avatar], [NumberPlayGame], [Role])
 VALUES 
     ('Admin', 'admin', '12345', '0388530006', '', 1, 'activationkey456', '2.jpg', 0, 'admin'),
-    (N'Người dùng 1', 'user@stylex.com', '12345', '0388530006', N'175 Tây Sơn, Đống Đa, Hà Nội', 1, 'activationkey123', '2.jpg', 9999, 'user');
+    (N'Người dùng 1', 'user', '12345', '0388530006', N'175 Tây Sơn, Đống Đa, Hà Nội', 1, 'activationkey123', '2.jpg', 9999, 'user');
 
