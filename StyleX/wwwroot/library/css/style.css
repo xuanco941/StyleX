@@ -3530,3 +3530,8 @@ textarea.form-control {
         max-width: 1320px;
     }
 }
+@media (max-width: 992px){
+    #home-section {
+        display: none;
+    }
+}

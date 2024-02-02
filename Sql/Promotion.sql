@@ -1,3 +1,0 @@
-INSERT INTO [Promotion] ([PromotionID], [Number], [Status], [ResultSpin], [CreateAt], [UsedAt], [ExpiredAt], [OrderID], [AccountID]) VALUES (1, 10, '0', N'5-2-5  4-4-4  1-6-3', '2024-01-31 19:24:51.0844805', NULL, '2024-03-01 19:24:51.0844805', NULL, 2); GO
-INSERT INTO [Promotion] ([PromotionID], [Number], [Status], [ResultSpin], [CreateAt], [UsedAt], [ExpiredAt], [OrderID], [AccountID]) VALUES (2, 10, '0', N'4-4-4  1-5-6  5-1-2', '2024-01-31 19:25:01.6454008', NULL, '2024-03-01 19:25:01.6454008', NULL, 2); GO
-INSERT INTO [Promotion] ([PromotionID], [Number], [Status], [ResultSpin], [CreateAt], [UsedAt], [ExpiredAt], [OrderID], [AccountID]) VALUES (3, 10, '0', N'7-7-7  2-1-3  6-5-5', '2024-01-31 19:25:09.0613038', NULL, '2024-03-01 19:25:09.0613038', NULL, 2); GO
