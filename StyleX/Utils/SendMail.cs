@@ -8,7 +8,7 @@ namespace StyleX.Utils
         public bool SendEmailByGmail(string toEmail, string subject, string body)
         {
             string fromEmail = "kaioco09@gmail.com";
-            string password = "mffh clnl chgu fcgg"; //app password , 2auth
+            string password = ""; //app password , 2auth
             try
             {
                 MailMessage message = new MailMessage(fromEmail, toEmail);
